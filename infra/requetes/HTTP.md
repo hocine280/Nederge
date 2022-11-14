@@ -2,7 +2,7 @@
 
 ### Format des requêtes JSON
 
-- <b>Recevoir une commande - Méthodes POST</b> <br>
+#### <b>Recevoir une commande - Méthodes POST</b> <br>
 <i>Sens revendeur -> TARE</i>
 
 ```json
@@ -43,7 +43,7 @@
 }
 ```
 
-- <b>Annuler une commande - Requetes </b>
+#### <b>Annuler une commande - Requetes </b>
 
 <i> Sens Revendeur -> TARE</i>
 
@@ -73,7 +73,7 @@
 }
 ```
 
-- <b>Obtenir des infos sur le marché</b><br>
+#### <b>Obtenir des infos sur le marché</b><br>
 <hr>
 <u>Disponibilité d'une énergie sur le marché:  </u><br>
 <i> Sens Revendeur -> TARE</i>
@@ -144,7 +144,7 @@
 <hr>
 
 
-- <b>Etat d'avancement de la commande</b>
+#### <b>Etat d'avancement de la commande</b>
 
 Différentes étapes de la commande : <br>
 - Energie pas disponible
