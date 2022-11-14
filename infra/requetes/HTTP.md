@@ -121,7 +121,7 @@
 }
 ```
 
-<i> Sens TARE -> Revendeur</i>
+<i> Sens TARE -> Revendeur</i><br>
 <span style="color:green">Si la demande est disponible</span>
 
 ```json
@@ -147,12 +147,12 @@
 - <b>Etat d'avancement de la commande</b>
 
 Différentes étapes de la commande : <br>
-    - Energie pas disponible
-    - Commande disponible en attente validation
-    - Commande en cours de traitement
-    - Commande en cours de livraison
-    - Commande livrée
-    - Commande annulée : motif
+- Energie pas disponible
+- Commande disponible en attente validation
+- Commande en cours de traitement
+- Commande en cours de livraison
+- Commande livrée
+- Commande annulée : motif
 
 
 <i> Sens Revendeur -> TARE</i>
