@@ -4,25 +4,36 @@ import com.sun.net.httpserver.HttpServer;
 
 import TareServer.Handlers.AddCommandHandler;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class TareServer {
 
-	public static int port = 8080;
+	private int port;
+	private String name;
 
-	public static void main(String[] args) {
+	public TareServer(String name, int port){
+		this.name = name;
+		this.port = port;
+	}
+
+	public void start() throws IOException{
 		HttpServer server = null;
 
-		try {
-			server = HttpServer.create(new InetSocketAddress(port), 0);
-		} catch (Exception e) {
-			System.err.println("Erreur lors de la création du serveur HTTP");
-		}
+		server = HttpServer.create(new InetSocketAddress(port), 0);
 
 		server.createContext("/add-command", new AddCommandHandler());
 		server.setExecutor(null);
 		server.start();
 
-		System.out.println("Le serveur HTTP a bien démarré");
+		System.out.println("Le serveur " + this.name + " a bien démarré sur le port " + this.port);
+	}
+
+	public String getName(){
+		return this.name;
+	}
+
+	public int getPort(){
+		return this.port;
 	}
 }
