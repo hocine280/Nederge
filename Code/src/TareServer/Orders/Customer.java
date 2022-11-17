@@ -1,4 +1,4 @@
-package TareServer.Commands;
+package TareServer.Orders;
 
 public class Customer {
 	
