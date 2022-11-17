@@ -10,7 +10,7 @@
                 <ul>
                     <li><a href="OrderEnergy.php">Commander une énergie</a></li>
                     <li><a href="ConsultAvailableEnergy.php">Consulter les énergies disponibles</a></li>
-                    <li><a href="TrackOrder.php">Suivre mes commandes</a></li>
+                    <li><a href="MyOrder.php">Mes commandes</a></li>
                 </ul>
             </li>
         </ul>
