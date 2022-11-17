@@ -1,24 +1,27 @@
 package TareServer.Orders;
 
-public class Customer {
+public class Client {
 	
 	private String name;
 	private String surname;
 	private String email;
 	private String companyName;
+	private int phoneNumber;
 
-	public Customer(String name, String surname, String email, String companyName){
+	public Client(String name, String surname, String email, String companyName, int phoneNumber){
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.companyName = companyName;
+		this.phoneNumber = phoneNumber;
 	}
 
-	public Customer(String name, String surname, String email){
+	public Client(String name, String surname, String email, int phoneNumber){
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
 		this.companyName = null;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public String getName() {
@@ -35,6 +38,10 @@ public class Customer {
 
 	public String getCompanyName() {
 		return companyName;
+	}
+
+	public int getPhoneNumber(){
+		return this.phoneNumber;
 	}
 
 }

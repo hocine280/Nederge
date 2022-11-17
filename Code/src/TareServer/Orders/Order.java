@@ -1,5 +1,7 @@
 package TareServer.Orders;
 
+import org.json.JSONObject;
+
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
@@ -9,7 +11,7 @@ public class Order {
 	private int id = -1;
 	private String login = null;
 	
-	private Customer customer;
+	private Client client;
 	
 	private TypeEnergyEnum typeEnergy;
 	private CountryEnum countryOrigin;
@@ -21,10 +23,24 @@ public class Order {
 	private int maxPriceUnitEnergy;
 
 
-	public Order(Customer customer, TypeEnergyEnum typeEnergy, CountryEnum countryOrigin,
+	public static Order fromJSON(JSONObject object){
+		return new Order(
+			new Client(object.getString("name"), object.getString("surname"), object.getString("email"), Integer.valueOf(object.getString("phoneNumber"))),
+			TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
+			CountryEnum.valueOf(object.getString("countryOrigin")),
+			ExtractModeEnum.valueOf(object.getString("extractionMode")),
+			Boolean.valueOf(object.getString("green")),
+			Integer.valueOf(object.getString("quantity")),
+			Integer.valueOf(object.getString("quantityMin")),
+			Integer.valueOf(object.getString("budget")),
+			Integer.valueOf(object.getString("maxPriceUnitEnergy"))
+		);
+	}
+
+	public Order(Client client, TypeEnergyEnum typeEnergy, CountryEnum countryOrigin,
 			ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
 			int maxPriceUnitEnergy) {
-		this.customer = customer;
+		this.client = client;
 		this.typeEnergy = typeEnergy;
 		this.countryOrigin = countryOrigin;
 		this.extractionMode = extractionMode;
@@ -47,8 +63,8 @@ public class Order {
 		}
 	}
 
-	public Customer getCustomer() {
-		return customer;
+	public Client getclient() {
+		return client;
 	}
 
 	public TypeEnergyEnum getTypeEnergy() {

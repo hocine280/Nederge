@@ -10,15 +10,7 @@ public class OrderManage {
 		this.listOrder = new Hashtable<Integer, Order>();
 	}
 	
-	public void addOrder(Order order){
-		int idOrder;
-
-		do {
-			idOrder = generateIdOrder();
-		} while (this.listOrder.containsKey(idOrder));
-
-		order.setId(idOrder);
-		order.setLogin(generateLoginOrder());
+	public void addOrder(int idOrder, Order order){
 
 		this.listOrder.put(idOrder, order);
 	}
@@ -29,12 +21,22 @@ public class OrderManage {
 		}
 	}
 
-	private int generateIdOrder(){
-		return 12;
+	public int generateIdOrder(){
+		int idOrder;
+		
+		do {
+			idOrder = (int) (this.listOrder.size() + Math.random() * (Integer.MAX_VALUE - this.listOrder.size()));
+		} while (this.listOrder.containsKey(idOrder));
+
+		return idOrder;
 	}
 
-	private String generateLoginOrder(){
-		return "";
+	public String generateLoginOrder(){
+		return "test";
+	}
+
+	public Order getOrder(int idOrder){
+		return this.listOrder.get(idOrder);
 	}
 
 }
