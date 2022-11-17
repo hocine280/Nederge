@@ -23,6 +23,9 @@ public class TareServer {
 		server = HttpServer.create(new InetSocketAddress(port), 0);
 
 		server.createContext("/add-command", new AddCommandHandler());
+		server.createContext("/remove-command", null);
+		server.createContext("/infos-market");
+		server.createContext("/order-status");
 		server.setExecutor(null);
 		server.start();
 

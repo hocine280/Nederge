@@ -9,19 +9,17 @@ import org.json.JSONObject;
  * @version  1.0
  * */
 public class TrackingCode implements Comparable{
-	/** Permet d'attribuer un identifiant unique */
-	private static int identifier = 1;
 
 	/** Le pays de production de l'énergie */
-	private String country;
+	private CountryEnum country;
 	/** Le code du producteur de l'énergie */
 	private int codeProducer;
 	/** Le type d'énergie */
-	private String typeEnergy;
+	private TypeEnergyEnum typeEnergy;
 	/** Indique si l'énergie est verte ou non */
 	private boolean greenEnergy;
 	/** Le mode d'extraction de l'énergie */
-	private String extractMode;
+	private ExtractModeEnum extractMode;
 	/** L'année de production de l'énergie */
 	private int productionYear;
 	/** L'identifiant unique de suivi */
@@ -39,11 +37,11 @@ public class TrackingCode implements Comparable{
 	public static TrackingCode fromJson(String json) throws Exception{
 		JSONObject object = new JSONObject(json);
 
-		return new TrackingCode(object.getString("country"),
+		return new TrackingCode(CountryEnum.valueOf(object.getString("country")),
 								object.getInt("codeProducer"),
-								object.getString("typeEnergy"),
+								TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
 								object.getBoolean("greenEnergy"),
-								object.getString("extractMode"),
+								ExtractModeEnum.valueOf(object.getString("extractMode")),
 								object.getInt("productionYear"),
 								object.getInt("identifier"),
 								object.getInt("quantity")
@@ -60,14 +58,14 @@ public class TrackingCode implements Comparable{
 	public static TrackingCode fromCode(String code) throws Exception{
 		String codeSplit[] = code.split("-");
 
-		return new TrackingCode(codeSplit[0], Integer.valueOf(codeSplit[1]), codeSplit[2], Boolean.valueOf(codeSplit[3]), codeSplit[4], Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
+		return new TrackingCode(CountryEnum.fromCode(codeSplit[0]), Integer.valueOf(codeSplit[1]), TypeEnergyEnum.fromCode(codeSplit[2]), false, ExtractModeEnum.fromCode(codeSplit[4]), Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
 	}
 
 	/**
 	 * Le constructeur privé d'un code de suivi car il construit un code de suivi avec un identifiant unique donné
 	 * 
 	 * @param country Le pays de production de l'énergie
-	 * @param producer Le producteur de l'énergie
+	 * @param codeProducer Le code du producteur de l'énergie
 	 * @param typeEnergy Le type d'énergie
 	 * @param greenEnergy Indique si l'énergie est verte ou non
 	 * @param extractMode Le mode d'extraction de l'énergie
@@ -75,7 +73,7 @@ public class TrackingCode implements Comparable{
 	 * @param uniqueIdentifier L'identifiant unique de suivi
 	 * @param quantity La quantité d'énergie
 	 */
-	private TrackingCode(String country, int codeProducer, String typeEnergy, boolean greenEnergy, String extractMode, int productionYear, int uniqueIdentifier, int quantity){
+	private TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
 		this.country = country;
 		this.codeProducer = codeProducer;
 		this.typeEnergy = typeEnergy;
@@ -87,47 +85,20 @@ public class TrackingCode implements Comparable{
 	}
 
 	/**
-	 * Le constructeur public d'un code de suivi car il construit un code de suivi en lui attribuant un identifiant unique
-	 * 
-	 * @param country Le pays de production de l'énergie
-	 * @param producer Le producteur de l'énergie
-	 * @param typeEnergy Le type d'énergie
-	 * @param greenEnergy Indique si l'énergie est verte ou non
-	 * @param extractMode Le mode d'extraction de l'énergie
-	 * @param productionYear L'année de production de l'énergie
-	 * @param quantity La quantité d'énergie
-	 */
-	public TrackingCode(String country, int codeProducer, String typeEnergy, boolean greenEnergy, String extractMode, int productionYear, int quantity){
-		if(quantity <= 0){
-			System.out.println("La quantité d'énergie ne peut être inférier ou égal à 0");
-			return;
-		}
-		this.country = country;
-		this.codeProducer = codeProducer;
-		this.typeEnergy = typeEnergy;
-		this.greenEnergy = greenEnergy;
-		this.extractMode = extractMode;
-		this.productionYear = productionYear;
-		this.quantity = quantity;
-		this.uniqueIdentifier = TrackingCode.identifier;
-		TrackingCode.identifier++;
-	}
-
-	/**
 	 * Getter du pays de production de l'énergie
 	 * 
 	 * @return Le pays de production de l'énergie
 	 */
-	public String getCountry(){
+	public CountryEnum getCountry(){
 		return this.country;
 	}
 
 	/**
-	 * Getter du producteur de l'énergie
+	 * Getter du code du producteur de l'énergie
 	 * 
-	 * @return Le producteur de l'énergie
+	 * @return Le code du producteur de l'énergie
 	 */
-	public int getCodeProducer(){
+	public int getCodeProducteur(){
 		return this.codeProducer;
 	}
 
@@ -136,7 +107,7 @@ public class TrackingCode implements Comparable{
 	 * 
 	 * @return Le type d'énergie
 	 */
-	public String getTypeEnergy(){
+	public TypeEnergyEnum getTypeEnergy(){
 		return this.typeEnergy;
 	}
 
@@ -154,7 +125,7 @@ public class TrackingCode implements Comparable{
 	 * 
 	 * @return Le mode d'extraction de l'énergie
 	 */
-	public String getExtractMode(){
+	public ExtractModeEnum getExtractMode(){
 		return this.extractMode;
 	}
 
