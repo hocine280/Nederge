@@ -1,10 +1,3 @@
-/**
-* Template Name: Techie - v4.7.0
-* Template URL: https://bootstrapmade.com/techie-free-skin-bootstrap-3/
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
-
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -14,7 +7,7 @@ body {
 }
 
 a {
-  color: #FADD9B;
+  color: #f7ad05;
   text-decoration: none;
 }
 
@@ -28,7 +21,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*--------------------------------------------------------------
-# Back to top button
+# Bouton de retour en haut
 --------------------------------------------------------------*/
 .back-to-top {
   position: fixed;
@@ -107,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 /*--------------------------------------------------------------
-# Disable aos animation delay on mobile devices
+# Désactivation d'AOS sur mobile
 --------------------------------------------------------------*/
 @media screen and (max-width: 768px) {
   [data-aos-delay] {
@@ -141,12 +134,16 @@ h1, h2, h3, h4, h5, h6 {
 #header .logo img {
   max-height: 40px;
 }
+.header-inner-pages{
+  background-color: black;
+  padding: 12px 0;
+}
 
 /*--------------------------------------------------------------
 # Navigation Menu
 --------------------------------------------------------------*/
 /**
-* Desktop Navigation 
+* Navigation PC 
 */
 .navbar {
   padding: 0;
@@ -273,7 +270,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**
-* Mobile Navigation 
+* Navigation mobile
 */
 .mobile-nav-toggle {
   color: #fff;
@@ -366,7 +363,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /*--------------------------------------------------------------
-# Hero Section
+# Hero
 --------------------------------------------------------------*/
 #hero {
   width: 100%;
@@ -571,7 +568,7 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Counts
+# Compteur
 --------------------------------------------------------------*/
 .counts {
   background: linear-gradient(90deg, #FADD9B  0%, black 80%);
@@ -592,7 +589,7 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Features
+# Fonctionnalités
 --------------------------------------------------------------*/
 .features .icon-box h4 {
   font-size: 20px;
@@ -627,6 +624,7 @@ section {
   color: #fff;
   background: linear-gradient(45deg, #FADD9B 0%, black 100%);
   position: relative;
+  border:none;
 }
 .command:hover {
   zoom : 1.02;
@@ -649,7 +647,7 @@ section {
   padding: 15px 0;
   background: #f2f6f9;
   min-height: 40px;
-  margin-top: 85px;
+  margin-top: 70px;
 }
 @media (max-width: 992px) {
   .breadcrumbs {
@@ -709,4 +707,37 @@ section {
 }
 #footer .credits a {
   color: #fff;
+}
+
+
+
+/*--------------------------------------------------------------
+# Commande 
+--------------------------------------------------------------*/
+
+.trait{
+  width : 200px; 
+  height : 3px; 
+  background-color: #f1c96b;
+}
+
+input, select{
+  border: none !important;
+  border-bottom : 2px solid black !important;
+  outline : none !important;
+  border-radius : 0 !important;
+}
+
+input:focus, select:focus{
+  border-bottom : 2px solid #f1c96b !important; 
+  transition : 0.3s !important; 
+  outline : none !important; 
+}
+
+input:focus, input.form-control:focus, select:focus, select.form-control:focus {
+  outline:none !important;
+  outline-width: 0 !important;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
 }
