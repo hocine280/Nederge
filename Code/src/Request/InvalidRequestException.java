@@ -16,7 +16,7 @@ public class InvalidRequestException extends Exception{
 
 	@Override
 	public String toString() {
-		return "Problème dans la requête : " + this.situation + message != null ? "\nMessage : " + this.message : "";
+		return "Problème dans la requête : " + this.situation + message != null ? "\nInfos supplémentaires : " + this.message : "";
 	}
 
 }
