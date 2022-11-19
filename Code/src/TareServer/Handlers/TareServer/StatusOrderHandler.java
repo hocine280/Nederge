@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
-import Request.InvalidRequestException;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.StatusOrderRequest;

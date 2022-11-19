@@ -38,9 +38,14 @@ public class StatusOrderRequest implements RequestInterface{
 	public JSONObject process(){
 		JSONObject response = new JSONObject();
 
-		response.put("status", true);
-		response.put("idOrder", this.idOrder);
-		response.put("statusOrder", this.orderManage.getOrder(this.idOrder).getStatus().toString());
+		if(this.orderManage.getOrder(this.idOrder) != null && this.orderManage.getOrder(this.idOrder).verifOrder(this.idOrder, this.loginOrder)){
+			response.put("status", true);
+			response.put("idOrder", this.idOrder);
+			response.put("statusOrder", this.orderManage.getOrder(this.idOrder).getStatus().toString());
+		}else{
+			response.put("status", false);
+			response.put("message", "Identifiant de commande ou login incorrect");
+		}
 
 		return response;
 	}
