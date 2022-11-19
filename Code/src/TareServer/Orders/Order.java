@@ -21,6 +21,7 @@ public class Order {
 	private int quantityMin;
 	private int budget;
 	private int maxPriceUnitEnergy;
+	private StatusOrderEnum status;
 
 
 	public static Order fromJSON(JSONObject object){
@@ -33,13 +34,14 @@ public class Order {
 			Integer.valueOf(object.getString("quantity")),
 			Integer.valueOf(object.getString("quantityMin")),
 			Integer.valueOf(object.getString("budget")),
-			Integer.valueOf(object.getString("maxPriceUnitEnergy"))
+			Integer.valueOf(object.getString("maxPriceUnitEnergy")),
+			StatusOrderEnum.valueOf(object.getString("statusOrder"))
 		);
 	}
 
 	public Order(Client client, TypeEnergyEnum typeEnergy, CountryEnum countryOrigin,
 			ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
-			int maxPriceUnitEnergy) {
+			int maxPriceUnitEnergy, StatusOrderEnum status) {
 		this.client = client;
 		this.typeEnergy = typeEnergy;
 		this.countryOrigin = countryOrigin;
@@ -49,6 +51,7 @@ public class Order {
 		this.quantityMin = quantityMin;
 		this.budget = budget;
 		this.maxPriceUnitEnergy = maxPriceUnitEnergy;
+		this.status = status;
 	}
 
 	public void setId(int id){
@@ -109,6 +112,28 @@ public class Order {
 
 	public boolean verifOrder(int id, String login){
 		return verifId(id) && verifLogin(login);
+	}
+
+	public StatusOrderEnum getStatus(){
+		return this.status;
+	}
+
+	public JSONObject toJson(){
+		JSONObject ret = new JSONObject();
+
+		ret.put("idOrderForm", this.id);
+		ret.put("client", this.client.toJson());
+		ret.put("typeEnergy", this.typeEnergy);
+		ret.put("countryOrigin", this.countryOrigin);
+		ret.put("extractionMode", this.extractionMode);
+		ret.put("green", this.greenEnergy);
+		ret.put("quantity", this.quantity);
+		ret.put("quantityMin", this.quantityMin);
+		ret.put("budget", this.budget);
+		ret.put("maxPriceUnitEnergy", this.maxPriceUnitEnergy);
+		ret.put("statusOrder", this.status);
+
+		return ret;
 	}
 
 }

@@ -1,44 +1,35 @@
 package TareServer.Handlers.TareServer;
 
 import java.io.IOException;
-
-import com.sun.net.httpserver.HttpExchange;
-
-import TareServer.Handlers.Handler;
-import TareServer.Orders.OrderManage;
-import TareServer.RequestsTare.AddCommandRequest;
-
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import com.sun.net.httpserver.HttpExchange;
 
-public class AddCommandHandler extends Handler{
+import TareServer.Handlers.Handler;
+import TareServer.RequestsTare.InfosMarketRequest;
 
-	private OrderManage orderManage;
-
-	public AddCommandHandler(OrderManage orderManage){
-		this.orderManage = orderManage;
-	}
+public class InfosMarketHandler extends Handler{
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
-		
 		JSONObject response = new JSONObject();
 
 		HashMap<String, String> data = receivePost(exchange);
 
 		if(data.size() == 0){
 			response.put("status", false);
-			response.put("message", "Aucune donnée à traiter ...");
+			response.put("message", "Il manque les spécifications sur l'énergie dont on veut obtenir les infos du marché");
 			sendResponse(exchange, response);
 			return;
-		}	
+		}
 
-		AddCommandRequest request;
+		InfosMarketRequest request;
+
 		try {
-			request = AddCommandRequest.fromJSON(new JSONObject(data), this.orderManage);
-		} catch (Exception e){
+			request = InfosMarketRequest.fromJSON(new JSONObject(data));
+		} catch (Exception e) {
 			response.put("status", false);
 			response.put("message", e.toString());
 			sendResponse(exchange, response);
@@ -49,5 +40,7 @@ public class AddCommandHandler extends Handler{
 
 		sendResponse(exchange, response);
 	}
+	
+	
 
 }

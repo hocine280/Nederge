@@ -3,6 +3,8 @@ package TareServer.Orders;
 import java.util.Hashtable;
 import java.util.Random;
 
+import org.json.JSONArray;
+
 public class OrderManage {
 
 	private Hashtable<Integer, Order> listOrder;
@@ -48,6 +50,16 @@ public class OrderManage {
 
 	public Order getOrder(int idOrder){
 		return this.listOrder.get(idOrder);
+	}
+
+	public JSONArray listOrder(){
+		JSONArray array = new JSONArray();
+
+		this.listOrder.forEach((id, order)->{
+			array.put(order.toJson());
+		});
+
+		return array;
 	}
 
 }

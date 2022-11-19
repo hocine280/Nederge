@@ -8,6 +8,7 @@ import TareServer.Orders.Client;
 import TareServer.Orders.Order;
 import TareServer.Orders.OrderException;
 import TareServer.Orders.OrderManage;
+import TareServer.Orders.StatusOrderEnum;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
@@ -30,6 +31,7 @@ public class AddCommandRequest implements RequestInterface{
 	private int quantityMin;
 	private int budget;
 	private int maxPriceUnitEnergy;
+	private StatusOrderEnum statusOrder;
 
 	public static AddCommandRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
 		check(object);
@@ -48,13 +50,14 @@ public class AddCommandRequest implements RequestInterface{
 			Integer.valueOf(object.getString("quantityMin")),
 			Integer.valueOf(object.getString("budget")),
 			Integer.valueOf(object.getString("maxPriceUnitEnergy")),
+			StatusOrderEnum.PROCESS,
 			orderManage
 		);
 	}
 
 	private AddCommandRequest(String name, String surname, String email, int phoneNumber, String companyName, TypeEnergyEnum typeEnergy,
 			CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
-			int maxPriceUnitEnergy, OrderManage orderManage) {
+			int maxPriceUnitEnergy, StatusOrderEnum statusOrder, OrderManage orderManage) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -68,6 +71,7 @@ public class AddCommandRequest implements RequestInterface{
 		this.quantityMin = quantityMin;
 		this.budget = budget;
 		this.maxPriceUnitEnergy = maxPriceUnitEnergy;
+		this.statusOrder = statusOrder;
 		this.orderManage = orderManage;
 	}
 
@@ -138,7 +142,8 @@ public class AddCommandRequest implements RequestInterface{
 			this.quantity,
 			this.quantityMin,
 			this.budget,
-			this.maxPriceUnitEnergy
+			this.maxPriceUnitEnergy,
+			this.statusOrder
 		);
 		
 		int idOrder = this.orderManage.generateIdOrder();

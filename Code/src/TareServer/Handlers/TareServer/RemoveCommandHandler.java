@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
-import Request.InvalidRequestException;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.RemoveCommandRequest;
@@ -37,11 +36,6 @@ public class RemoveCommandHandler extends Handler{
 
 		try {
 			request = RemoveCommandRequest.fromJSON(new JSONObject(data), this.orderManage);
-		} catch (InvalidRequestException e) {
-			response.put("status", false);
-			response.put("message", e.toString());
-			sendResponse(exchange, response);
-			return;
 		} catch (Exception e){
 			response.put("status", false);
 			response.put("message", e.toString());
