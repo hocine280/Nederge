@@ -1,6 +1,7 @@
 package TareServer.Orders;
 
 import java.util.Hashtable;
+import java.util.Random;
 
 public class OrderManage {
 
@@ -10,29 +11,39 @@ public class OrderManage {
 		this.listOrder = new Hashtable<Integer, Order>();
 	}
 	
-	public void addOrder(int idOrder, Order order){
-
-		this.listOrder.put(idOrder, order);
+	public void addOrder(int idOrder, Order order) throws OrderException{
+		if(!this.listOrder.containsKey(idOrder)){
+			this.listOrder.put(idOrder, order);
+		}
 	}
 
-	public void removeOrder(int id, String login){
-		if(this.listOrder.containsKey(id) && this.listOrder.get(id).verifOrder(id, login)){
-			this.listOrder.remove(id);
+	public void removeOrder(int id, String login) throws OrderException{
+		if(!this.listOrder.containsKey(id) || !this.listOrder.get(id).verifOrder(id, login)){
+			throw new OrderException("Le champ idOrderForm ou loginOrder est incorrect.");
 		}
+
+		this.listOrder.remove(id);
 	}
 
 	public int generateIdOrder(){
 		int idOrder;
 		
 		do {
-			idOrder = (int) (this.listOrder.size() + Math.random() * (Integer.MAX_VALUE - this.listOrder.size()));
+			idOrder = (int) (Math.random() * (Integer.MAX_VALUE));
 		} while (this.listOrder.containsKey(idOrder));
 
 		return idOrder;
 	}
 
 	public String generateLoginOrder(){
-		return "test";
+		String login = "";
+		Random rand = new Random();
+
+		for (int i = 0; i < 6; i++) {
+			login += (char) (rand.nextInt(26) + 97);
+		}
+
+		return login;
 	}
 
 	public Order getOrder(int idOrder){

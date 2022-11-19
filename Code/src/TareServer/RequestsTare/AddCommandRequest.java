@@ -6,6 +6,7 @@ import Request.InvalidRequestException;
 import Request.RequestInterface;
 import TareServer.Orders.Client;
 import TareServer.Orders.Order;
+import TareServer.Orders.OrderException;
 import TareServer.Orders.OrderManage;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
@@ -128,8 +129,6 @@ public class AddCommandRequest implements RequestInterface{
 	public JSONObject process() {
 		JSONObject response = new JSONObject();
 
-		response.put("status", true);
-
 		Order order = new Order(
 			new Client(this.name, this.surname, this.email, this.companyName, this.phoneNumber),
 			this.typeEnergy,
@@ -141,17 +140,22 @@ public class AddCommandRequest implements RequestInterface{
 			this.budget,
 			this.maxPriceUnitEnergy
 		);
-
+		
 		int idOrder = this.orderManage.generateIdOrder();
 		String loginOrder = this.orderManage.generateLoginOrder();
-
+		
 		order.setId(idOrder);
 		order.setLogin(loginOrder);
 		
-		orderManage.addOrder(idOrder, order);
-
-		response.put("idOrderForm", idOrder);
-		response.put("login", loginOrder);
+		try {
+			orderManage.addOrder(idOrder, order);
+			response.put("status", true);
+			response.put("idOrderForm", idOrder);
+			response.put("login", loginOrder);
+		} catch (OrderException e) {
+			response.put("status", false);
+			response.put("message", e.toString());
+		}
 
 		return response;
 	}

@@ -3,6 +3,7 @@ package TareServer;
 import com.sun.net.httpserver.HttpServer;
 
 import TareServer.Handlers.TareServer.AddCommandHandler;
+import TareServer.Handlers.TareServer.RemoveCommandHandler;
 import TareServer.Orders.OrderManage;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class TareServer {
 
 	public void start() throws IOException{
 		this.server.createContext("/add-command", new AddCommandHandler(this.orderManage));
-		this.server.createContext("/remove-command");
+		this.server.createContext("/remove-command", new RemoveCommandHandler(this.orderManage));
 		this.server.createContext("/infos-market");
 		this.server.createContext("/order-status");
 		this.server.setExecutor(null);
