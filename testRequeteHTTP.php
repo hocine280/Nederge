@@ -12,12 +12,12 @@ switch ($argv[1]) {
 		exit;
 		break;
 
-	case 'add-command':
+	case 'add-order':
 		$method = 'POST';
-		$content = 'name=CHEMIN&surname=Pierre&email=pierrechemin08200@gmail.com&phoneNumber=0682204603&companyName=StronePathCompany&typeEnergy=EL&countryOrigin=FR&extractionMode=MODE1&green=true&quantity=500&quantityMin=250&budget=5000&maxPriceUnitEnergy=20';
+		$content = 'name=CHEMIN&surname=Pierre&email=pierrechemin08200@gmail.com&phoneNumber=0682204603&companyName=StronePathCompany&typeEnergy=ELECTRICITE&countryOrigin=FRANCE&extractionMode=MODE_1&green=true&quantity=500&quantityMin=250&budget=5000&maxPriceUnitEnergy=20';
 		break;
 
-	case 'remove-command':
+	case 'remove-order':
 		if(empty($argv[2]) || empty($argv[3])){
 			echo "L'identifiant de la commande ou son login n'est pas renseigné";
 			exit;

@@ -14,7 +14,7 @@ import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 import Request.InvalidRequestSituationEnum;
 
-public class AddCommandRequest implements RequestInterface{
+public class AddOrderRequest implements RequestInterface{
 
 	private OrderManage orderManage; 
 
@@ -33,18 +33,18 @@ public class AddCommandRequest implements RequestInterface{
 	private int maxPriceUnitEnergy;
 	private StatusOrderEnum statusOrder;
 
-	public static AddCommandRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
+	public static AddOrderRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
 		check(object);
 
-		return new AddCommandRequest(
+		return new AddOrderRequest(
 			object.getString("name"),
 			object.getString("surname"),
 			object.getString("email"),
 			Integer.valueOf(object.getString("phoneNumber")),
 			object.getString("companyName"),
-			TypeEnergyEnum.fromCode(object.getString("typeEnergy")),
-			CountryEnum.fromCode(object.getString("countryOrigin")),
-			ExtractModeEnum.fromCode(object.getString("extractionMode")),
+			TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
+			CountryEnum.valueOf(object.getString("countryOrigin")),
+			ExtractModeEnum.valueOf(object.getString("extractionMode")),
 			Boolean.valueOf(object.getString("green")),
 			Integer.valueOf(object.getString("quantity")),
 			Integer.valueOf(object.getString("quantityMin")),
@@ -55,7 +55,7 @@ public class AddCommandRequest implements RequestInterface{
 		);
 	}
 
-	private AddCommandRequest(String name, String surname, String email, int phoneNumber, String companyName, TypeEnergyEnum typeEnergy,
+	private AddOrderRequest(String name, String surname, String email, int phoneNumber, String companyName, TypeEnergyEnum typeEnergy,
 			CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
 			int maxPriceUnitEnergy, StatusOrderEnum statusOrder, OrderManage orderManage) {
 		this.name = name;

@@ -8,19 +8,19 @@ import Request.RequestInterface;
 import TareServer.Orders.OrderException;
 import TareServer.Orders.OrderManage;
 
-public class RemoveCommandRequest implements RequestInterface{
+public class RemoveOrderRequest implements RequestInterface{
 
 	private int idOrderForm;
 	private String loginOrder;
 	private OrderManage orderManage;
 
-	public static RemoveCommandRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
+	public static RemoveOrderRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
 		check(object);
 
-		return new RemoveCommandRequest(Integer.valueOf(object.getString("idOrderForm")), object.getString("loginOrder"), orderManage);
+		return new RemoveOrderRequest(Integer.valueOf(object.getString("idOrderForm")), object.getString("loginOrder"), orderManage);
 	}
 
-	private RemoveCommandRequest(int idOrderForm, String loginOrder, OrderManage orderManage){
+	private RemoveOrderRequest(int idOrderForm, String loginOrder, OrderManage orderManage){
 		this.idOrderForm = idOrderForm;
 		this.loginOrder = loginOrder;
 		this.orderManage = orderManage;
