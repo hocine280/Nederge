@@ -19,7 +19,7 @@ class AvailabilityEnergy implements JsonSerializable{
             'energy' => $this->energy,
             'originCountry' => $this->originCountry,
             'extractionMode' => $this->extractionMode,
-            'greenEnergy' => $this->greenEnergy
+            'green' => $this->greenEnergy
         ];
     }    
 }

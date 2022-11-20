@@ -8,7 +8,6 @@
 
         <?php include '../layout/FileCSS.php'; ?>
         <link rel="stylesheet" href="../assets/css/order-tracking.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pixeden-stroke-7-icon@1.2.3/pe-icon-7-stroke/dist/pe-icon-7-stroke.min.css">
     </head>
 
     <body>
@@ -91,13 +90,16 @@
                 <div class="trait" style="margin-left:12px;"></div>
             </div>
 
-            <!-- <div class="row mt-3">
-                <h6 class="text-center"><b>Statut de votre commande :</b> En cours de traitement - 25%</h6>
-                <div class="progress mt-2">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>
-                </div>
-            </div> -->
             <?php include '../layout/OrderTracking.php'; ?>
+
+            <form action="" method="post">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Annuler la commande</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
 
         

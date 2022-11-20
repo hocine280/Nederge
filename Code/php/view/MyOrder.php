@@ -1,3 +1,4 @@
+<?php include "../src/controllers/MyOrderController.php"; ?>
 <!DOCTYPE html>
     <html lang="fr">
     <head>
@@ -11,6 +12,7 @@
 
         <!-- ======= Header ======= -->
         <?php include '../layout/header.php'; ?>
+        
 
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
@@ -27,7 +29,7 @@
         </section>
 
         <!-- Si aucune commande n'existe -->
-            <!-- <div class="container">
+            <!-- <div class="container mb-5">
                 <div class="row">
                     <div class="col-md-12 text-center">
                         <i class="bi bi-cart-x icon-no-order"></i>
@@ -51,90 +53,10 @@
                     <div class="card" style="width: 100%;">
                         <img src="../assets/img/energy/petrole.jpg" class="card-img-top">
                         <div class="card-body">
-                            <h5 class="card-title">Commande - Petrole</h5>
-                            <hr>
-                            <p class="card-text">
-                                <b>Quantite : </b> 10 unités <br>
-                                <b>Budget : </b> 1000 € <br>
-                                <b>Pays de Provenance : </b> France <br>
-                            </p>
+                            <h5 class="card-title">Commande - <?php $myOrders->listOrders[0]['energy']['energy'] ?></h5>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><b>Identifiant commande</b> : 005</li>
-                            <li class="list-group-item">
-                                <b>Login commande</b> : <span>ahj5cdjn5cd9cd</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="text-center mt-2">
-                        <a href="TrackOrder.php" class="command">Suivre ma commande <i class="bi bi-truck"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card" style="width: 100%;">
-                        <img src="../assets/img/energy/electricite.jpg" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">Commande - Electricite</h5>
-                            <hr>
-                            <p class="card-text">
-                                <b>Quantite : </b> 10 unités <br>
-                                <b>Budget : </b> 1000 € <br>
-                                <b>Pays de Provenance : </b> France <br>
-                            </p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><b>Identifiant commande</b> : 006</li>
-                            <li class="list-group-item">
-                                <b>Login commande</b> : <span>ahj5cdjn5cd9cd</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="text-center mt-2">
-                        <a href="TrackOrder.php" class="command">Suivre ma commande <i class="bi bi-truck"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card" style="width: 100%;">
-                        <img src="../assets/img/energy/gaz.jpg" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">Commande - Gaz</h5>
-                            <hr>
-                            <p class="card-text">
-                                <b>Quantite : </b> 10 unités <br>
-                                <b>Budget : </b> 1000 € <br>
-                                <b>Pays de Provenance : </b> France <br>
-                            </p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><b>Identifiant commande</b> : 007</li>
-                            <li class="list-group-item">
-                                <b>Login commande</b> : <span>ahj5cdjn5cd9cd</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="text-center mt-2">
-                        <a href="TrackOrder.php" class="command">Suivre ma commande <i class="bi bi-truck"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card" style="width: 100%;">
-                        <img src="../assets/img/energy/charbon.jpg" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">Commande - Charbon</h5>
-                            <hr>
-                            <p class="card-text">
-                                <b>Quantite : </b> 10 unités <br>
-                                <b>Budget : </b> 1000 € <br>
-                                <b>Pays de Provenance : </b> France <br>
-                            </p>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item"><b>Identifiant commande</b> : 009</li>
-                            <li class="list-group-item">
-                                <b>Login commande</b> : <span>ahj5cdjn5cd9cd</span>
-                            </li>
+                            <li class="list-group-item"><b>Identifiant commande</b> : <b style="color:#f7ad05">#2563326</b></li>
                         </ul>
                     </div>
                     <div class="text-center mt-2">

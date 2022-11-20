@@ -25,4 +25,8 @@ class Client implements JsonSerializable{
             'phoneNumber' => $this->phoneNumber
         ];
     }    
+
+    public function getName(){
+        return $this->name;
+    }
 }

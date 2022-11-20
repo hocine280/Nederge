@@ -17,11 +17,11 @@ include "../../vendor/autoload.php";
                 [
                     'method'=>'POST',
                     'header'=>'Content-Type: application/x-www-form-urlencoded', 
-                    'content'=>json_encode($order, true),
+                    'content'=>json_encode($availabilityEnergy, true),
                 ]
         ]; 
 
-        $url = "http://localhost:8080/consult-availability-energy";
+        $url = "http://localhost:8080/infos-market";
         $context = stream_context_create($options);
         $result = file_get_contents($url, false, $context);
 

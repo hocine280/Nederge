@@ -8,8 +8,10 @@ class Order implements JsonSerializable{
     private float $maxUnitPrice;
     private String $originCountry;
     private float $budget; 
+    private String $status;
     
-    public function __construct(Client $client, Energy $energy, float $quantity, float $minQuantity, float $maxUnitPrice, String $originCountry, float $budget){
+    public function __construct(Client $client, Energy $energy, float $quantity, float $minQuantity, float $maxUnitPrice, 
+                                String $originCountry, float $budget, String $status){
         $this->client = $client;
         $this->energy = $energy;
         $this->quantity = $quantity;
@@ -17,6 +19,7 @@ class Order implements JsonSerializable{
         $this->maxUnitPrice = $maxUnitPrice;
         $this->originCountry = $originCountry;
         $this->budget = $budget;
+        $this->status = $status;
     }
 
     public function jsonSerialize(): array{
@@ -26,9 +29,14 @@ class Order implements JsonSerializable{
             'minQuantity' => $this->minQuantity,
             'maxUnitPrice' => $this->maxUnitPrice, 
             'originCountry' => $this->originCountry,
-            'budget' => $this->budget
+            'budget' => $this->budget,
+            'status' => $this->status
         ];
         $data['energy'] = $this->energy->jsonSerialize();
         return $data; 
+    }
+
+    public function getClient(){
+        return $this->client;
     }
 }
