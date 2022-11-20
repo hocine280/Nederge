@@ -5,6 +5,7 @@ if(empty($argv[1])){
 	exit;
 }
 
+$array = array();
 
 switch ($argv[1]) {
 	case 'test':
@@ -14,7 +15,21 @@ switch ($argv[1]) {
 
 	case 'add-order':
 		$method = 'POST';
-		$content = 'name=CHEMIN&surname=Pierre&email=pierrechemin08200@gmail.com&phoneNumber=0682204603&companyName=StronePathCompany&typeEnergy=ELECTRICITE&countryOrigin=FRANCE&extractionMode=MODE_1&green=true&quantity=500&quantityMin=250&budget=5000&maxPriceUnitEnergy=20';
+		$array = [
+			"name" => "CHEMIN",
+			"surname" => "Pierre",
+			"email" => "pierrechemin08200@gmail.com",
+			"phoneNumber" => "0682204603",
+			"companyName" => "StonePath company",
+			"typeEnergy" => "ELECTRICITE",
+			"countryOrigin" => "FRANCE",
+			"extractionMode" => "MODE_1",
+			"green" => true,
+			"quantity" => 500,
+			"quantityMin" => 250,
+			"budget" => 5000,
+			"maxPriceUnitEnergy" => 250
+		];
 		break;
 
 	case 'remove-order':
@@ -23,12 +38,14 @@ switch ($argv[1]) {
 			exit;
 		}
 		$method = 'POST';
-		$content = 'idOrderForm=' . $argv[2] . '&loginOrder=' . $argv[3];
+		$array = [
+			"idOrderForm" => $argv[2],
+			"loginOrder" => $argv[3]
+		];
 		break;
 
 	case 'list-order':
-		$method = 'POST';
-		$content = '';
+		$method = 'GET';
 		break;
 
 	case 'order-status':
@@ -37,7 +54,17 @@ switch ($argv[1]) {
 			exit;
 		}
 		$method = 'POST';
-		$content = 'idOrderForm=' . $argv[2] . '&loginOrder=' . $argv[3];
+		$array = [
+			"idOrderForm" => $argv[2],
+			"loginOrder" => $argv[3]
+		];
+		break;
+
+	case 'infos-market' :
+		$method = 'POST';
+		$array = [
+			"test" => "test"
+		];
 		break;
 	
 	default:
@@ -45,6 +72,8 @@ switch ($argv[1]) {
 		exit;
 		break;
 }
+
+$content = json_encode($array);
 
 // Préparation de la requête
 $options = [

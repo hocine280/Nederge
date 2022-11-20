@@ -8,8 +8,6 @@ import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.AddOrderRequest;
 
-import java.util.HashMap;
-
 import org.json.JSONObject;
 
 
@@ -26,9 +24,9 @@ public class AddOrderHandler extends Handler{
 		
 		JSONObject response = new JSONObject();
 
-		HashMap<String, String> data = receivePost(exchange);
+		JSONObject data = receiveJSON(exchange);
 
-		if(data.size() == 0){
+		if(data == null){
 			response.put("status", false);
 			response.put("message", "Aucune donnée à traiter ...");
 			sendResponse(exchange, response);
@@ -37,7 +35,7 @@ public class AddOrderHandler extends Handler{
 
 		AddOrderRequest request;
 		try {
-			request = AddOrderRequest.fromJSON(new JSONObject(data), this.orderManage);
+			request = AddOrderRequest.fromJSON(data, this.orderManage);
 		} catch (Exception e){
 			response.put("status", false);
 			response.put("message", e.toString());

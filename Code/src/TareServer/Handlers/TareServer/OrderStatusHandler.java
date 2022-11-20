@@ -1,7 +1,6 @@
 package TareServer.Handlers.TareServer;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -9,13 +8,13 @@ import com.sun.net.httpserver.HttpExchange;
 
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
-import TareServer.RequestsTare.StatusOrderRequest;
+import TareServer.RequestsTare.OrderStatusRequest;
 
-public class StatusOrderHandler extends Handler{
+public class OrderStatusHandler extends Handler{
 	
 	private OrderManage orderManage;
 
-	public StatusOrderHandler(OrderManage orderManage){
+	public OrderStatusHandler(OrderManage orderManage){
 		this.orderManage = orderManage;
 	}
 
@@ -23,12 +22,19 @@ public class StatusOrderHandler extends Handler{
 	public void handle(HttpExchange exchange) throws IOException {
 		JSONObject response = new JSONObject();
 		
-		HashMap<String, String> data = receivePost(exchange);
+		JSONObject data = receiveJSON(exchange);
 
-		StatusOrderRequest request;
+		if(data == null){
+			response.put("status", false);
+			response.put("message", "Il manque les spécifications sur l'énergie dont on veut obtenir les infos du marché");
+			sendResponse(exchange, response);
+			return;
+		}
+
+		OrderStatusRequest request;
 
 		try {
-			request = StatusOrderRequest.fromJSON(new JSONObject(data), this.orderManage);
+			request = OrderStatusRequest.fromJSON(data, this.orderManage);
 		} catch (Exception e) {
 			response.put("status", false);
 			response.put("message", e.toString());

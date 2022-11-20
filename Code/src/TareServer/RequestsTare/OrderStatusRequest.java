@@ -7,16 +7,16 @@ import Request.InvalidRequestSituationEnum;
 import Request.RequestInterface;
 import TareServer.Orders.OrderManage;
 
-public class StatusOrderRequest implements RequestInterface{
+public class OrderStatusRequest implements RequestInterface{
 	
 	private int idOrder;
 	private String loginOrder;
 	private OrderManage orderManage;
 
-	public static StatusOrderRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
+	public static OrderStatusRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
 		check(object);
 
-		return new StatusOrderRequest(object.getInt("idOrderForm"), object.getString("loginOrder"), orderManage);
+		return new OrderStatusRequest(object.getInt("idOrderForm"), object.getString("loginOrder"), orderManage);
 	}
 
 	public static void check(JSONObject data) throws InvalidRequestException{
@@ -29,7 +29,7 @@ public class StatusOrderRequest implements RequestInterface{
 		}
 	}
 
-	private StatusOrderRequest(int idOrder, String loginOrder, OrderManage orderManage){
+	private OrderStatusRequest(int idOrder, String loginOrder, OrderManage orderManage){
 		this.idOrder = idOrder;
 		this.loginOrder = loginOrder;
 		this.orderManage = orderManage;

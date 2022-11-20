@@ -1,7 +1,6 @@
 package TareServer.Handlers.TareServer;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -23,9 +22,9 @@ public class RemoveOrderHandler extends Handler{
 	public void handle(HttpExchange exchange) throws IOException {
 		JSONObject response = new JSONObject();
 
-		HashMap<String, String> data = receivePost(exchange);
+		JSONObject data = receiveJSON(exchange);
 		
-		if(data.size() == 0){
+		if(data == null){
 			response.put("status", false);
 			response.put("message", "Aucune donnée à traiter ...");
 			sendResponse(exchange, response);
@@ -35,7 +34,7 @@ public class RemoveOrderHandler extends Handler{
 		RemoveOrderRequest request;
 
 		try {
-			request = RemoveOrderRequest.fromJSON(new JSONObject(data), this.orderManage);
+			request = RemoveOrderRequest.fromJSON(data, this.orderManage);
 		} catch (Exception e){
 			response.put("status", false);
 			response.put("message", e.toString());

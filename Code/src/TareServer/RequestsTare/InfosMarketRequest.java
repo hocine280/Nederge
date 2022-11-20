@@ -3,6 +3,7 @@ package TareServer.RequestsTare;
 import org.json.JSONObject;
 
 import Request.InvalidRequestException;
+import Request.InvalidRequestSituationEnum;
 import Request.RequestInterface;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
@@ -16,7 +17,21 @@ public class InfosMarketRequest implements RequestInterface{
 	private boolean green;
 
 	public static void check(JSONObject data) throws InvalidRequestException{
+		if(!data.has("typeEnergy")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "Champ typeEnergy absent");
+		}
 
+		if(!data.has("countryOrigin")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "Champ countryOrigin absent");
+		}
+
+		if(!data.has("extractionMode")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "Champ extractionMode absent");
+		}
+
+		if(!data.has("green")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "Champ green absent");
+		}
 	}
 
 	public static InfosMarketRequest fromJSON(JSONObject object) throws InvalidRequestException{

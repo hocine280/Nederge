@@ -17,7 +17,7 @@ public class RemoveOrderRequest implements RequestInterface{
 	public static RemoveOrderRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
 		check(object);
 
-		return new RemoveOrderRequest(Integer.valueOf(object.getString("idOrderForm")), object.getString("loginOrder"), orderManage);
+		return new RemoveOrderRequest(object.getInt("idOrderForm"), object.getString("loginOrder"), orderManage);
 	}
 
 	private RemoveOrderRequest(int idOrderForm, String loginOrder, OrderManage orderManage){

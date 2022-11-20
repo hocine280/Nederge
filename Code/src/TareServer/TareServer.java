@@ -6,7 +6,7 @@ import TareServer.Handlers.TareServer.AddOrderHandler;
 import TareServer.Handlers.TareServer.InfosMarketHandler;
 import TareServer.Handlers.TareServer.ListOrderHandler;
 import TareServer.Handlers.TareServer.RemoveOrderHandler;
-import TareServer.Handlers.TareServer.StatusOrderHandler;
+import TareServer.Handlers.TareServer.OrderStatusHandler;
 import TareServer.Orders.OrderManage;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class TareServer {
 		this.server.createContext("/add-order", new AddOrderHandler(this.orderManage));
 		this.server.createContext("/remove-order", new RemoveOrderHandler(this.orderManage));
 		this.server.createContext("/infos-market", new InfosMarketHandler());
-		this.server.createContext("/order-status", new StatusOrderHandler(this.orderManage));
+		this.server.createContext("/order-status", new OrderStatusHandler(this.orderManage));
 		this.server.createContext("/list-order", new ListOrderHandler(this.orderManage));
 		this.server.setExecutor(null);
 		this.server.start();

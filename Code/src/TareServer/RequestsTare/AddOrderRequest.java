@@ -45,11 +45,11 @@ public class AddOrderRequest implements RequestInterface{
 			TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
 			CountryEnum.valueOf(object.getString("countryOrigin")),
 			ExtractModeEnum.valueOf(object.getString("extractionMode")),
-			Boolean.valueOf(object.getString("green")),
-			Integer.valueOf(object.getString("quantity")),
-			Integer.valueOf(object.getString("quantityMin")),
-			Integer.valueOf(object.getString("budget")),
-			Integer.valueOf(object.getString("maxPriceUnitEnergy")),
+			object.getBoolean("green"),
+			object.getInt("quantity"),
+			object.getInt("quantityMin"),
+			object.getInt("budget"),
+			object.getInt("maxPriceUnitEnergy"),
 			StatusOrderEnum.PROCESS,
 			orderManage
 		);

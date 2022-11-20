@@ -48,6 +48,31 @@ public abstract class Handler implements HttpHandler{
 		return data;
 	}
 
+	public JSONObject receiveJSON(HttpExchange exchange){
+		JSONObject data = null;
+
+		BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(),"utf-8"));
+        } catch(UnsupportedEncodingException e) {
+            System.err.println("Erreur lors de la récupération du flux " + e);
+			return data;
+        }
+	
+		String post = null;
+        // Récupération des données en POST
+        try {
+            post = br.readLine();
+        } catch(IOException e) {
+            System.err.println("Erreur lors de la lecture d'une ligne " + e);
+			return data;
+        }
+
+		data = new JSONObject(post);
+
+		return data;
+	}
+
 	public void sendResponse(HttpExchange exchange, JSONObject response){
         try {
             Headers h = exchange.getResponseHeaders();
