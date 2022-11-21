@@ -145,3 +145,8 @@
     color : white;
     font-weight : bold; 
 }
+
+.modal-header{
+    background-color : #f7ad05;
+    color : white;
+}

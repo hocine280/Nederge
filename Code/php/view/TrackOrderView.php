@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
     <html lang="fr">
     <head>
@@ -31,6 +32,16 @@
 
         <div class="container mt-5 mb-5">
             <h1 class="text-center">Commande n°<?php echo $_GET['idOrderForm']?></h1>
+            <?php 
+                if(isset($_SESSION['cancelOrderBadConfirmationLogin'])){
+                    echo '<div class="col-md-12 text-center mt-4">
+                            <div class="alert alert-danger" role="alert" style="font-weight : bold;">
+                                <i class="bi bi-exclamation-circle-fill"></i> '.$_SESSION['cancelOrderBadConfirmationLogin'].'
+                            </div>
+                        </div>';
+                    unset($_SESSION['cancelOrderBadConfirmationLogin']);
+                }
+            ?>
             <div class="row mt-5">
                 <div class="col-md-12">
                     <h3><b><u>Détails de la commande : </u></b></h3>
@@ -86,23 +97,45 @@
                     </div>  
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row mt-3" id="statusOrder">
                 <h4>Statut de ma commande</h4>
                 <div class="trait" style="margin-left:12px;"></div>
             </div>
 
             <?php include '../layout/order-tracking/OrderTracking.php'; ?>
 
+
+            <!-- Button trigger modal -->
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <form action="../src/controllers/CancelOrderController.php" method="POST">
-                        <input type="hidden" name="idOrderForm" value="<?php echo $_GET['idOrderForm']?>">
-                        <input type="hidden" name="loginOrder" value="<?php echo $_GET['loginOrder']?>">
-                        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Annuler la commande</button>
-                    </form>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="bi bi-trash"></i> Annuler la commande
+                    </button>
                 </div>
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Etes-vous sur de votre action ?</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="../src/controllers/CancelOrderController.php" method="POST">
+                            <div class="modal-body">
+                                <input type="hidden" name="idOrderForm" value="<?php echo $_GET['idOrderForm']?>">
+                                <span>Pour confirmer l'annulation de votre commande, veuillez saisir le login de la commande <b>#<?php echo $_GET['idOrderForm']?> : </b></span><br><br>
+                                <input type="text" name="loginOrder" style="width:100%;" placeholder="Exemple login : jdjncdncd">
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</a>
+                                <button type="submit" class="btn btn-dark"><i class="bi bi-trash"></i> Confirmer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
     
@@ -112,7 +145,7 @@
 
         <!-- Fichier js -->
         <?php include '../layout/FileJS.php' ?>
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script> -->
+        <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+
     </body>
     </html>

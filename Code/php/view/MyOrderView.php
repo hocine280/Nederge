@@ -85,7 +85,7 @@
         <?php    
             }else if(!empty($listOrders) && $jsonReceived == true){
         ?>
-        <div class="container mt-5 mb-5">
+        <div class="container mt-3 mb-5">
             <div class="row mb-5">
 
             <?php 

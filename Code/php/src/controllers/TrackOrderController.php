@@ -37,7 +37,7 @@ if(isset($_POST['login']) && !empty($_POST['login'])){
                         "&maxPriceUnitEnergy=".$order->getMaxPriceUnitEnergy()."&budget=".$order->getBudget().
                         "&name=".$order->getClient()->getName()."&surname=".$order->getClient()->getSurname().
                         "&email=".$order->getClient()->getMail()."&companyName=".$order->getClient()->getNameCompany().
-                        "&phoneNumber=".$order->getClient()->getPhoneNumber()."&loginOrder=".$enteredLogin);
+                        "&phoneNumber=".$order->getClient()->getPhoneNumber());
                     }
                 }
             }
