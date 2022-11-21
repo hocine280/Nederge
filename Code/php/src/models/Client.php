@@ -3,14 +3,14 @@
 class Client implements JsonSerializable{
 
     private String $name; 
-    private String $firstName; 
+    private String $surname; 
     private String $mail;
     private String $nameCompany;
     private String $phoneNumber;
 
-    public function __construct(String $name, String $firstName, String $mail, String $nameCompany, String $phoneNumber){
+    public function __construct(String $name, String $surname, String $mail, String $nameCompany, String $phoneNumber){
         $this->name = $name;
-        $this->firstName = $firstName;
+        $this->surname = $surname;
         $this->mail = $mail;
         $this->nameCompany = $nameCompany;
         $this->phoneNumber = $phoneNumber;
@@ -19,9 +19,9 @@ class Client implements JsonSerializable{
     public function jsonSerialize(): array{
         return [
             'name' => $this->name,
-            'fistName' => $this->firstName,
-            'mail' => $this->mail,
-            'nameCompany' => $this->nameCompany,
+            'surname' => $this->surname,
+            'email' => $this->mail,
+            'compagnyName' => $this->nameCompany,
             'phoneNumber' => $this->phoneNumber
         ];
     }    
@@ -29,4 +29,20 @@ class Client implements JsonSerializable{
     public function getName(){
         return $this->name;
     }
+
+    public function getSurname(){
+        return $this->surname;
+    }
+
+    public function getMail(){
+        return $this->mail;
+    }
+
+    public function getNameCompany(){
+        return $this->nameCompany;
+    }
+
+    public function getPhoneNumber(){
+        return $this->phoneNumber;
+    }   
 }

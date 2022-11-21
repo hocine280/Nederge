@@ -22,21 +22,46 @@ class Order implements JsonSerializable{
         $this->status = $status;
     }
 
-    public function jsonSerialize(): array{
-        $data['client'] = $this->client->jsonSerialize();
-        $data['order'] = [
+    public function jsonSerialize():array{
+        return [
+            'name' => $this->client->getName(),
+            'surname' => $this->client->getSurname(),
+            'email' => $this->client->getMail(),
+            'phoneNumber' => $this->client->getPhoneNumber(),
+            'companyName' => $this->client->getNameCompany(),
+            'typeEnergy' => $this->energy->getTypeEnergy(),
+            'countryOrigin' => $this->originCountry,
+            'extractionMode' => $this->energy->getExtractionMode(),
+            'green' => $this->energy->getGreenEnergy(),
             'quantity' => $this->quantity,
-            'minQuantity' => $this->minQuantity,
-            'maxUnitPrice' => $this->maxUnitPrice, 
-            'originCountry' => $this->originCountry,
+            'quantityMin' => $this->minQuantity,
             'budget' => $this->budget,
-            'status' => $this->status
+            'maxPriceUnitEnergy' => $this->maxUnitPrice,
         ];
-        $data['energy'] = $this->energy->jsonSerialize();
-        return $data; 
     }
+
+    // public function jsonSerialize(): array{
+    //     $data['client'] = $this->client->jsonSerialize();
+    //     $data['order'] = [
+    //         'quantity' => $this->quantity,
+    //         'quantityMin' => $this->minQuantity,
+    //         'maxPriceUnitEnergy' => $this->maxUnitPrice, 
+    //         'countryOrigin' => $this->originCountry,
+    //         'budget' => $this->budget,
+    //         'statusOrder' => $this->status
+    //     ];
+    //     $data['energy'] = $this->energy->jsonSerialize();
+    //     return $data; 
+    // }
+
 
     public function getClient(){
         return $this->client;
     }
+
+    public function getEnergy(){
+        return $this->energy;
+    }
+
+    
 }

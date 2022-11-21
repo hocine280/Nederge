@@ -62,7 +62,7 @@ class Validation{
         if(isset($energy) && empty($energy)){
             $errors['energy'] = "Veuillez sélectionner une énergie";
         }
-        if(!in_array($energy, ['gaz', 'electricite', 'petrole', 'charbon'])){
+        if(!in_array($energy, ['GAZ', 'ELECTRICITE', 'PETROLE', 'CHARBON'])){
             $errors['energy'] = "L'énergie sélectionnée n'est pas valide";
         }
 
@@ -86,7 +86,7 @@ class Validation{
         if(isset($extractionMode) && empty($extractionMode)){
             $errors['extractionMode'] = "Veuillez sélectionner un mode d'extraction";
         }
-        if(!in_array($extractionMode, ['eolionne', 'eolienne', 'panneau_solaire', 'forage_puits', 'nucleaire','sans_preference'])){
+        if(!in_array($extractionMode, ['eolionne', 'eolienne', 'panneau_solaire', 'forage_puits', 'nucleaire','sans_preference', 'MODE_1'])){
             $errors['extractionMode'] = "Le mode d'extraction sélectionné ne figure pas dans la liste";
         }
 
@@ -139,7 +139,7 @@ class Validation{
         if(isset($energy) && empty($energy)){
             $errors['energy'] = "Veuillez sélectionner une énergie";
         }
-        if(!in_array($energy, ['gaz', 'electricite', 'petrole', 'charbon'])){
+        if(!in_array($energy, ['GAZ', 'ELECTRICITE', 'PETROLE', 'CHARBON'])){
             $errors['energy'] = "L'énergie sélectionnée n'est pas valide";
         }
         // Pays de provenance
@@ -153,7 +153,7 @@ class Validation{
         if(isset($extractionMode) && empty($extractionMode)){
             $errors['extractionMode'] = "Veuillez sélectionner un mode d'extraction";
         }
-        if(!in_array($extractionMode, ['eolionne', 'eolienne', 'panneau_solaire', 'forage_puits', 'nucleaire','sans_preference'])){
+        if(!in_array($extractionMode, ['eolionne', 'eolienne', 'panneau_solaire', 'forage_puits', 'nucleaire','sans_preference', 'MODE_1'])){
             $errors['extractionMode'] = "Le mode d'extraction sélectionné ne figure pas dans la liste";
         }
         // Énergie verte

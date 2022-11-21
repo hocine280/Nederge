@@ -68,6 +68,21 @@
     display: none
 }
 
+.steps .step.no-dispo .step-icon-wrap::before,
+.steps .step.no-dispo .step-icon-wrap::after {
+    background-color: #bb2d3b;
+}
+
+.no-dispo-icon{
+    background-color : #bb2d3b !important;
+    border-color : #bb2d3b !important;
+}
+
+.no-dispo-icon i{
+    color : #fff !important;
+}
+
+
 .steps .step.completed .step-icon-wrap::before,
 .steps .step.completed .step-icon-wrap::after {
     background-color: #f7ad05;
@@ -76,7 +91,7 @@
 .steps .step.completed .step-icon {
     border-color: #f7ad05;
     background-color: #f7ad05;
-    color: #fff
+    color: #fff; 
 }
 
 @media (max-width: 576px) {

@@ -8,9 +8,9 @@
             <li><a class="nav-link scrollto active" href="../index.php">Accueil</a></li>
             <li class="dropdown"><a href="#"><span>Mon énergie</span> <i class="bi bi-chevron-down"></i></a>
                 <ul>
-                    <li><a href="OrderEnergy.php">Commander une énergie</a></li>
-                    <li><a href="ConsultAvailableEnergy.php">Consulter les énergies disponibles</a></li>
-                    <li><a href="MyOrder.php">Mes commandes</a></li>
+                    <li><a href="OrderEnergyView.php">Commander une énergie</a></li>
+                    <li><a href="ConsultAvailableEnergyView.php">Consulter les énergies disponibles</a></li>
+                    <li><a href="MyOrderView.php">Mes commandes</a></li>
                 </ul>
             </li>
         </ul>

@@ -1,6 +1,6 @@
 <?php
 
-include "../../vendor/autoload.php";
+include "../vendor/autoload.php";
 
 class MyOrders{
     private array $listOrders;
@@ -11,10 +11,15 @@ class MyOrders{
 
     public function fromJSON($json){
         $data = json_decode($json, true);
-        foreach($data as $order){
-            $client = new Client($order['client']['name'], $order['client']['firstName'], $order['client']['mail'], $order['client']['companyName'], $order['client']['phoneNumber']);
-            $energy = new Energy($order['energy']['energy'], $order['energy']['extractionMode'], $order['energy']['greenEnergy']);
-            $order = new Order($client, $energy, $order['order']['quantity'], $order['order']['minQuantity'], $order['order']['maxUnitPrice'], $order['order']['originCountry'], $order['order']['budget'], $order['order']['status']);
+
+        foreach($data['orders'] as $order){
+            $client = new Client($order['client']['name'], $order['client']['surname'], $order['client']['email'], 
+                                $order['client']['companyName'], $order['client']['phoneNumber']);
+            $order = new OrderReceived($order['statusOrder'], $order['green'], $order['quantity'], 
+                                        $order['idOrderForm'], $order['typeEnergy'], $client, 
+                                        $order['extractionMode'], $order['quantityMin'], 
+                                        $order['countryOrigin'], $order['maxPriceUnitEnergy'], 
+                                        $order['budget']);
             array_push($this->listOrders, $order);
         }
     }

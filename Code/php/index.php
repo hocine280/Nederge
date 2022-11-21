@@ -35,9 +35,9 @@
             <li><a class="nav-link scrollto" href="#features">Fonctionnalités</a></li>
             <li class="dropdown"><a href="#"><span>Mon énergie</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
-                <li><a href="view/OrderEnergy.php">Commander une énergie</a></li>
-                <li><a href="view/ConsultAvailableEnergy.php">Consulter les énergies disponibles</a></li>
-                <li><a href="view/MyOrder.php">Mes commandes</a></li>
+                <li><a href="view/OrderEnergyView.php">Commander une énergie</a></li>
+                <li><a href="view/ConsultAvailableEnergyView.php">Consulter les énergies disponibles</a></li>
+                <li><a href="view/MyOrderView.php">Mes commandes</a></li>
               </ul>
             </li>
             <li><a class="getstarted scrollto" href="#about">Découvrir</a></li>
@@ -172,7 +172,7 @@
           </div>
           <div class="row mt-5">
             <div class="col-md-12 text-center">
-              <a class="command" href="view/OrderEnergy.php">Passez votre première commande !</a>
+              <a class="command" href="view/OrderEnergyView.php">Passez votre première commande !</a>
             </div>
           </div>
 

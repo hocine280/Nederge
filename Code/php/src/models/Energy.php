@@ -1,22 +1,37 @@
 <?php 
 
 class Energy implements JsonSerializable{
-    private String $energy;
+    private String $typeEnergy;
     private String $extractionMode;
     private String $greenEnergy;
 
-    public function __construct(String $energy, String $extractionMode, String $greenEnergy){
-        $this->energy = $energy;
+    public function __construct(String $typeEnergy, String $extractionMode, String $greenEnergy){
+        $this->typeEnergy = $typeEnergy;
         $this->extractionMode = $extractionMode;
         $this->greenEnergy = $greenEnergy;
     }
 
     public function jsonSerialize():array{
         return [
-            'energy' => $this->energy,
+            'typeEnergy' => $this->typeEnergy,
             'extractionMode' => $this->extractionMode,
-            'greenEnergy' => $this->greenEnergy
+            'green' => $this->greenEnergy
         ];
     }
 
+    public function getExtractionMode(){
+        return $this->extractionMode;
+    }
+
+    public function GetTypeEnergy(){
+        return $this->typeEnergy;
+    }
+
+    public function getGreenEnergy(){
+        $green = false;
+        if($this->greenEnergy == "oui"){
+            $green = true;
+        }
+        return $green;
+    }
 }

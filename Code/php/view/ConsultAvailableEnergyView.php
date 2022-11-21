@@ -51,7 +51,7 @@
                 }
             ?>
             <div class="row mt-5">
-                <form action="../src/controllers/AvailabilityEnergyProcessing.php" method="post">
+                <form action="../src/controllers/AvailabilityEnergyProcessingController.php" method="post">
                     <div class="row mb-4">
                             <div class="col-md-6">
                                 <select class="form-control" name="energy" id="energie">
@@ -102,8 +102,6 @@
             </div>
         </div>
 
-        <!-- ======= Footer ======= -->
-        <?php include '../layout/Footer.php'; ?>
 
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
         <div id="preloader"></div>

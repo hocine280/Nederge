@@ -40,8 +40,17 @@
                     if($_SESSION['statusOrder']!=null){
                         if($_SESSION['statusOrder']=='success'){
                             echo '<div class="alert alert-success mt-4" role="alert">
-                                <i class="bi bi-check-circle-fill"></i> Votre commande a bien été prise en compte !
+                                <i class="bi bi-check-circle-fill"></i> Votre commande a bien été prise en compte ! <br>
+                                <b>Numéro de commande</b> : '.$_SESSION['idNewOrder'].' <br>
+                                <hr>
+                                <span>
+                                    <i class="bi bi-exclamation-diamond-fill"></i> Veuillez enregistrer dans un endroit sécurisé cet identifiant : <br>
+                                    <span style="margin-left:20px;"> <i class="bi bi-shield-lock"></i> <b>Login : <i>"'.$_SESSION['loginOrder'].'"</i></b> <br></span>
+                                    Celui-ci vous sera demandé pour suivre votre commande.
+                                </span>
                             </div>';
+                            unset($_SESSION['login']);
+                            unset($_SESSION['idNewOrder']);
                         }else{
                             echo '<div class="alert alert-danger mt-4" role="alert">
                                 <i class="bi bi-exclamation-triangle-fill"></i> Une erreur est survenue lors du transfert de la commande vers le TARE ! 
@@ -53,33 +62,33 @@
                 }
             ?>
         <div class="row mt-5">
-            <form action="../src/controllers/OrderEnergyProcessing.php" method="POST" id="formulaire">
+            <form action="../src/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
                 <div class="row">
                     <h3>Informations du client</h3>
                     <div class="col-md-12 mb-4">
                         <div class="trait mb-4"></div>    
                         <div class="row">
                             <div class="col-md-6">
-                                <input class="form-control" name="name" type="text" placeholder="Nom">
+                                <input class="form-control" name="name" type="text" placeholder="Nom" value="<?php echo @$_SESSION['champError']['name']; ?>">
                             </div>
                             <div class="col-md-6">
-                                <input class="form-control" name="firstName" type="text" placeholder="Prénom">
+                                <input class="form-control" name="firstName" type="text" placeholder="Prénom"  value="<?php echo @$_SESSION['champError']['firstName']; ?>">
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <input class="form-control" name="mail" type="mail" placeholder="E-mail">
+                                <input class="form-control" name="mail" type="email" placeholder="E-mail"  value="<?php echo @$_SESSION['champError']['mail']; ?>">
                             </div>
                             <div class="col-md-6">
-                                <input class="form-control"  name="phoneNumber" type="number" placeholder="Numéro de téléphone">
+                                <input class="form-control"  name="phoneNumber" type="number" placeholder="Numéro de téléphone"  value="<?php echo @$_SESSION['champError']['phoneNumber']; ?>">
                             </div>
                         </div>
                     </div>
 
                     <div class="col-md-12 mb-4">
-                        <input class="form-control" name="companyName" type="text" placeholder="Nom de la compagnie">
+                        <input class="form-control" name="companyName" type="text" placeholder="Nom de la compagnie"  value="<?php echo @$_SESSION['champError']['companyName']; ?>">
                     </div>
                 </div>
 
@@ -91,14 +100,19 @@
                             <div class="col-md-6">
                                 <select class="form-control" name="energy" id="energie">
                                     <option selected disabled>Type d'énergie</option>
-                                    <option value="electricite">Electricité</option>
-                                    <option value="gaz">Gaz</option>
-                                    <option value="petrole">Pétrole</option>    
-                                    <option value="charbon">Charbon</option>                            
+                                    <option value="ELECTRICITE">Electricité</option>
+                                    <option value="GAZ">Gaz</option>
+                                    <option value="PETROLE">Pétrole</option>    
+                                    <option value="CHARBON">Charbon</option>                            
                                 </select>                        
                             </div>
                             <div class="col-md-6">
-                                <input class="form-control" name="originCountry" type="text" placeholder="Pays de Provenance">
+                                <select class="form-control" name="originCountry">
+                                    <option selected disabled>Pays de provenance</option>
+                                    <option value="FRANCE">France</option>
+                                    <option value="ALLEMAGNE">Allemagne</option>
+                                    <option value="UKRAINE">Ukraine</option>    
+                                </select>  
                             </div>
                         </div>
                     </div>
@@ -120,6 +134,7 @@
                                     <option value="forage_puits">Forage de puits</option>
                                     <option value="nucleaire">Nucléaire</option>
                                     <option value="sans_preference">Sans préférence</option>
+                                    <option value="MODE_1">Mode 1</option>
                                 </select>                        
                             </div>
                         </div>
@@ -127,20 +142,20 @@
                     <div class="col-md-12 mb-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <input class="form-control" name="quantity" type="number" placeholder="Quantité (en L ou Kg ou kWh)">               
+                                <input class="form-control" name="quantity" type="number" placeholder="Quantité (unité(s))"  value="<?php echo @$_SESSION['champError']['quantity']; ?>">               
                             </div>
                             <div class="col-md-6">
-                                <input class="form-control" name="minQuantity" type="number" placeholder="Quantité Minimale (en L ou Kg ou kWh)">               
+                                <input class="form-control" name="minQuantity" type="number" placeholder="Quantité Minimale (unité(s))"  value="<?php echo @$_SESSION['champError']['minQuantity']; ?>">               
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 mb-4">
                         <div class="row">
                             <div class="col-md-6">
-                                <input class="form-control" name="maxUnitPrice" type="number" placeholder="Prix maximale par unité d'énergie (en dollars)">
+                                <input class="form-control" name="maxUnitPrice" type="number" placeholder="Prix maximale par unité d'énergie (en euros) "  value="<?php echo @$_SESSION['champError']['maxUnitPrice']; ?>">
                             </div>
                             <div class="col-md-6">
-                                <input class="form-control" name="budget" type="number" placeholder="Budget (en dollars)">
+                                <input class="form-control" name="budget" type="number" placeholder="Budget (en dollars)"  value="<?php echo @$_SESSION['champError']['budget']; ?>">
                             </div>
                         </div>
                     </div>
@@ -163,8 +178,6 @@
         </div>
     </div>
 
-    <!-- ======= Footer ======= -->
-    <?php include '../layout/Footer.php'; ?>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <div id="preloader"></div>
