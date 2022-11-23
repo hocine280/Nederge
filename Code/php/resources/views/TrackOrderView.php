@@ -1,3 +1,4 @@
+<!-- Début d'une session -->
 <?php session_start(); ?>
 <!DOCTYPE html>
     <html lang="fr">
@@ -7,14 +8,14 @@
 
         <title>Nederge - Système d'achat d'énergie</title>
 
-        <?php include '../layout/FileCSS.php'; ?>
-        <link rel="stylesheet" href="../assets/css/order-tracking.css">
+        <?php include '../layout/file-style/FileCSS.html'; ?>
+        <link rel="stylesheet" href="../../public/css/order-tracking.css">
     </head>
 
     <body>
 
         <!-- ======= Header ======= -->
-        <?php include '../layout/header.php'; ?>
+        <?php include '../layout/Header.html'; ?>
 
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
@@ -30,6 +31,7 @@
             </div>
         </section>
 
+        <!-- Description de la commande -->
         <div class="container mt-5 mb-5">
             <h1 class="text-center">Commande n°<?php echo $_GET['idOrderForm']?></h1>
             <?php 
@@ -47,6 +49,7 @@
                     <h3><b><u>Détails de la commande : </u></b></h3>
                 </div>
             </div>
+            <!-- Informations du client -->
             <div class="row mt-3">
                 <h4>Informations sur le client</h4>
                 <div class="trait" style="margin-left:12px;"></div>
@@ -71,6 +74,7 @@
                     <p><b>Nom de la compagnie : </b> <?php echo $_GET['companyName']?></p>
                 </div>
             </div>
+            <!-- Informations sur la commande -->
             <div class="row mt-3">
                 <h4>Informations sur la commande</h4>
                 <div class="trait" style="margin-left:12px;"></div>
@@ -97,6 +101,8 @@
                     </div>  
                 </div>
             </div>
+
+            <!-- Statut de la commande -->
             <div class="row mt-3" id="statusOrder">
                 <h4>Statut de ma commande</h4>
                 <div class="trait" style="margin-left:12px;"></div>
@@ -105,7 +111,7 @@
             <?php include '../layout/order-tracking/OrderTracking.php'; ?>
 
 
-            <!-- Button trigger modal -->
+            <!-- Annuler la commande -->
             <div class="row">
                 <div class="col-md-12 text-center">
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -114,7 +120,7 @@
                 </div>
             </div>
 
-            <!-- Modal -->
+            <!-- Pop d'un modal qui permet d'annuler une commande -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -122,7 +128,7 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Etes-vous sur de votre action ?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="../src/controllers/CancelOrderController.php" method="POST">
+                        <form action="../../src/controllers/CancelOrderController.php" method="POST">
                             <div class="modal-body">
                                 <input type="hidden" name="idOrderForm" value="<?php echo $_GET['idOrderForm']?>">
                                 <span>Pour confirmer l'annulation de votre commande, veuillez saisir le login de la commande <b>#<?php echo $_GET['idOrderForm']?> : </b></span><br><br>
@@ -139,13 +145,13 @@
         </div>
 
     
-
+        <!-- Preloader -->
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
         <div id="preloader"></div>
 
-        <!-- Fichier js -->
-        <?php include '../layout/FileJS.php' ?>
-        <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- Fichier JS -->
+        <?php include '../layout/file-style/FileJS.html' ?>
+        <script src="../../public/vendor/bootstrap/js/bootstrap.min.js"></script>
 
     </body>
     </html>

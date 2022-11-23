@@ -1,6 +1,14 @@
 <?php
+/**
+ * ***********************************************************************************************************
+ * Model gérant une commande dans sa globalité implémentant la classe JsonSerializable
+ * @author HADID Hocine & CHEMIN Pierre
+ * @version 1.0
+ * ***********************************************************************************************************
+ */
 
 class Order implements JsonSerializable{
+    // Attributs privés
     private Client $client;
     private Energy $energy;
     private float $quantity;
@@ -8,10 +16,21 @@ class Order implements JsonSerializable{
     private float $maxUnitPrice;
     private String $originCountry;
     private float $budget; 
-    private String $status;
     
+    /**
+     * Constructeur par initialisation
+     *
+     * @param Client $client
+     * @param Energy $energy
+     * @param float $quantity
+     * @param float $minQuantity
+     * @param float $maxUnitPrice
+     * @param String $originCountry
+     * @param float $budget
+     * @param String $status
+     */
     public function __construct(Client $client, Energy $energy, float $quantity, float $minQuantity, float $maxUnitPrice, 
-                                String $originCountry, float $budget, String $status){
+                                String $originCountry, float $budget){
         $this->client = $client;
         $this->energy = $energy;
         $this->quantity = $quantity;
@@ -19,9 +38,12 @@ class Order implements JsonSerializable{
         $this->maxUnitPrice = $maxUnitPrice;
         $this->originCountry = $originCountry;
         $this->budget = $budget;
-        $this->status = $status;
     }
 
+    /**
+     * Méthode permettant de sérialiser l'objet en JSON
+     * @return array
+     */
     public function jsonSerialize():array{
         return [
             'name' => $this->client->getName(),
@@ -40,28 +62,40 @@ class Order implements JsonSerializable{
         ];
     }
 
-    // public function jsonSerialize(): array{
-    //     $data['client'] = $this->client->jsonSerialize();
-    //     $data['order'] = [
-    //         'quantity' => $this->quantity,
-    //         'quantityMin' => $this->minQuantity,
-    //         'maxPriceUnitEnergy' => $this->maxUnitPrice, 
-    //         'countryOrigin' => $this->originCountry,
-    //         'budget' => $this->budget,
-    //         'statusOrder' => $this->status
-    //     ];
-    //     $data['energy'] = $this->energy->jsonSerialize();
-    //     return $data; 
-    // }
-
-
+    /**
+     * Récupération du client
+     * @return Client
+     */
     public function getClient(){
         return $this->client;
     }
 
+    /**
+     * Récupération de l'énergie
+     * @return Energy
+     */
     public function getEnergy(){
         return $this->energy;
     }
 
+    public function getQuantity(){
+        return $this->quantity;
+    }
+
+    public function getMinQuantity(){
+        return $this->minQuantity;
+    }
+
+    public function getMaxUnitPrice(){
+        return $this->maxUnitPrice;
+    }
+
+    public function getOriginCountry(){
+        return $this->originCountry;
+    }
+
+    public function getBudget(){
+        return $this->budget;
+    }
     
 }

@@ -31,15 +31,15 @@
         <div class="steps d-flex flex-wrap flex-sm-nowrap justify-content-between padding-top-2x padding-bottom-1x">
             <?php 
                 if($statusOrder == "UNAVAILABLE"){
-                    include 'step-tracking/OrderUnavailable.php';
+                    include 'step-tracking/OrderUnavailable.html';
                 }else if($statusOrder == "WAITING_VALIDATION"){
-                    include 'step-tracking/OrderWaitingValidation.php';
+                    include 'step-tracking/OrderWaitingValidation.html';
                 }else if($statusOrder == "PROCESS"){
-                    include 'step-tracking/OrderProcess.php';
+                    include 'step-tracking/OrderProcess.html';
                 }else if($statusOrder == "DELIVERY"){
-                    include 'step-tracking/OrderDelivery.php';
+                    include 'step-tracking/OrderDelivery.html';
                 }else if($statusOrder == "DELIVERED"){
-                    include 'step-tracking/OrderDelivered.php';
+                    include 'step-tracking/OrderDelivered.html';
                 }
             ?>
         </div>

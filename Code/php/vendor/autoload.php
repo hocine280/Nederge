@@ -18,7 +18,7 @@ spl_autoload_register(function($class_name){
         join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src', 'models']),
         join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src', 'rules']),
         join(DIRECTORY_SEPARATOR, [__DIR__, '..']),
-        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'view']),
+        join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'resources', 'views']),
     );
 
     foreach($paths as $path){

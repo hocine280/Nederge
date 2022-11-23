@@ -1,6 +1,7 @@
-<?php 
-    session_start(); 
-?>
+
+<!-- Debut d'une session -->
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,14 +10,14 @@
 
     <title>Nederge - Système d'achat d'énergie</title>
 
-    <?php include '../layout/FileCSS.php'; ?>
+    <?php include '../layout/file-style/FileCSS.html'; ?>
 
 </head>
 
 <body>
 
     <!-- ======= Header ======= -->
-    <?php include '../layout/Header.php'; ?>
+    <?php include '../layout/Header.html'; ?>
 
     <!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
@@ -62,7 +63,7 @@
                 }
             ?>
         <div class="row mt-5">
-            <form action="../src/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
+            <form action="../../src/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
                 <div class="row">
                     <h3>Informations du client</h3>
                     <div class="col-md-12 mb-4">
@@ -160,6 +161,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- Affichage des erreurs -->
                 <?php
                     if(isset($_SESSION['errors'])){
                         foreach($_SESSION['errors'] as $error){
@@ -178,12 +180,12 @@
         </div>
     </div>
 
-
+    <!-- Preloader -->
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <div id="preloader"></div>
 
-    <!-- Fichier js -->
-    <?php include '../layout/FileJS.php' ?>
+    <!-- Fichier JS -->
+    <?php include '../layout/file-style/FileJS.html' ?>
 
 </body>
 </html>

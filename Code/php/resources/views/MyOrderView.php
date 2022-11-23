@@ -1,17 +1,18 @@
-<?php include "../src/controllers/MyOrderController.php"; ?>
+<!-- Importation du controller qui gère la page des commandes -->
+<?php include "../../src/controllers/MyOrderController.php"; ?>
 <!DOCTYPE html>
     <html lang="fr">
     <head>
         <meta charset="utf-8">
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
         <title>Nederge - Système d'achat d'énergie</title>
-        <?php include '../layout/FileCSS.php'; ?>
+        <?php include '../layout/file-style/FileCSS.html'; ?>
     </head>
 
     <body>
 
         <!-- ======= Header ======= -->
-        <?php include '../layout/header.php'; ?>
+        <?php include '../layout/Header.html'; ?>
         
 
         <!-- ======= Breadcrumbs ======= -->
@@ -28,6 +29,7 @@
         </div>
         </section>
 
+        <!-- Pop up alert -->
         <div class="container">
             <div class="row mb-3 mt-3">
                 <?php 
@@ -43,7 +45,7 @@
             </div>
         </div>
 
-        <!-- Si une/plusieurs commande(s) existe(ent) -->
+        <!-- Si le serveur HTTP n'est pas allumé -->
         <?php
             if($jsonReceived == false){
         ?>
@@ -63,6 +65,7 @@
         <?php
             }
         ?>
+        <!-- Si le serveur HTTP est allumé mais qu'il n'y a pas de commande -->
         <?php
             if(empty($listOrders) && $jsonReceived == true){
         ?>
@@ -82,6 +85,8 @@
                     </div>
                 </div>
             </div>
+
+        <!-- Si le serveur HTTP est allumé et qu'il y a des commandes -->
         <?php    
             }else if(!empty($listOrders) && $jsonReceived == true){
         ?>
@@ -104,18 +109,18 @@
                 $typeEnergy = $order->getTypeEnergy(); 
                 $idOrder = $order->getIdOrderForm();
         ?>
-                
+            <!-- Affichage individuel des commandes -->
             <div class="col-md-4 mb-5">
                 <div class="card" style="width: 100%;">
                     <?php 
                         if($typeEnergy=="ELECTRICITE"){
-                            echo '<img src="../assets/img/energy/electricite.jpg" class="card-img-top">'; 
+                            echo '<img src="../../public/img/energy/electricite.jpg" class="card-img-top">'; 
                         }else if($typeEnergy=="GAZ"){
-                            echo '<img src="../assets/img/energy/gaz.jpg" class="card-img-top">';
+                            echo '<img src="../../public/img/energy/gaz.jpg" class="card-img-top">';
                         }else if($typeEnergy=="PETROLE"){
-                            echo '<img src="../assets/img/energy/petrole.jpg" class="card-img-top">';
+                            echo '<img src="../../public/img/energy/petrole.jpg" class="card-img-top">';
                         }else if($typeEnergy=="CHARBON"){
-                            echo '<img src="../assets/img/energy/charbon.jpg" class="card-img-top">';
+                            echo '<img src="../../public/img/energy/charbon.jpg" class="card-img-top">';
                         }
                     ?>
                     <div class="card-body">
@@ -123,7 +128,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><b>Identifiant commande</b> : <b style="color:#f7ad05">#<?php echo $idOrder; ?></b></li>
-                        <form action="../src/controllers/TrackOrderController.php" method="POST">
+                        <form action="../../src/controllers/TrackOrderController.php" method="POST">
                             <li class="list-group-item"> 
                                 <input type="text" name="login" required placeholder="Saisir le login pour suivre la commande" class="form-control">
                             </li>
@@ -139,15 +144,16 @@
             </div>
         <?php         
             }
-            }
+        }
         ?>
             </div>
         </div>
 
+        <!-- Preloader -->
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
         <div id="preloader"></div>
 
-        <!-- Fichier js -->
-        <?php include '../layout/FileJS.php' ?>
+        <!-- Fichier JS -->
+        <?php include '../layout/file-style/FileJS.html' ?>
     </body>
     </html>

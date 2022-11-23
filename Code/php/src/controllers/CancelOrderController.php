@@ -1,15 +1,27 @@
 <?php 
+/**
+ * *********************************************************************************************************
+ * Traitement d'une requête permettant d'annuler une commande
+ * @author HADID Hocine & CHEMIN Pierre
+ * @version 1.0
+ * *********************************************************************************************************
+ */
 
+// Inclusion des fichiers nécessaires
 include "../../vendor/autoload.php";
+
+// Début d'une session
 session_start(); 
 
+// Création du tableau contenant les données de la requête
 $data = [
     "idOrderForm" => $_POST['idOrderForm'],
     "loginOrder" => $_POST['loginOrder'],
 ]; 
-
+// Création du json à envoyer au serveur TARE
 $content = json_encode($data);
 
+// Envoi de la requête au serveur TARE pour avoir le status de la commande afin de vérifier que le login saisi est le bon
 $optionsStatusOrder = [
     'http' => [
         'method' => 'POST',
@@ -17,13 +29,14 @@ $optionsStatusOrder = [
         'content' => $content
     ]
 ];
-
 $urlStatusOrder = "http://localhost:8080/order-status";
 $contextStatusOrder = stream_context_create($optionsStatusOrder);
 
+// Récupération de la réponse du serveur TARE avec gestion des erreurs
 if(($jsonReceivedStatusOrder = @file_get_contents($urlStatusOrder, false, $contextStatusOrder))!== false){
     $json = json_decode($jsonReceivedStatusOrder, true);
     if($json['status'] == true && $json['idOrder'] == $_POST['idOrderForm']){
+        // Envoi de la requête au serveur TARE pour annuler la commande
         $options = [
             'http' => [
                 'method' => 'POST',
@@ -33,14 +46,15 @@ if(($jsonReceivedStatusOrder = @file_get_contents($urlStatusOrder, false, $conte
         ];        
         $url = "http://localhost:8080/remove-order";
         $context = stream_context_create($options);
+        // Récupération de la réponse du serveur TARE avec gestion des erreurs
         if(($jsonReceived = @file_get_contents($url, false, $context)) !== false){
             $dataReceived = json_decode($jsonReceived, true);
             if($dataReceived['status'] == true){
                 $_SESSION['cancelOrder'] = "La commande n° ".$_POST['idOrderForm']." a bien été annulée";
-                header("Location: ../../view/MyOrderView.php");
+                header("Location: ../../resources/views/MyOrderView.php");
             }else{
                 $_SESSION['cancelOrder'] = "La commande n° ".$_POST['idOrderForm']." n'a pas pu être annulée";
-                header("Location: ../../view/MyOrderView.php");
+                header("Location: ../../resources/views/MyOrderView.php");
             }
         }
     }else{
@@ -50,7 +64,7 @@ if(($jsonReceivedStatusOrder = @file_get_contents($urlStatusOrder, false, $conte
             foreach($listOrders as $order){
                 if($order->getIdOrderForm() == $_POST['idOrderForm']){
                     $idOrderForm = $order->getIdOrderForm();
-                    header("Location: ../../view/TrackOrderView.php?statusOrder=".$order->getStatusOrder().
+                    header("Location: ../../resources/views/TrackOrderView.php?statusOrder=".$order->getStatusOrder().
                     "&green=".$order->getGreen()."&quantity=".$order->getQuantity()."&idOrderForm=".$idOrderForm.
                     "&typeEnergy=".$order->getTypeEnergy()."&extractionMode=".$order->getExtractionMode().
                     "&quantityMin=".$order->getQuantityMin()."&countryOrigin=".$order->getCountryOrigin().

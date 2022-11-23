@@ -1,3 +1,4 @@
+<!-- Debut d'une session -->
 <?php session_start(); ?>
 <!DOCTYPE html>
     <html lang="fr">
@@ -7,14 +8,14 @@
 
         <title>Nederge - Système d'achat d'énergie</title>
 
-        <?php include '../layout/FileCSS.php'; ?>
-        <link rel="stylesheet" href="../assets/css/footer-inner-page.css">
+        <?php include '../layout/file-style/FileCSS.html'; ?>
+        <link rel="stylesheet" href="../../public/css/footer-inner-page.css">
     </head>
 
     <body>
 
         <!-- ======= Header ======= -->
-        <?php include '../layout/header.php'; ?>
+        <?php include '../layout/Header.html'; ?>
 
         <!-- ======= Breadcrumbs ======= -->
         <section class="breadcrumbs">
@@ -30,7 +31,7 @@
         </div>
         </section>
 
-        <!-- ======= Energie Display ======= -->
+        <!-- Consultation de la disponibilité d'une énergie -->
         <div class="container mb-5 mt-5">
             <h1 class="text-center">Qu'elle énergie souhaitez-vous consulter ? </h1>
             <?php
@@ -50,8 +51,9 @@
                     }
                 }
             ?>
+            <!-- Formulaire permettant de consulter une énergie -->
             <div class="row mt-5">
-                <form action="../src/controllers/AvailabilityEnergyProcessingController.php" method="post">
+                <form action="../../src/controllers/AvailabilityEnergyProcessingController.php" method="post">
                     <div class="row mb-4">
                             <div class="col-md-6">
                                 <select class="form-control" name="energy" id="energie">
@@ -102,12 +104,12 @@
             </div>
         </div>
 
-
+        <!-- Preloader -->
         <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
         <div id="preloader"></div>
 
-        <!-- Fichier js -->
-        <?php include '../layout/FileJS.php' ?>
+        <!-- Fichier JS -->
+        <?php include '../layout/file-style/FileJS.html' ?>
 
     </body>
-    </html>
+</html>

@@ -13,10 +13,10 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
     <!-- Fichier CSS -->
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="public/vendor/aos/aos.css" rel="stylesheet">
+    <link href="public/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="public/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="public/css/style.css" rel="stylesheet">
 
   </head>
 
@@ -35,9 +35,9 @@
             <li><a class="nav-link scrollto" href="#features">Fonctionnalités</a></li>
             <li class="dropdown"><a href="#"><span>Mon énergie</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
-                <li><a href="view/OrderEnergyView.php">Commander une énergie</a></li>
-                <li><a href="view/ConsultAvailableEnergyView.php">Consulter les énergies disponibles</a></li>
-                <li><a href="view/MyOrderView.php">Mes commandes</a></li>
+                <li><a href="resources/views/OrderEnergyView.php">Commander une énergie</a></li>
+                <li><a href="resources/views/ConsultAvailableEnergyView.php">Consulter les énergies disponibles</a></li>
+                <li><a href="resources/views/MyOrderView.php">Mes commandes</a></li>
               </ul>
             </li>
             <li><a class="getstarted scrollto" href="#about">Découvrir</a></li>
@@ -59,7 +59,7 @@
             <div><a href="#about" class="btn-get-started scrollto">Découvrir</a></div>
           </div>
           <div class="col-xl-4 col-lg-6 order-1 order-lg-2 hero-img" data-aos="zoom-in" data-aos-delay="150">
-            <img src="assets/img/trader.png" class="img-fluid animated" alt="">
+            <img src="public/img/trader.png" class="img-fluid animated" alt="">
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="zoom-in" data-aos-delay="150">
-              <img src="assets/img/energy.png" class="img-fluid" alt="">
+              <img src="public/img/energy.png" class="img-fluid" alt="">
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right">
               <h3>Nederge ? Qu'est-ce que c'est ?</h3>
@@ -167,12 +167,12 @@
 
             </div>
             <div class="image col-lg-6 order-1 order-lg-2 " data-aos="zoom-in" data-aos-delay="100">
-              <img src="assets/img/echange.png" alt="" class="img-fluid">
+              <img src="public/img/echange.png" alt="" class="img-fluid">
             </div>
           </div>
           <div class="row mt-5">
             <div class="col-md-12 text-center">
-              <a class="command" href="view/OrderEnergyView.php">Passez votre première commande !</a>
+              <a class="command" href="resources/views/OrderEnergyView.php">Passez votre première commande !</a>
             </div>
           </div>
 
@@ -182,18 +182,18 @@
     </main>
 
     <!-- ======= Footer ======= -->
-    <?php include 'layout/Footer.php'; ?>
+    <?php include 'resources/layout/Footer.html'; ?>
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
     <div id="preloader"></div>
 
     <!-- Fichier js -->
-    <script src="assets/vendor/purecounter/purecounter.js"></script>
-    <script src="assets/vendor/aos/aos.js"></script>
-    <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/index.js"></script>
+    <script src="public/vendor/purecounter/purecounter.js"></script>
+    <script src="public/vendor/aos/aos.js"></script>
+    <script src="public/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="public/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="public/js/main.js"></script>
+    <script src="public/js/index.js"></script>
 
   </body>
 </html>
