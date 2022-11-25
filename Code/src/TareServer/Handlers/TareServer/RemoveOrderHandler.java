@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.RemoveOrderRequest;
@@ -14,7 +15,8 @@ public class RemoveOrderHandler extends Handler{
 
 	private OrderManage orderManage;
 
-	public RemoveOrderHandler(OrderManage orderManage){
+	public RemoveOrderHandler(LogManager logManager, OrderManage orderManage){
+		super(logManager);
 		this.orderManage = orderManage;
 	}
 
@@ -34,7 +36,7 @@ public class RemoveOrderHandler extends Handler{
 		RemoveOrderRequest request;
 
 		try {
-			request = RemoveOrderRequest.fromJSON(data, this.orderManage);
+			request = RemoveOrderRequest.fromJSON(data, this.orderManage, this.logManager);
 		} catch (Exception e){
 			response.put("status", false);
 			response.put("message", e.toString());

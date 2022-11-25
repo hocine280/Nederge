@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.OrderStatusRequest;
@@ -14,7 +15,8 @@ public class OrderStatusHandler extends Handler{
 	
 	private OrderManage orderManage;
 
-	public OrderStatusHandler(OrderManage orderManage){
+	public OrderStatusHandler(LogManager logManager, OrderManage orderManage){
+		super(logManager);
 		this.orderManage = orderManage;
 	}
 
@@ -34,7 +36,7 @@ public class OrderStatusHandler extends Handler{
 		OrderStatusRequest request;
 
 		try {
-			request = OrderStatusRequest.fromJSON(data, this.orderManage);
+			request = OrderStatusRequest.fromJSON(data, this.orderManage, this.logManager);
 		} catch (Exception e) {
 			response.put("status", false);
 			response.put("message", e.toString());

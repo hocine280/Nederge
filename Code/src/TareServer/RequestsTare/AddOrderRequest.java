@@ -2,6 +2,7 @@ package TareServer.RequestsTare;
 
 import org.json.JSONObject;
 
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.RequestInterface;
@@ -16,7 +17,8 @@ import TrackingCode.TypeEnergyEnum;
 
 public class AddOrderRequest implements RequestInterface{
 
-	private OrderManage orderManage; 
+	private OrderManage orderManage;
+	private LogManager logManager;
 
 	private String name;
 	private String surname;
@@ -33,7 +35,7 @@ public class AddOrderRequest implements RequestInterface{
 	private int maxPriceUnitEnergy;
 	private StatusOrderEnum statusOrder;
 
-	public static AddOrderRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
+	public static AddOrderRequest fromJSON(JSONObject object, OrderManage orderManage, LogManager logManager) throws InvalidRequestException{
 		check(object);
 
 		return new AddOrderRequest(
@@ -51,13 +53,14 @@ public class AddOrderRequest implements RequestInterface{
 			object.getInt("budget"),
 			object.getInt("maxPriceUnitEnergy"),
 			StatusOrderEnum.PROCESS,
-			orderManage
+			orderManage,
+			logManager
 		);
 	}
 
 	private AddOrderRequest(String name, String surname, String email, int phoneNumber, String companyName, TypeEnergyEnum typeEnergy,
 			CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
-			int maxPriceUnitEnergy, StatusOrderEnum statusOrder, OrderManage orderManage) {
+			int maxPriceUnitEnergy, StatusOrderEnum statusOrder, OrderManage orderManage, LogManager logManager) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -73,6 +76,7 @@ public class AddOrderRequest implements RequestInterface{
 		this.maxPriceUnitEnergy = maxPriceUnitEnergy;
 		this.statusOrder = statusOrder;
 		this.orderManage = orderManage;
+		this.logManager = logManager;
 	}
 
 	public static void check(JSONObject data) throws InvalidRequestException {
@@ -157,9 +161,11 @@ public class AddOrderRequest implements RequestInterface{
 			response.put("status", true);
 			response.put("idOrderForm", idOrder);
 			response.put("login", loginOrder);
+			this.logManager.addLog("Ajout d'une nouvelle commande. Commande : " + order.toJson().toString());
 		} catch (OrderException e) {
 			response.put("status", false);
 			response.put("message", e.toString());
+			this.logManager.addLog("Echec de l'ajout d'une nouvelle commande. Motif : " + e.toString());
 		}
 
 		return response;

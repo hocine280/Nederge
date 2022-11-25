@@ -13,8 +13,16 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import Server.LogManage.LogManager;
+
 
 public abstract class Handler implements HttpHandler{
+
+	protected LogManager logManager;
+
+	public Handler(LogManager logManager){
+		this.logManager = logManager;
+	}
 
 	public HashMap<String, String> receivePost(HttpExchange exchange){
 		

@@ -2,6 +2,7 @@ package TareServer.RequestsTare;
 
 import org.json.JSONObject;
 
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.RequestInterface;
@@ -10,6 +11,8 @@ import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 
 public class InfosMarketRequest implements RequestInterface{
+
+	private LogManager logManager;
 
 	private TypeEnergyEnum typeEnergy;
 	private CountryEnum countryOrigin;
@@ -34,22 +37,24 @@ public class InfosMarketRequest implements RequestInterface{
 		}
 	}
 
-	public static InfosMarketRequest fromJSON(JSONObject object) throws InvalidRequestException{
+	public static InfosMarketRequest fromJSON(JSONObject object, LogManager logManager) throws InvalidRequestException{
 		check(object);
 
 		return new InfosMarketRequest(
 			TypeEnergyEnum.fromCode(object.getString("typeEnergy")),
 			CountryEnum.fromCode(object.getString("countryOrigin")),
 			ExtractModeEnum.fromCode(object.getString("extractionMode")),
-			Boolean.valueOf(object.getString("green"))
+			Boolean.valueOf(object.getString("green")),
+			logManager
 		);
 	}
 
-	private InfosMarketRequest(TypeEnergyEnum typeEnergy, CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean green){
+	private InfosMarketRequest(TypeEnergyEnum typeEnergy, CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean green, LogManager logManager){
 		this.typeEnergy = typeEnergy;
 		this.countryOrigin = countryOrigin;
 		this.extractionMode = extractionMode;
 		this.green = green;
+		this.logManager = logManager;
 	}
 
 	public JSONObject process(){

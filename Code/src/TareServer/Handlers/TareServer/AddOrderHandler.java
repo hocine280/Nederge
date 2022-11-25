@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 import TareServer.RequestsTare.AddOrderRequest;
@@ -15,7 +16,8 @@ public class AddOrderHandler extends Handler{
 
 	private OrderManage orderManage;
 
-	public AddOrderHandler(OrderManage orderManage){
+	public AddOrderHandler(LogManager logManager, OrderManage orderManage){
+		super(logManager);
 		this.orderManage = orderManage;
 	}
 
@@ -35,7 +37,7 @@ public class AddOrderHandler extends Handler{
 
 		AddOrderRequest request;
 		try {
-			request = AddOrderRequest.fromJSON(data, this.orderManage);
+			request = AddOrderRequest.fromJSON(data, this.orderManage, this.logManager);
 		} catch (Exception e){
 			response.put("status", false);
 			response.put("message", e.toString());

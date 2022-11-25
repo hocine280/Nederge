@@ -6,10 +6,15 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.Handlers.Handler;
 import TareServer.RequestsTare.InfosMarketRequest;
 
 public class InfosMarketHandler extends Handler{
+
+	public InfosMarketHandler(LogManager logManager){
+		super(logManager);
+	}
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
@@ -27,7 +32,7 @@ public class InfosMarketHandler extends Handler{
 		InfosMarketRequest request;
 
 		try {
-			request = InfosMarketRequest.fromJSON(new JSONObject(data));
+			request = InfosMarketRequest.fromJSON(new JSONObject(data), this.logManager);
 		} catch (Exception e) {
 			response.put("status", false);
 			response.put("message", e.toString());

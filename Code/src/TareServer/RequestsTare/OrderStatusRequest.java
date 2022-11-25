@@ -2,6 +2,7 @@ package TareServer.RequestsTare;
 
 import org.json.JSONObject;
 
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.RequestInterface;
@@ -12,11 +13,12 @@ public class OrderStatusRequest implements RequestInterface{
 	private int idOrder;
 	private String loginOrder;
 	private OrderManage orderManage;
+	private LogManager logManager;
 
-	public static OrderStatusRequest fromJSON(JSONObject object, OrderManage orderManage) throws InvalidRequestException{
+	public static OrderStatusRequest fromJSON(JSONObject object, OrderManage orderManage, LogManager logManager) throws InvalidRequestException{
 		check(object);
 
-		return new OrderStatusRequest(object.getInt("idOrderForm"), object.getString("loginOrder"), orderManage);
+		return new OrderStatusRequest(object.getInt("idOrderForm"), object.getString("loginOrder"), orderManage, logManager);
 	}
 
 	public static void check(JSONObject data) throws InvalidRequestException{
@@ -29,10 +31,11 @@ public class OrderStatusRequest implements RequestInterface{
 		}
 	}
 
-	private OrderStatusRequest(int idOrder, String loginOrder, OrderManage orderManage){
+	private OrderStatusRequest(int idOrder, String loginOrder, OrderManage orderManage, LogManager logManager){
 		this.idOrder = idOrder;
 		this.loginOrder = loginOrder;
 		this.orderManage = orderManage;
+		this.logManager = logManager;
 	}
 
 	public JSONObject process(){
@@ -42,6 +45,7 @@ public class OrderStatusRequest implements RequestInterface{
 			response.put("status", true);
 			response.put("idOrder", this.idOrder);
 			response.put("statusOrder", this.orderManage.getOrder(this.idOrder).getStatus().toString());
+			this.logManager.addLog("Récupération du statut d'une commande. Commande : " + this.orderManage.getOrder(this.idOrder).toJson().toString());
 		}else{
 			response.put("status", false);
 			response.put("message", "Identifiant de commande ou login incorrect");

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.TareServer;
 import TareServer.Handlers.Handler;
 
@@ -14,7 +15,8 @@ public class ListServerHandler extends Handler{
 
 	private Hashtable<Integer, TareServer> listServer;
 
-	public ListServerHandler(Hashtable<Integer, TareServer> listServer){
+	public ListServerHandler(LogManager logManager, Hashtable<Integer, TareServer> listServer){
+		super(logManager);
 		this.listServer = listServer;
 	}
 

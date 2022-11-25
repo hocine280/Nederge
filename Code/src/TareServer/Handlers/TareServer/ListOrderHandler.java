@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import com.sun.net.httpserver.HttpExchange;
 
+import Server.LogManage.LogManager;
 import TareServer.Handlers.Handler;
 import TareServer.Orders.OrderManage;
 
@@ -13,7 +14,8 @@ public class ListOrderHandler extends Handler{
 
 	private OrderManage orderManage;
 
-	public ListOrderHandler(OrderManage orderManage){
+	public ListOrderHandler(LogManager logManager, OrderManage orderManage){
+		super(logManager);
 		this.orderManage = orderManage;
 	}
 
@@ -24,6 +26,8 @@ public class ListOrderHandler extends Handler{
 
 		response.put("status", true);
 		response.put("orders", this.orderManage.listOrder());
+
+		this.logManager.addLog("Récupération de la liste des commandes par le revendeur");
 
 		sendResponse(exchange, response);
 	}
