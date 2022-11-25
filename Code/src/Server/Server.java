@@ -25,6 +25,10 @@ public class Server {
 		return this.port;
 	}
 
+	public TypeServerEnum getTypeServer(){
+		return this.typeServer;
+	}
+
 	@Override
 	public String toString() {
 		return "[" + this.name + ":" + this.port + "]";
