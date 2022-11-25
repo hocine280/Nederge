@@ -2,7 +2,7 @@
 
 Description des différentes commandes de compilation pour la partie JAVA de Nederge.
 
-#### Lancement du test des requêtes HTTP (uniquement) du serveur TARE
+### Lancement du test des requêtes HTTP (uniquement) du serveur TARE
 
 Pour compiler :
 
