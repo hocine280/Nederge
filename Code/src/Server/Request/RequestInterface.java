@@ -1,4 +1,4 @@
-package Request;
+package Server.Request;
 
 import org.json.JSONObject;
 

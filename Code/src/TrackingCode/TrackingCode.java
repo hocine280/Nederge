@@ -8,24 +8,18 @@ import org.json.JSONObject;
  * @author Pierre CHEMIN et Hocine HADID
  * @version  1.0
  * */
-public class TrackingCode implements Comparable{
+public class TrackingCode{
 
 	/** Le pays de production de l'énergie */
-	private CountryEnum country;
-	/** Le code du producteur de l'énergie */
-	private int codeProducer;
+	private String country;
+	/** Le producteur de l'énergie */
+	private int producer;
 	/** Le type d'énergie */
-	private TypeEnergyEnum typeEnergy;
+	private String typeEnergy;
 	/** Indique si l'énergie est verte ou non */
 	private boolean greenEnergy;
 	/** Le mode d'extraction de l'énergie */
-	private ExtractModeEnum extractMode;
-	/** L'année de production de l'énergie */
-	private int productionYear;
-	/** L'identifiant unique de suivi */
-	private int uniqueIdentifier;
-	/** La quantité d'énergie */
-	private int quantity;
+	private String extractMode;
 	
 
 	/**
@@ -37,14 +31,11 @@ public class TrackingCode implements Comparable{
 	public static TrackingCode fromJson(String json) throws Exception{
 		JSONObject object = new JSONObject(json);
 
-		return new TrackingCode(CountryEnum.valueOf(object.getString("country")),
-								object.getInt("codeProducer"),
-								TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
+		return new TrackingCode(object.getString("country"),
+								object.getInt("producer"),
+								object.getString("typeEnergy"),
 								object.getBoolean("greenEnergy"),
-								ExtractModeEnum.valueOf(object.getString("extractMode")),
-								object.getInt("productionYear"),
-								object.getInt("identifier"),
-								object.getInt("quantity")
+								object.getString("extractMode")
 							);
 	}
 
@@ -58,30 +49,24 @@ public class TrackingCode implements Comparable{
 	public static TrackingCode fromCode(String code) throws Exception{
 		String codeSplit[] = code.split("-");
 
-		return new TrackingCode(CountryEnum.fromCode(codeSplit[0]), Integer.valueOf(codeSplit[1]), TypeEnergyEnum.fromCode(codeSplit[2]), false, ExtractModeEnum.fromCode(codeSplit[4]), Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
+		return new TrackingCode(codeSplit[0], Integer.valueOf(codeSplit[1]), codeSplit[2], Boolean.valueOf(codeSplit[3]), codeSplit[4]);
 	}
 
 	/**
-	 * Le constructeur privé d'un code de suivi car il construit un code de suivi avec un identifiant unique donné
+	 * Le constructeur d'un TrackingCode
 	 * 
 	 * @param country Le pays de production de l'énergie
-	 * @param codeProducer Le code du producteur de l'énergie
+	 * @param producer Le producteur de l'énergie
 	 * @param typeEnergy Le type d'énergie
 	 * @param greenEnergy Indique si l'énergie est verte ou non
 	 * @param extractMode Le mode d'extraction de l'énergie
-	 * @param productionYear L'année de production de l'énergie
-	 * @param uniqueIdentifier L'identifiant unique de suivi
-	 * @param quantity La quantité d'énergie
 	 */
-	private TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
+	public TrackingCode(String country, int producer, String typeEnergy, boolean greenEnergy, String extractMode){
 		this.country = country;
-		this.codeProducer = codeProducer;
+		this.producer = producer;
 		this.typeEnergy = typeEnergy;
 		this.greenEnergy = greenEnergy;
 		this.extractMode = extractMode;
-		this.productionYear = productionYear;
-		this.uniqueIdentifier = uniqueIdentifier;
-		this.quantity = quantity;
 	}
 
 	/**
@@ -89,17 +74,17 @@ public class TrackingCode implements Comparable{
 	 * 
 	 * @return Le pays de production de l'énergie
 	 */
-	public CountryEnum getCountry(){
+	public String getCountry(){
 		return this.country;
 	}
 
 	/**
-	 * Getter du code du producteur de l'énergie
+	 * Getter du producteur de l'énergie
 	 * 
 	 * @return Le code du producteur de l'énergie
 	 */
-	public int getCodeProducteur(){
-		return this.codeProducer;
+	public int getProducer(){
+		return this.producer;
 	}
 
 	/**
@@ -107,7 +92,7 @@ public class TrackingCode implements Comparable{
 	 * 
 	 * @return Le type d'énergie
 	 */
-	public TypeEnergyEnum getTypeEnergy(){
+	public String getTypeEnergy(){
 		return this.typeEnergy;
 	}
 
@@ -125,44 +110,8 @@ public class TrackingCode implements Comparable{
 	 * 
 	 * @return Le mode d'extraction de l'énergie
 	 */
-	public ExtractModeEnum getExtractMode(){
+	public String getExtractMode(){
 		return this.extractMode;
-	}
-
-	/**
-	 * Getter de l'année de production de l'énergie
-	 * 
-	 * @return L'année de production de l'énergie
-	 */
-	public int getProductionYear(){
-		return this.productionYear;
-	}
-
-	/**
-	 * Getter de l'identifiant unique de l'énergie
-	 * 
-	 * @return L'identifiant unique de l'énergie
-	 */
-	public int getUniqueIdentifier(){
-		return this.uniqueIdentifier;
-	}
-
-	/**
-	 * Getter de la quantité d'énergie
-	 * 
-	 * @return La quantité d'énergie
-	 */
-	public int getQuantity(){
-		return this.quantity;
-	}
-
-	/**
-	 * Getter du code de la quantité sous forme de chaine de caractères
-	 * 
-	 * @return la chaine de caractères contenant la quantité sous forme de code
-	 */
-	public String getCodeQuantity(){
-		return "Q" + this.quantity;
 	}
 
 	/**
@@ -174,13 +123,10 @@ public class TrackingCode implements Comparable{
 		String code = "";
 
 		code += this.country + "-" +
-			this.codeProducer + "-" +
+			this.producer + "-" +
 			this.typeEnergy + "-" +
 			"0" + (this.greenEnergy ? "1" : "0") + "-" +
-			this.extractMode + "-" +
-			"Q" + this.quantity + "-" +
-			this.productionYear + "-" +
-			this.uniqueIdentifier;
+			this.extractMode;
 
 		return code;
 	}
@@ -202,29 +148,11 @@ public class TrackingCode implements Comparable{
 		JSONObject ret = new JSONObject();
 
 		ret.put("country", this.country);
-		ret.put("codeProducer", this.codeProducer);
+		ret.put("producer", this.producer);
 		ret.put("typeEnergy", this.typeEnergy);
 		ret.put("greenEnergy", this.greenEnergy);
 		ret.put("extractMode", this.extractMode);
-		ret.put("productionYear", this.productionYear);
-		ret.put("identifier", this.uniqueIdentifier);
-		ret.put("quantity", this.quantity);
 
 		return ret;
-	}
-
-	/**
-	 * Surchage de la méthode compareTo qui permet de comparer 2 code de suivi
-	 * 
-	 * @param o L'objet a comparé
-	 * @return 0 si les deux codes de suivi sont égaux, inférieur à 0 si le code de suivi courant est inférieur et supérieur à 0 s'il est supérieur
-	 */
-	@Override
-	public int compareTo(Object o) {
-		if(o == null){
-			throw new NullPointerException();
-		}
-
-		return this.quantity - ((TrackingCode) o).quantity;
 	}
 }

@@ -2,9 +2,9 @@ package TareServer.RequestsTare;
 
 import org.json.JSONObject;
 
-import Request.InvalidRequestException;
-import Request.InvalidRequestSituationEnum;
-import Request.RequestInterface;
+import Server.Request.InvalidRequestException;
+import Server.Request.InvalidRequestSituationEnum;
+import Server.Request.RequestInterface;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;

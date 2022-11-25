@@ -1,4 +1,4 @@
-package Request;
+package Server.Request;
 
 public enum InvalidRequestSituationEnum {
 	NoData("Pas de donnée"),

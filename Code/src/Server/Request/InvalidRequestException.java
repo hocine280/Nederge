@@ -1,4 +1,4 @@
-package Request;
+package Server.Request;
 
 public class InvalidRequestException extends Exception{
 	

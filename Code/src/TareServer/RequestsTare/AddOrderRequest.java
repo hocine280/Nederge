@@ -2,8 +2,9 @@ package TareServer.RequestsTare;
 
 import org.json.JSONObject;
 
-import Request.InvalidRequestException;
-import Request.RequestInterface;
+import Server.Request.InvalidRequestException;
+import Server.Request.InvalidRequestSituationEnum;
+import Server.Request.RequestInterface;
 import TareServer.Orders.Client;
 import TareServer.Orders.Order;
 import TareServer.Orders.OrderException;
@@ -12,7 +13,6 @@ import TareServer.Orders.StatusOrderEnum;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
-import Request.InvalidRequestSituationEnum;
 
 public class AddOrderRequest implements RequestInterface{
 

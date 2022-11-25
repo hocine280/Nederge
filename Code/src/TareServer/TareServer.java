@@ -2,6 +2,7 @@ package TareServer;
 
 import com.sun.net.httpserver.HttpServer;
 
+import Server.Server;
 import TareServer.Handlers.TareServer.AddOrderHandler;
 import TareServer.Handlers.TareServer.InfosMarketHandler;
 import TareServer.Handlers.TareServer.ListOrderHandler;
@@ -13,20 +14,16 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Vector;
 
-public class TareServer {
+public class TareServer extends Server{
 
 	private static Vector<Integer> listServer = new Vector<Integer>();
-
-	private int port;
-	private String name;
 
 	private OrderManage orderManage;
 
 	private HttpServer server;
 
 	private TareServer(String name, int port) throws IOException{
-		this.name = name;
-		this.port = port;
+		super(name, port);
 		this.orderManage = new OrderManage();
 
 		this.server = HttpServer.create(new InetSocketAddress(port), 0);
@@ -56,13 +53,5 @@ public class TareServer {
 		this.server.start();
 
 		System.out.println("Le serveur " + this.name + " a bien démarré sur le port " + this.port);
-	}
-
-	public String getName(){
-		return this.name;
-	}
-
-	public int getPort(){
-		return this.port;
 	}
 }
