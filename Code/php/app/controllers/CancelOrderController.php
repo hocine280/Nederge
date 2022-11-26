@@ -65,10 +65,10 @@ if(($jsonReceivedStatusOrder = @file_get_contents($urlStatusOrder, false, $conte
                 if($order->getIdOrderForm() == $_POST['idOrderForm']){
                     $idOrderForm = $order->getIdOrderForm();
                     header("Location: ../../resources/views/TrackOrderView.php?statusOrder=".$order->getStatusOrder().
-                    "&green=".$order->getGreen()."&quantity=".$order->getQuantity()."&idOrderForm=".$idOrderForm.
-                    "&typeEnergy=".$order->getTypeEnergy()."&extractionMode=".$order->getExtractionMode().
-                    "&quantityMin=".$order->getQuantityMin()."&countryOrigin=".$order->getCountryOrigin().
-                    "&maxPriceUnitEnergy=".$order->getMaxPriceUnitEnergy()."&budget=".$order->getBudget().
+                    "&green=".$order->getEnergy()->getGreenEnergy()."&quantity=".$order->getQuantity()."&idOrderForm=".$idOrderForm.
+                    "&typeEnergy=".$order->getEnergy()->getTypeEnergy()."&extractionMode=".$order->getEnergy()->getExtractionMode().
+                    "&quantityMin=".$order->getMinQuantity()."&countryOrigin=".$order->getOriginCountry().
+                    "&maxPriceUnitEnergy=".$order->getMaxUnitPrice()."&budget=".$order->getBudget().
                     "&name=".$order->getClient()->getName()."&surname=".$order->getClient()->getSurname().
                     "&email=".$order->getClient()->getMail()."&companyName=".$order->getClient()->getNameCompany().
                     "&phoneNumber=".$order->getClient()->getPhoneNumber());

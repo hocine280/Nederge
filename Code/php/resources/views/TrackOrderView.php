@@ -128,7 +128,7 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel">Etes-vous sur de votre action ?</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="../../src/controllers/CancelOrderController.php" method="POST">
+                        <form action="../../app/controllers/CancelOrderController.php" method="POST">
                             <div class="modal-body">
                                 <input type="hidden" name="idOrderForm" value="<?php echo $_GET['idOrderForm']?>">
                                 <span>Pour confirmer l'annulation de votre commande, veuillez saisir le login de la commande <b>#<?php echo $_GET['idOrderForm']?> : </b></span><br><br>

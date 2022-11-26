@@ -63,7 +63,7 @@
                 }
             ?>
         <div class="row mt-5">
-            <form action="../../src/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
+            <form action="../../app/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
                 <div class="row">
                     <h3>Informations du client</h3>
                     <div class="col-md-12 mb-4">

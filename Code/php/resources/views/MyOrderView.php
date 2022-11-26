@@ -1,5 +1,5 @@
 <!-- Importation du controller qui gère la page des commandes -->
-<?php include "../../src/controllers/MyOrderController.php"; ?>
+<?php include "../../app/controllers/MyOrderController.php"; ?>
 <!DOCTYPE html>
     <html lang="fr">
     <head>
@@ -106,7 +106,7 @@
         <?php
             $_SESSION['listOrders'] = $listOrders;
             foreach($listOrders as $order){
-                $typeEnergy = $order->getTypeEnergy(); 
+                $typeEnergy = $order->getEnergy()->getTypeEnergy(); 
                 $idOrder = $order->getIdOrderForm();
         ?>
             <!-- Affichage individuel des commandes -->
@@ -128,7 +128,7 @@
                     </div>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><b>Identifiant commande</b> : <b style="color:#f7ad05">#<?php echo $idOrder; ?></b></li>
-                        <form action="../../src/controllers/TrackOrderController.php" method="POST">
+                        <form action="../../app/controllers/TrackOrderController.php" method="POST">
                             <li class="list-group-item"> 
                                 <input type="text" name="login" required placeholder="Saisir le login pour suivre la commande" class="form-control">
                             </li>

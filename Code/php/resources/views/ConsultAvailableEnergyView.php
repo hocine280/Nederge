@@ -53,7 +53,7 @@
             ?>
             <!-- Formulaire permettant de consulter une énergie -->
             <div class="row mt-5">
-                <form action="../../src/controllers/AvailabilityEnergyProcessingController.php" method="post">
+                <form action="../../app/controllers/AvailabilityEnergyProcessingController.php" method="post">
                     <div class="row mb-4">
                             <div class="col-md-6">
                                 <select class="form-control" name="energy" id="energie">

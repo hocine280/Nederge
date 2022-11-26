@@ -13,10 +13,10 @@ spl_autoload_register(function($class_name){
 
     $paths = array(
         join(DIRECTORY_SEPARATOR, [__DIR__]), 
-        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src']),
-        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src', 'controllers']),
-        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src', 'models']),
-        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'src', 'rules']),
+        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'app']),
+        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'app', 'controllers']),
+        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'app', 'models']),
+        join(DIRECTORY_SEPARATOR, [__DIR__, '..' ,'app', 'rules']),
         join(DIRECTORY_SEPARATOR, [__DIR__, '..']),
         join(DIRECTORY_SEPARATOR, [__DIR__, '..' , 'resources', 'views']),
     );

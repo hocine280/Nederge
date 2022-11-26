@@ -53,9 +53,4 @@ class OrderReceived  extends Order implements JsonSerializable{
     public function getIdOrderForm(){
         return $this->idOrderForm;
     }
-
-
-    public function getClient(){
-        return $this->client;
-    }
 }
