@@ -1,0 +1,5 @@
+=========== LOG SERVEUR HTTP_Server - Server TARE manager ===========
+
+[Server TARE manager - 26/11/2022 03:11:29] : 	Ajout du serveur TARE : {Nom : Test, Adresse : /[0:0:0:0:0:0:0:0]:8080}
+[Server TARE manager - 26/11/2022 03:11:29] : 	Serveur démarré
+[Server TARE manager - 26/11/2022 03:11:29] : 	Ajout du serveur TARE : {Nom : Inc, Adresse : /[0:0:0:0:0:0:0:0]:8050}
