@@ -10,4 +10,4 @@
 
 - Le <a href="MarcheGros.md">Marché de gros</a> demande à <a href="AMI.md">l'AMI</a> si le <a href="CodeDeSuivi.md">code de suivi</a> existe chez lui avec le code producteur correspondant, le prix et la quantité
 
-- Une fois l'énergie validé par <a href="AMI.md">l'AMI</a>, l'énergie est ajouté au <a href="MarcheGros.md">Marché de gros</a>
+- Une fois l'énergie validé par <a href="AMI.md">l'AMI</a>, l'énergie est ajouté au <a href="MarcheGros.md">Marché de gros</a>.
