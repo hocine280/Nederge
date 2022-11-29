@@ -16,7 +16,7 @@ Description du format des requêtes.
 }
 ```
 
-####*TARE => PONE*
+####*AMI => PONE*
 
 **Producteur ajouté :**
 ```json
