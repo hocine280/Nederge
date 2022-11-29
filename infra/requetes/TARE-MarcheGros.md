@@ -6,7 +6,7 @@ Description du format des requêtes.
 
 **nomDeLaRequete :** ``AskAvailabilityOrder``
 
-####*TARE -> Marché de gros*
+#### *TARE -> Marché de gros*
 
 ```json
 {
@@ -28,7 +28,7 @@ Description du format des requêtes.
 }
 ```
 
-####*Marché de gros => TARE*
+#### *Marché de gros => TARE*
 
 **Energie disponible :**
 ```json
@@ -64,7 +64,7 @@ Description du format des requêtes.
 
 **Nom de la requête :** ``BuyEnergyOrder``
 
-####*TARE => Marché de gros*
+#### *TARE => Marché de gros*
 
 ```json
 {
@@ -78,7 +78,7 @@ Description du format des requêtes.
 }
 ```
 
-####*Marché de gros => TARE*
+#### *Marché de gros => TARE*
 
 **Succès de l'achat:**
 ```json
@@ -108,7 +108,7 @@ Description du format des requêtes.
 ### Future disponibilité d'une énergie :
 
 **Nom de la requête :** ``VerifyFutureAvailabilityEnergy``
-####*TARE => Marché de gros*
+#### *TARE => Marché de gros*
 
 ```json
 {
@@ -126,7 +126,7 @@ Description du format des requêtes.
 }
 ```
 
-####*Marché de gros => TARE*
+#### *Marché de gros => TARE*
 
 ```json
 {

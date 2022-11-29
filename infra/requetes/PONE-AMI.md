@@ -3,6 +3,7 @@
 Description du format des requêtes.
 
 ### Inscription à l'AMI :
+
 **Nom de la requête :** ``RegisterPone``
 
 ####*PONE => AMI*
@@ -17,7 +18,7 @@ Description du format des requêtes.
 }
 ```
 
-####*AMI => PONE*
+#### *AMI => PONE*
 
 **Producteur ajouté :**
 ```json
@@ -47,7 +48,7 @@ Description du format des requêtes.
 
 **Nom de la requête :** ``RequestValidationSellEnergy``
 
-####*PONE => AMI*
+####  *PONE => AMI*
 
 ```json
 {
@@ -66,7 +67,7 @@ Description du format des requêtes.
 }
 ```
 
-####*AMI => PONE*
+#### *AMI => PONE*
 
 **Energie validé pour l'ajout à la vente :**
 
