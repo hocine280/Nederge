@@ -4,6 +4,7 @@ Description du format des requêtes.
 
 ### Inscription à l'AMI :
 **Nom de la requête :** ``RegisterPone``
+
 ####*PONE => AMI*
 
 ```json
@@ -43,7 +44,9 @@ Description du format des requêtes.
 ```
 
 ### Demande de code de suivi :
+
 **Nom de la requête :** ``RequestValidationSellEnergy``
+
 ####*PONE => AMI*
 
 ```json
@@ -66,6 +69,7 @@ Description du format des requêtes.
 ####*AMI => PONE*
 
 **Energie validé pour l'ajout à la vente :**
+
 ```json
 {
 	"sender" : "AMI", 
@@ -78,6 +82,7 @@ Description du format des requêtes.
 ```
 
 **Energie invalidé pour la vente :**
+
 ```json
 {
 	"sender" : "Nom du PONE", 

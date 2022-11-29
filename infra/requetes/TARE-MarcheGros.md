@@ -2,9 +2,10 @@
 
 Description du format des requêtes.
 
-### Envoie de la commande vers le Marché de gros :
+### Envoie de la commande vers le Marché de gros : 
 
 **nomDeLaRequete :** ``AskAvailabilityOrder``
+
 ####*TARE -> Marché de gros*
 
 ```json
@@ -46,6 +47,7 @@ Description du format des requêtes.
 ```
 
 **Energie indisponible :**
+
 ```json
 {
 	"sender" : "Nom du Marché de gros",
@@ -61,6 +63,7 @@ Description du format des requêtes.
 ### Achat d'un lot d'énergie :
 
 **Nom de la requête :** ``BuyEnergyOrder``
+
 ####*TARE => Marché de gros*
 
 ```json

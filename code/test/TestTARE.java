@@ -6,7 +6,7 @@ import TareServer.TareServer;
 public class TestTARE {
 	public static void main(String[] args) {
 		TareServer serverTare = TareServer.createTareServer("Test", 8080);
-
+		
 		try {
 			ManageTareServer.manageTareServer().start();
 			serverTare.start();

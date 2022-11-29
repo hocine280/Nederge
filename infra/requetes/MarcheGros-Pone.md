@@ -3,6 +3,7 @@
 Description du format des requêtes.
 
 ## Envoie de l'énergie du PONE vers le marché de gros : 
+
 ```json
 {
     "sender" : "Nom du PONE", 
@@ -16,6 +17,7 @@ Description du format des requêtes.
 
 ## Réponse du marché de gros : 
 ### Si énergie ajouté 
+
 ```json
 {
     "sender" : "Marché de gros", 
@@ -27,6 +29,7 @@ Description du format des requêtes.
 ```
 
 ### Si énergie non ajouté
+
 ```json
 {
     "sender" : "Marché de gros", 
