@@ -9,11 +9,13 @@ public abstract class Request implements RequestInterface{
 	protected String sender;
 	protected String receiver;
 	protected SimpleDateFormat timestamp;
+	protected TypeRequestEnum typeRequest; 
 
-	public Request(String sender, String receiver, SimpleDateFormat timestamp){
+	public Request(String sender, String receiver, SimpleDateFormat timestamp, TypeRequestEnum typeRequest){
 		this.sender = sender;
 		this.receiver = receiver;
 		this.timestamp = timestamp;
+		this.typeRequest = typeRequest;
 	}
 
 	public static Request fromJSON(JSONObject object) throws InvalidRequestException{
@@ -33,6 +35,10 @@ public abstract class Request implements RequestInterface{
 
 		if(!data.has("timestamp")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "timestamp absent");
+		}
+
+		if(!data.has("typeRequest")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "typeRequest absent");
 		}
 	}
 

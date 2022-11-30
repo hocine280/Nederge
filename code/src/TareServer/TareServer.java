@@ -36,7 +36,7 @@ public class TareServer extends Server{
 			listServer.add(port);
 			try {
 				return new TareServer(name, port);
-			} catch (IOException e) {
+			} catch (IOException e) {	
 				System.err.println("Impossible de créer le serveur TARE ! " + e);
 			}
 		}
