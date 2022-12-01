@@ -1,12 +1,38 @@
 package AMIServer;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import Server.Server;
 import Server.TypeServerEnum;
 
 public class AMIServer extends Server{
 
-	public AMIServer(String name, int port) {
+	private ServerSocket serverSocket;
+
+	public AMIServer(String name, int port) throws IOException{
 		super(name, port, TypeServerEnum.TCP_Server);
+
+		this.serverSocket = new ServerSocket(this.port);
+	}
+
+	public void start(){
+		Socket socketClient;
+		while (true) {
+			try {
+				socketClient = this.serverSocket.accept();
+				ThreadConnectionAMI connection = new ThreadConnectionAMI(socketClient, this, this.logManager);
+				connection.start();
+				this.logManager.addLog("Un client vient de se connecter au serveur !");
+			} catch (IOException e) {
+				this.logManager.addLog("Erreur lors de la connexion d'un client ! Motif : " + e.toString());
+			}
+		}
+	}
+
+	public void close() throws IOException {
+		this.serverSocket.close();
 	}
 
 }

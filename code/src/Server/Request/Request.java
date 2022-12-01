@@ -22,6 +22,10 @@ public abstract class Request implements RequestInterface{
 		return null;
 	}
 
+	public String getSender() {
+		return sender;
+	}
+
 	public static void check(JSONObject data) throws InvalidRequestException{
 		if(!data.has("sender")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "sender absent");
