@@ -5,7 +5,9 @@ import java.net.DatagramPacket;
 import java.net.SocketException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Scanner;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -35,13 +37,11 @@ public class ClientUDP {
         DatagramPacket msg = null;
         try {
             InetAddress adresse = InetAddress.getByName(null);
-            // Scanner sc = new Scanner(System.in);
-            // String message = sc.nextLine();
             JSONObject json = new JSONObject();
-            json.put("sender", "Kaka"); 
-            json.put("receiver", "Kaka");
+            json.put("sender", "TareServer"); 
+            json.put("receiver", "MarcheGrosServer");
             json.put("typeRequest", "AskAvailabilityOrder");
-            json.put("timestamp", "2020-12-12 12:12:12");
+            json.put("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()).toString());
             String message = json.toString();
             byte[] tampon = message.getBytes();
             msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
@@ -51,11 +51,24 @@ public class ClientUDP {
             System.exit(0);
         }
 
+
         // Envoi du message
         try {
             socket.send(msg);
         } catch(IOException e) {
             System.err.println("Erreur lors de l'envoi du message : " + e);
+            System.exit(0);
+        }
+
+        // Lecture de la réponse
+        byte[] buffer = new byte[2048];
+        DatagramPacket msgRecu = new DatagramPacket(buffer, buffer.length);
+        try {
+            socket.receive(msgRecu);
+            String txt = new String(msgRecu.getData(), 0, msgRecu.getLength());
+            System.out.println(txt);
+        } catch(IOException e) {
+            System.err.println("Erreur lors de la réception du message : " + e);
             System.exit(0);
         }
 

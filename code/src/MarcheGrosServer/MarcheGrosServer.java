@@ -8,6 +8,9 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.Vector;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
 import MarcheGrosServer.Handlers.Handler; 
 
 
@@ -66,7 +69,7 @@ public class MarcheGrosServer extends Server{
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
             System.out.println("Message reçu : " + text);
             this.logManager.addLog("Message reçu : " + text);
-            handler.checkTypeRequest(text);
+            handler.checkTypeRequest(messageReceived);
             listenRequest(socket);
         }catch(Exception e){
             System.err.println("Erreur lors de la réception du message : " + e); 

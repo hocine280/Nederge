@@ -1,4 +1,4 @@
-package Server.Request; 
+package MarcheGrosServer.Requests; 
 
 public enum TypeRequestEnum{
     AskAvailabilityOrder("AskAvailabilityOrder"),
