@@ -1,9 +1,13 @@
-package MarcheGrosServer.Requests; 
+package MarcheGrosServer.Requests;
+
+import MarcheGrosServer.Requests.RequestsPone.SendEnergyToMarketRequest;
 
 public enum TypeRequestEnum{
     AskAvailabilityOrder("AskAvailabilityOrder"),
     BuyEnergyOrder("BuyEnergyOrder"), 
-    VerifyFutureAvailabilityOrder("VerifyFutureAvailabilityOrder");
+    VerifyFutureAvailabilityOrder("VerifyFutureAvailabilityOrder"),
+    SendEnergyToMarket("SendEnergyToMarket"), 
+    CheckEnergyMarket("CheckEnergyMarket");
 
     private String typeRequest; 
 

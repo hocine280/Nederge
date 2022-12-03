@@ -29,7 +29,7 @@ public class Order{
         this.maxPriceUnitEnergy = maxPriceUnitEnergy;
     }
 
-    public Order fromJSON(JSONObject orderJSON){
+    public static Order fromJSON(JSONObject orderJSON){
         return new Order(
             TypeEnergyEnum.valueOf(orderJSON.getString("typeEnergy")),
             CountryEnum.valueOf(orderJSON.getString("countryOrigin")),

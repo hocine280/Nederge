@@ -33,7 +33,7 @@ public class MarcheGrosServer extends Server{
             }
         }else{
             System.err.println("Impossible de créer le serveur du marché de gros \""+name+ "\""); 
-            System.err.println("Nous ne pouvons pas avoir plusieurs marché de gros au sein de système !");
+            System.err.println("Nous ne pouvons pas avoir plusieurs marché de gros au sein du système !");
             System.exit(0);
         }
         return null; 
@@ -52,7 +52,7 @@ public class MarcheGrosServer extends Server{
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-
+               
             listenRequest(socket);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
@@ -76,6 +76,4 @@ public class MarcheGrosServer extends Server{
             System.exit(0);
         }
     }
-
-
 }

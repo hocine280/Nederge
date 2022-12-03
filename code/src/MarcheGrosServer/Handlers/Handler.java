@@ -5,23 +5,27 @@ import org.json.JSONObject;
 import MarcheGrosServer.Handlers.TareServer.AskAvailabilityOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.BuyEnergyOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.VerifyFutureAvailabilityOrderHandler;
-import MarcheGrosServer.Requestss.TypeRequestEnum;
+import MarcheGrosServer.Handlers.PoneClient.SendEnergyToMarketHandler;
+import MarcheGrosServer.Energy.StockManage;
+import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
+import MarcheGrosServer.Requests.TypeRequestEnum;
 import Server.LogManage.LogManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+
 
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 
 public class Handler{
     protected LogManager logManager;
+    protected StockManage stockManage; 
 
     public Handler(LogManager logManager){
         this.logManager = logManager;
+        this.stockManage = new StockManage();
     }
 
     public JSONObject receiveJSON(DatagramPacket messageReceived){
@@ -58,9 +62,15 @@ public class Handler{
         }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.VerifyFutureAvailabilityOrder.toString())){
             VerifyFutureAvailabilityOrderHandler verifyFutureAvailabilityOrderHandler = new VerifyFutureAvailabilityOrderHandler(this.logManager);
             verifyFutureAvailabilityOrderHandler.handle(messageReceived);
-        }   
+        }else if(data.getString("sender").equals("PoneClient") && data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
+
+        }else if(data.getString("sender").equals("AmiServer") && data.getString("typeRequest").equals(TypeRequestEnum.CheckEnergyMarket.toString())){
+            
+        }
+
     }
 
+    
     public void sendResponse(DatagramPacket messageReiceived, JSONObject json){
         System.out.println("La réponse est envoyé !");
 
@@ -71,7 +81,7 @@ public class Handler{
             System.err.println("Erreur lors de la création du socket");
             System.exit(0); 
         }
-
+        
         DatagramPacket messageToSend = null; 
         try{
             byte[] buffer = json.toString().getBytes();
@@ -80,14 +90,18 @@ public class Handler{
             System.err.println("Erreur lors de la création du message");
             System.exit(0); 
         }
-
+        
         try{
             socket.send(messageToSend); 
         }catch(IOException e){
             System.err.println("Erreur lors de l'envoi du message");
             System.exit(0); 
         }
-
+        
         socket.close();
+    }
+    
+    public StockManage getStockManage(){
+        return this.stockManage;
     }
 }
