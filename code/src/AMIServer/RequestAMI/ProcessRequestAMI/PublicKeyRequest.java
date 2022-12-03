@@ -42,6 +42,8 @@ public class PublicKeyRequest extends RequestAMI{
 	public JSONObject process() {
 		JSONObject response = this.server.constructBaseRequest(this.receiver);
 
+		response.put("typeRequest", this.typeRequest);
+
 		if(this.server.addServerToList(receiver, this.publicKey)){
 			response.put("publicKeySender", this.server.getPublicKeyEncode());
 			response.put("status", true);
