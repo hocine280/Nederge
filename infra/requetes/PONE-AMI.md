@@ -56,14 +56,14 @@ Description du format des requêtes.
 	"receiver" : "AMI",
 	"typeRequest" : "ValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
-	"energy" : [
+	"energy" : {
 		"typeEnergy" : "PETROLE",
 		"extractionMode" : "FORAGE",
 		"green" : false,
 		"countryOrigin" : "FRANCE",
 		"quantity" : 50,
 		"price" : 300
-	]
+	}
 }
 ```
 
