@@ -31,8 +31,12 @@ public class AMIServer extends Server{
 		}
 	}
 
-	public void close() throws IOException {
-		this.serverSocket.close();
+	public void shutdown() {
+		try {
+			this.serverSocket.close();
+		} catch (IOException e) {
+			this.logManager.addLog("Une erreur est survenue lors de l'arrêt du serveur");
+		}
 	}
 
 }

@@ -94,6 +94,10 @@ public abstract class Server {
 		return this.typeServer;
 	}
 
+	public String getPublicKeyEncode(){
+		return Base64.getEncoder().encodeToString(new X509EncodedKeySpec(this.publicKey.getEncoded()).getEncoded());
+	}
+
 	@Override
 	public String toString() {
 		return "[" + this.name + ":" + this.port + "]";
@@ -120,7 +124,21 @@ public abstract class Server {
 	}
 
 	public void addServerToList(String nameServer, PublicKey publicKeyServer){
-		this.listServerConnected.put(nameServer, publicKeyServer);
+		this.listServerConnected.putIfAbsent(nameServer, publicKeyServer);
+	}
+
+	public boolean addServerToList(String nameServer, String publicKeyEncode){
+		X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyEncode));
+	
+		try {
+			this.addServerToList(nameServer, KeyFactory.getInstance("RSA").generatePublic(spec));
+		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+			System.out.println("Erreur lors de l'ajout de la clé publique d'un serveur : " + e.toString());
+			this.logManager.addLog("Erreur lors de l'ajout de la clé publique d'un serveur. Motif : " + e.toString());
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -148,10 +166,8 @@ public abstract class Server {
 	public JSONObject sendFirstConnectionServe(String nameServer){
 		JSONObject request = constructBaseRequest(nameServer);
 
-		String publicKeyEncode = Base64.getEncoder().encodeToString(new X509EncodedKeySpec(this.publicKey.getEncoded()).getEncoded());
-
 		request.put("typeRequest", "PublicKeyRequest");
-		request.put("publicKeySender", publicKeyEncode);
+		request.put("publicKeySender", this.getPublicKeyEncode());
 
 		return request;
 	}
@@ -164,21 +180,22 @@ public abstract class Server {
 	 */
 	public JSONObject responseFirstConnectionServer(JSONObject request){
 		JSONObject response = constructBaseRequest(request.getString("sender"));
-		response.put("status", true);
-
-		String publicKeyEncode = Base64.getEncoder().encodeToString(new X509EncodedKeySpec(this.publicKey.getEncoded()).getEncoded());
 		
-		response.put("publicKey", publicKeyEncode);
+		response.put("publicKey", this.getPublicKeyEncode());
 
 		if(!this.listServerConnected.containsKey(request.getString("sender"))){
 			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(request.getString("publicKey")));
 	
 			try {
 				this.addServerToList(request.getString("sender"), KeyFactory.getInstance("RSA").generatePublic(spec));
+				response.put("status", true);
 			} catch (JSONException | InvalidKeySpecException | NoSuchAlgorithmException e) {
 				System.out.println("Erreur lors de l'ajout de la clé publique d'un serveur : " + e.toString());
 				this.logManager.addLog("Erreur lors de l'ajout de la clé publique d'un serveur. Motif : " + e.toString());
+				response.put("status", false);
 			}
+		}else{
+			response.put("status", true);
 		}
 
 		return response;

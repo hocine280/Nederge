@@ -8,9 +8,11 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import AMIServer.Request.RequestAMI;
+import AMIServer.RequestAMI.RequestAMI;
+import AMIServer.RequestAMI.TypeRequestAMI;
 import Server.InvalidServerException;
 import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
@@ -48,18 +50,36 @@ public class ThreadConnectionAMI extends Thread{
 				close = true;
 			}else{
 				JSONObject requestJson;
+				boolean encrypt = false;
 				
-				//TODO : Ajouter clause try catch si la réception n'est pas chiffré
-				requestJson = new JSONObject(reception);
+				try {
+					requestJson = new JSONObject(reception);
+				} catch (JSONException e) {
+					requestJson = new JSONObject(this.server.receiveDecrypt(reception));
+					encrypt = true;
+				}
 
 				try {
-					RequestAMI request = RequestAMI.fromJSON(requestJson);
+					RequestAMI request = RequestAMI.fromJSON(this.server, requestJson);
 
-					this.output.println(this.server.encryptRequest(request.getSender(), request.process()));
+					JSONObject response;
+
+					if(encrypt){
+						response = request.process();
+					}else if(request.getTypeRequest().equals(TypeRequestAMI.PublicKeyRequest)){
+						response = this.server.responseFirstConnectionServer(requestJson);
+					}else{
+						response = this.server.constructBaseRequest(request.getSender());
+						response.put("status", false);
+						response.put("error", "La requête n'est pas chiffré");
+					}
+
+					this.output.println(this.server.encryptRequest(request.getSender(), response));
+					
 				} catch (InvalidRequestException e) {
-					e.printStackTrace();
+					this.logManager.addLog("Requête invalide. Motif : " + e.toString());
 				} catch (InvalidServerException e) {
-					e.printStackTrace();
+					this.logManager.addLog("Problème sur le serveur. Motif : " + e.toString());
 				}
 			}
 		}
