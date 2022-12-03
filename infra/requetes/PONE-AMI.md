@@ -54,7 +54,7 @@ Description du format des requêtes.
 {
 	"sender" : "Nom du PONE", 
 	"receiver" : "AMI",
-	"typeRequest" : "RequestValidationSellEnergy",
+	"typeRequest" : "ValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
 	"energy" : [
 		"typeEnergy" : "PETROLE",
@@ -75,7 +75,7 @@ Description du format des requêtes.
 {
 	"sender" : "AMI", 
 	"receiver" : "Nom du PONE",
-	"typeRequest" : "RequestValidationSellEnergy",
+	"typeRequest" : "ValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
 	"status" : true,
 	"energy" : {Energy}
@@ -88,7 +88,7 @@ Description du format des requêtes.
 {
 	"sender" : "Nom du PONE", 
 	"receiver" : "AMI",
-	"typeRequest" : "RequestValidationSellEnergy",
+	"typeRequest" : "ValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
 	"status" : false,
 	"message" : "Message expliquant pourquoi l'énergie ne peut être ajouté à la vente"
