@@ -46,7 +46,7 @@ Description du format des requêtes.
 
 ### Demande de code de suivi :
 
-**Nom de la requête :** ``RequestValidationSellEnergy``
+**Nom de la requête :** ``ValidationSellEnergy``
 
 ####  *PONE => AMI*
 
