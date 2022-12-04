@@ -7,9 +7,9 @@ Description du format des requêtes.
 ```json
 {
     "sender" : "Nom du PONE", 
-	"receiver" : "AMI",
-	"typeRequest" : "SendEnergyToMarket",
-	"timestamp" : "15/02/2019 10:00:00",
+    "receiver" : "AMI",
+    "typeRequest" : "SendEnergyToMarket",
+    "timestamp" : "15/02/2019 10:00:00",
     "energy" : {Energy},  // Contient le code de suivi et l'énergie
     "trackingCode" : {TrackingCode}
     "codeProducer" : 587, 
