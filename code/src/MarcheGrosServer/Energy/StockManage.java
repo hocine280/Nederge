@@ -35,7 +35,9 @@ public class StockManage{
     public Hashtable<Integer,TrackingCode> checkEnergyAvailabiliy(TrackingCode desiredEnergy){
         Hashtable<Integer,TrackingCode> energyAvailable = new Hashtable<Integer,TrackingCode>();
         for(TrackingCode energy : stockEnergy.values()){
-            if(energy.getTypeEnergy() == desiredEnergy.getTypeEnergy() && energy.getQuantity() >= desiredEnergy.getQuantity()){
+            if((energy.getTypeEnergy().equals(desiredEnergy.getTypeEnergy())) && (energy.getCountry().equals(desiredEnergy.getCountry()))
+                    && (energy.getExtractMode().equals(desiredEnergy.getExtractMode())) && (energy.getGreenEnergy() == desiredEnergy.getGreenEnergy())
+                    && (energy.getQuantity() == desiredEnergy.getQuantity())){
                 energyAvailable.put(energy.getUniqueIdentifier(), energy);
             }
         }

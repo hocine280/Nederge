@@ -6,9 +6,8 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
-import MarcheGrosServer.Energy.StockManage;
 import MarcheGrosServer.Handlers.Handler;
-import MarcheGrosServer.Requests.RequestsTare.AskAvailabilityOrderRequest;
+// import MarcheGrosServer.Requests.RequestsTare.AskAvailabilityOrderRequest;
 import Server.LogManage.LogManager;
 
 public class AskAvailabilityOrderHandler extends Handler{
@@ -33,7 +32,7 @@ public class AskAvailabilityOrderHandler extends Handler{
         }
         
         try{
-            AskAvailabilityOrderRequest request = AskAvailabilityOrderRequest.fromJSON(data);
+            // AskAvailabilityOrderRequest request = AskAvailabilityOrderRequest.fromJSON(data);
         }catch(Exception e){
             
         }
