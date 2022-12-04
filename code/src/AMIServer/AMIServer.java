@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import AMIServer.ManageAMI.EnergyManage;
 import AMIServer.ManageAMI.ProducerManage;
 import Server.Server;
 import Server.TypeServerEnum;
@@ -12,16 +13,22 @@ public class AMIServer extends Server{
 
 	private ServerSocket serverSocket;
 	private ProducerManage producerManage;
+	private EnergyManage energyManage;
 
 	public AMIServer(String name, int port) throws IOException{
 		super(name, port, TypeServerEnum.TCP_Server);
 		this.producerManage = new ProducerManage();
+		this.energyManage = new EnergyManage();
 
 		this.serverSocket = new ServerSocket(this.port);
 	}
 
 	public ProducerManage getProducerManage() {
 		return this.producerManage;
+	}
+
+	public EnergyManage getEnergyManage() {
+		return this.energyManage;
 	}
 
 	public void start(){

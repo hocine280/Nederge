@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Pierre CHEMIN et Hocine HADID
  * @version  1.0
  * */
-public class TrackingCode implements Comparable{
+public class TrackingCode{
 
 	/** Le pays de production de l'énergie */
 	private CountryEnum country;
@@ -34,8 +34,7 @@ public class TrackingCode implements Comparable{
 	 * @param json La chaine de caractères JSON représentant un code de suivi
 	 * @return Le code de suivi créé depuis sa représentation JSON
 	 */
-	public static TrackingCode fromJson(String json) throws Exception{
-		JSONObject object = new JSONObject(json);
+	public static TrackingCode fromJson(JSONObject object){
 
 		return new TrackingCode(CountryEnum.valueOf(object.getString("country")),
 								object.getInt("codeProducer"),
@@ -73,7 +72,7 @@ public class TrackingCode implements Comparable{
 	 * @param uniqueIdentifier L'identifiant unique de suivi
 	 * @param quantity La quantité d'énergie
 	 */
-	private TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
+	public TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
 		this.country = country;
 		this.codeProducer = codeProducer;
 		this.typeEnergy = typeEnergy;
@@ -211,20 +210,5 @@ public class TrackingCode implements Comparable{
 		ret.put("quantity", this.quantity);
 
 		return ret;
-	}
-
-	/**
-	 * Surchage de la méthode compareTo qui permet de comparer 2 code de suivi
-	 * 
-	 * @param o L'objet a comparé
-	 * @return 0 si les deux codes de suivi sont égaux, inférieur à 0 si le code de suivi courant est inférieur et supérieur à 0 s'il est supérieur
-	 */
-	@Override
-	public int compareTo(Object o) {
-		if(o == null){
-			throw new NullPointerException();
-		}
-
-		return this.quantity - ((TrackingCode) o).quantity;
 	}
 }

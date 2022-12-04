@@ -31,6 +31,10 @@ public class ProducerManage {
 		return this.listProducer.get(code);
 	}
 
+	public boolean containsProducer(int codeProducer){
+		return this.listProducer.containsKey(codeProducer);
+	}
+
 	public boolean containsProducer(String nameProducer){
 		return this.listProducer.containsValue(nameProducer);
 	}
