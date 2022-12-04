@@ -11,7 +11,8 @@ import java.util.Vector;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 
-import MarcheGrosServer.Handlers.Handler; 
+import MarcheGrosServer.Handlers.Handler;
+import MarcheGrosServer.Stock.StockManage; 
 
 
 public class MarcheGrosServer extends Server{
@@ -43,34 +44,34 @@ public class MarcheGrosServer extends Server{
         if(listServerUDP.contains(port)){
             // Création de la socket UDP
             DatagramSocket socket = null; 
-
+            StockManage stock = null;
             try{
                 socket = new DatagramSocket(this.port); 
+                stock = new StockManage(); 
             }catch(Exception e){
                 System.err.println("Erreur lors de la création de la socket : " + e); 
                 System.exit(0);
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-               
-            listenRequest(socket);
+            listenRequest(socket, stock);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
             System.exit(0);
         }
     }
 
-    public void listenRequest(DatagramSocket socket) throws IOException{
+    public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
         byte[] buffer = new byte[2048];        
         DatagramPacket messageReceived = new DatagramPacket(buffer, buffer.length);
-        Handler handler = new Handler(this.logManager);
+        Handler handler = new Handler(this.logManager, stock);
         try{
             socket.receive(messageReceived);
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
             System.out.println("Message reçu : " + text);
             this.logManager.addLog("Message reçu : " + text);
             handler.checkTypeRequest(messageReceived);
-            listenRequest(socket);
+            listenRequest(socket, stock);
         }catch(Exception e){
             System.err.println("Erreur lors de la réception du message : " + e); 
             System.exit(0);

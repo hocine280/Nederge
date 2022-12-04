@@ -1,8 +1,8 @@
 package MarcheGrosServer.Requests.RequestsTare;
 
 import MarcheGrosServer.Requests.MarcheGrosRequest;
-import MarcheGrosServer.Orders.Order;
 import MarcheGrosServer.Requests.TypeRequestEnum;
+import MarcheGrosServer.Stock.Energy;
 import Server.TypeServerEnum;
 import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
@@ -15,9 +15,9 @@ public class AskAvailabilityOrderRequest extends MarcheGrosRequest{
     private LogManager logManager;
 
     private int idOrder; 
-    private Order order; 
+    private Energy order; 
 
-    public AskAvailabilityOrderRequest(String sender, String receiver, SimpleDateFormat timestamp, int idOrder, Order order, LogManager logManager){
+    public AskAvailabilityOrderRequest(String sender, String receiver, SimpleDateFormat timestamp, int idOrder, Energy order, LogManager logManager){
         super(sender, receiver, timestamp, TypeRequestEnum.AskAvailabilityOrder);
         this.idOrder = idOrder; 
         this.order = order;
@@ -30,7 +30,7 @@ public class AskAvailabilityOrderRequest extends MarcheGrosRequest{
         String receiver = requestJSON.getString("receiver");
         SimpleDateFormat timestamp = new SimpleDateFormat(requestJSON.getString("timestamp"));
         int idOrder = requestJSON.getInt("idOrder");
-        Order order = Order.fromJSON(requestJSON.getJSONObject("order"));
+        Energy order = Energy.fromJSON(requestJSON.getJSONObject("order"));
         LogManager logManager = new LogManager(TypeServerEnum.UDP_Server, receiver);
         return new AskAvailabilityOrderRequest(sender, receiver, timestamp, idOrder, order, logManager);
     }

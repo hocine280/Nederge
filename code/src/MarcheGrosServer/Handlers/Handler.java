@@ -6,15 +6,17 @@ import MarcheGrosServer.Handlers.TareServer.AskAvailabilityOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.BuyEnergyOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.VerifyFutureAvailabilityOrderHandler;
 import MarcheGrosServer.Handlers.PoneClient.SendEnergyToMarketHandler;
-import MarcheGrosServer.Energy.StockManage;
 import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
 import MarcheGrosServer.Requests.TypeRequestEnum;
+import MarcheGrosServer.Stock.StockManage;
 import Server.LogManage.LogManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
@@ -23,15 +25,26 @@ public class Handler{
     protected LogManager logManager;
     protected StockManage stockManage; 
 
-    public Handler(LogManager logManager){
+    public Handler(LogManager logManager, StockManage stockManage){
         this.logManager = logManager;
-        this.stockManage = new StockManage();
+        this.stockManage = stockManage;
     }
 
     public JSONObject receiveJSON(DatagramPacket messageReceived){
         String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
         JSONObject data = new JSONObject(text);
         return data;
+    }
+
+    public JSONObject invalidRequest(){
+        JSONObject messageToSend = new JSONObject(); 
+        messageToSend.put("sender", "MarcheGrosServer");
+        messageToSend.put("receiver", "TareServer");
+        messageToSend.put("typeRequest", "AskAvailabilityOrder");
+        messageToSend.put("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()).toString());
+        messageToSend.put("status", false);
+        messageToSend.put("message", "Requete invalide");
+        return messageToSend;
     }
 
     public void check(JSONObject json) throws InvalidRequestException{

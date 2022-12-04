@@ -1,4 +1,4 @@
-package MarcheGrosServer.Orders;
+package MarcheGrosServer.Stock;
 
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
@@ -6,7 +6,7 @@ import TrackingCode.TypeEnergyEnum;
 
 import org.json.JSONObject;
 
-public class Order{
+public class Energy{
     private TypeEnergyEnum typeEnergy;
     private CountryEnum countryOrigin;
     private ExtractModeEnum extractionMode; 
@@ -17,7 +17,7 @@ public class Order{
     private int maxPriceUnitEnergy;
 
 
-    public Order(TypeEnergyEnum typeEnergy, CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, 
+    public Energy(TypeEnergyEnum typeEnergy, CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, 
             int quantity, int quantityMin, int budget, int maxPriceUnitEnergy){
         this.typeEnergy = typeEnergy;
         this.countryOrigin = countryOrigin;
@@ -29,8 +29,8 @@ public class Order{
         this.maxPriceUnitEnergy = maxPriceUnitEnergy;
     }
 
-    public static Order fromJSON(JSONObject orderJSON){
-        return new Order(
+    public static Energy fromJSON(JSONObject orderJSON){
+        return new Energy(
             TypeEnergyEnum.valueOf(orderJSON.getString("typeEnergy")),
             CountryEnum.valueOf(orderJSON.getString("countryOrigin")),
             ExtractModeEnum.valueOf(orderJSON.getString("extractionMode")),

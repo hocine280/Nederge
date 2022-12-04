@@ -1,4 +1,4 @@
-package MarcheGrosServer.Energy;
+package MarcheGrosServer.Stock;
 
 import java.util.Hashtable;
 import org.json.JSONObject;
