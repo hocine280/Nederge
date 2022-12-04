@@ -11,6 +11,7 @@ Description du format des requêtes.
 	"typeRequest" : "SendEnergyToMarket",
 	"timestamp" : "15/02/2019 10:00:00",
     "energy" : {Energy},  // Contient le code de suivi et l'énergie
+    "trackingCode" : {TrackingCode}
     "codeProducer" : 587, 
 }
 ```
