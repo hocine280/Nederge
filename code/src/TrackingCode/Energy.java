@@ -5,6 +5,7 @@ import org.json.JSONObject;
 public class Energy {
 	
 	private TrackingCode trackingCode;
+	private String certificate;
 
 	public Energy(TrackingCode trackingCode){
 		this.trackingCode = trackingCode;
@@ -18,10 +19,19 @@ public class Energy {
 		return this.trackingCode;
 	}
 
+	public String getCertificate() {
+		return this.certificate;
+	}
+
+	public void setCertificate(String certificate) {
+		this.certificate = certificate;
+	}
+
 	public JSONObject toJson(){
 		JSONObject json = new JSONObject();
 
 		json.put("trackingCode", this.trackingCode.toJson());
+		json.put("certificate", this.certificate);
 
 		return json;
 	}

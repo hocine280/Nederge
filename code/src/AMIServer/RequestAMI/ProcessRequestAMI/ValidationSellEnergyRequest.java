@@ -94,6 +94,8 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 		Energy energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.quantity, this.price);
 
+		this.server.certifyEnergy(energy);
+
 		// Energie ajouté
 		response.put("status", true);
 		response.put("energy", energy.toJson());

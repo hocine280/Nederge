@@ -42,14 +42,6 @@ public class EnergyManage {
 		return trackingCode;
 	}
 
-	public boolean verifyCertificateEnergy(){
-		return true;
-	}
-
-	public void certifyEnergy(Energy energy){
-		
-	}
-
 	public Energy addEnergy(ProducerManage producerManage, CountryEnum countryOrigin, int codeProducer, TypeEnergyEnum typeEnergy, boolean green, ExtractModeEnum extractionMode, int productionYear, int quantity, double price){
 		if(!producerManage.containsProducer(codeProducer)){
 			return null;
@@ -68,7 +60,6 @@ public class EnergyManage {
 		TrackingCode trackingCode = this.generateTrackingCode(countryOrigin, codeProducer, typeEnergy, green, extractionMode, productionYear, quantity);
 		
 		Energy energy = new Energy(trackingCode);
-		this.certifyEnergy(energy);
 
 		this.listEnergyValidate.put(energy.getTrackingCode().generateCode(), energy);
 

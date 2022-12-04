@@ -44,9 +44,9 @@ public abstract class Server {
 	protected LogManager logManager;
 
 	/** La cle privee du serveur @since 1.0 */
-	private PrivateKey privateKey;
+	protected PrivateKey privateKey;
 	/** La cle publique du serveur @since 1.0 */
-	private PublicKey publicKey;
+	protected PublicKey publicKey;
 
 	protected HashMap<String, PublicKey> listServerConnected;
 

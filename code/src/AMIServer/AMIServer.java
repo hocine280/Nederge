@@ -3,11 +3,17 @@ package AMIServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.util.Base64;
 
 import AMIServer.ManageAMI.EnergyManage;
 import AMIServer.ManageAMI.ProducerManage;
 import Server.Server;
 import Server.TypeServerEnum;
+import TrackingCode.Energy;
 
 public class AMIServer extends Server{
 
@@ -29,6 +35,49 @@ public class AMIServer extends Server{
 
 	public EnergyManage getEnergyManage() {
 		return this.energyManage;
+	}
+
+	public void certifyEnergy(Energy energy){
+		try {
+			Signature signature = Signature.getInstance("SHA256withRSA");
+		
+			signature.initSign(this.privateKey);
+			
+			signature.update(energy.getTrackingCode().toString().getBytes());
+
+			energy.setCertificate(Base64.getEncoder().encodeToString(signature.sign()));
+		} catch (NoSuchAlgorithmException e) {
+			this.logManager.addLog("Problème lors de l'initialisation de la signature. Motif : " + e.toString());
+			System.out.println("Problème lors de l'initialisation de la signature. " + e.toString());
+		} catch (InvalidKeyException e) {
+			this.logManager.addLog("Clé privé invalide. Motif : " + e.toString());
+			e.printStackTrace();
+		} catch (SignatureException e) {
+			this.logManager.addLog("Erreur lors de la mise à jour de la signature. Motif : " + e.toString());
+			e.printStackTrace();
+		}
+	}
+
+	public boolean verifyCertificateEnergy(Energy energy){
+		try {
+			Signature signature = Signature.getInstance("SHA256withRSA");
+
+			signature.initVerify(this.publicKey);
+			
+			signature.update(energy.getTrackingCode().toString().getBytes());
+			
+			return signature.verify(Base64.getDecoder().decode(energy.getCertificate()));
+		} catch (NoSuchAlgorithmException e) {
+			this.logManager.addLog("Problème lors de l'initialisation de la signature. Motif : " + e.toString());
+			System.out.println("Problème lors de l'initialisation de la signature. " + e.toString());
+		} catch (InvalidKeyException e) {
+			this.logManager.addLog("Clé publique invalide. Motif : " + e.toString());
+			e.printStackTrace();
+		} catch (SignatureException e) {
+			this.logManager.addLog("Erreur lors de la mise à jour de la signature. Motif : " + e.toString());
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public void start(){
