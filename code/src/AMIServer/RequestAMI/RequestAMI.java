@@ -5,7 +5,10 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 import AMIServer.AMIServer;
+import AMIServer.RequestAMI.ProcessRequestAMI.CheckEnergyMarket;
 import AMIServer.RequestAMI.ProcessRequestAMI.PublicKeyRequest;
+import AMIServer.RequestAMI.ProcessRequestAMI.RegisterPoneRequest;
+import AMIServer.RequestAMI.ProcessRequestAMI.ValidationSellEnergyRequest;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.Request;
@@ -30,6 +33,17 @@ public abstract class RequestAMI extends Request{
 			case PublicKeyRequest:
 				ret = PublicKeyRequest.fromJSON(server, object);
 				break;
+
+			case RegisterPone:
+				ret = RegisterPoneRequest.fromJSON(server, object);
+				break;
+
+			case ValidationSellEnergy:
+				ret = ValidationSellEnergyRequest.fromJSON(server, object);
+				break;
+
+			case CheckEnergyMarket:
+				ret = CheckEnergyMarket.fromJSON(server, object);
 		
 			default:
 				throw new InvalidRequestException(InvalidRequestSituationEnum.NotExist);
