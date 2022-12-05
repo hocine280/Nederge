@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 import AMIServer.AMIServer;
+import AMIServer.ManageAMI.InvalidEnergyException;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
 import Server.Request.InvalidRequestException;
@@ -88,21 +89,21 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 	@Override
 	public JSONObject process() {
-		JSONObject response = this.server.constructBaseRequest(receiver);
+		JSONObject response = this.server.constructBaseRequest(this.sender);
 
 		response.put("typeRequest", this.typeRequest);
 
-		Energy energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.quantity, this.price);
+		Energy energy;
+		try {
+			energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.quantity, this.price);
+			this.server.certifyEnergy(energy);
 
-		this.server.certifyEnergy(energy);
-
-		// Energie ajouté
-		response.put("status", true);
-		response.put("energy", energy.toJson());
-
-		// Energie non ajouté
-		response.put("status", false);
-		response.put("message", "L'énergie n'a pas pus être ajouté");
+			response.put("status", true);
+			response.put("energy", energy.toJson());
+		} catch (InvalidEnergyException e) {
+			response.put("status", false);
+			response.put("message", "L'énergie n'a pas pu être ajouté. Motif : " + e.toString());
+		}
 
 		return response;
 	}

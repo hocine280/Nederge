@@ -4,6 +4,7 @@ public enum TypeRequestAMI {
 	
 	PublicKeyRequest,
 	RegisterPone,
-	ValidationSellEnergy;
+	ValidationSellEnergy,
+	CheckEnergyMarket;
 
 }

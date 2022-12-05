@@ -42,7 +42,7 @@ public class EnergyManage {
 		return trackingCode;
 	}
 
-	public Energy addEnergy(ProducerManage producerManage, CountryEnum countryOrigin, int codeProducer, TypeEnergyEnum typeEnergy, boolean green, ExtractModeEnum extractionMode, int productionYear, int quantity, double price){
+	public Energy addEnergy(ProducerManage producerManage, CountryEnum countryOrigin, int codeProducer, TypeEnergyEnum typeEnergy, boolean green, ExtractModeEnum extractionMode, int productionYear, int quantity, double price) throws InvalidEnergyException{
 		if(!producerManage.containsProducer(codeProducer)){
 			return null;
 		}
@@ -50,11 +50,9 @@ public class EnergyManage {
 		double mediumPriceEnergy = price / quantity; 
 
 		if(mediumPriceEnergy < this.mediumPrice){
-			System.out.println("Prix trop faible");
-			return null;
+			throw new InvalidEnergyException(InvalidEnergySituation.PriceTooLow);
 		}else if(mediumPriceEnergy > this.mediumPrice){
-			System.out.println("Prix trop élevé");
-			return null;
+			throw new InvalidEnergyException(InvalidEnergySituation.PriceTooHigh);
 		}
 
 		TrackingCode trackingCode = this.generateTrackingCode(countryOrigin, codeProducer, typeEnergy, green, extractionMode, productionYear, quantity);
@@ -68,6 +66,18 @@ public class EnergyManage {
 		this.mediumPrice = this.mediumPrice / this.quantityEnergy;
 
 		return energy;
+	}
+
+	public Energy getEnergy(String trackingCode){
+		return this.listEnergyValidate.get(trackingCode);
+	}
+
+	public boolean verifyEnergy(Energy energy, int producer){
+		if(this.getEnergy(energy.getTrackingCode().generateCode()).getTrackingCode().getCodeProducer() != producer){
+			return false;
+		}
+
+		return true;
 	}
 
 }

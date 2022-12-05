@@ -97,7 +97,7 @@ public class TrackingCode{
 	 * 
 	 * @return Le code du producteur de l'énergie
 	 */
-	public int getCodeProducteur(){
+	public int getCodeProducer(){
 		return this.codeProducer;
 	}
 
