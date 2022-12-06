@@ -8,7 +8,9 @@ import org.json.JSONObject;
 
 import MarcheGrosServer.Handlers.Handler;
 import Server.LogManage.LogManager;
+import Server.Request.InvalidRequestException;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
+import MarcheGrosServer.Requests.RequestsTare.AskAvailabilityOrderRequest;
 
 public class AskAvailabilityOrderHandler extends Handler{
     
@@ -18,24 +20,28 @@ public class AskAvailabilityOrderHandler extends Handler{
 
 
     public void handle(DatagramPacket messageReceived){
-        JSONObject data = receiveJSON(messageReceived);
-        JSONObject messageToSend = new JSONObject();
-        if(data == null){
-            messageToSend.put("sender", "MarcheGrosServer");
-            messageToSend.put("receiver", "TareServer");
-            messageToSend.put("typeRequest", "AskAvailabilityOrder");
-            messageToSend.put("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()).toString());
-            messageToSend.put("status", false);
-            messageToSend.put("message", "Requete invalide");
-            sendResponse(messageReceived, messageToSend);
-            return;
+        System.out.println("Je suis dans le handle de AskAvailabilityOrderHandler\n\n");
+        JSONObject data = receiveJSON(messageReceived); 
+        JSONObject response; 
+        try{
+            AskAvailabilityOrderRequest.check(data);
+        }catch(InvalidRequestException e){
+            response = invalidRequest(); 
+            sendResponse(messageReceived, response);
+            return; 
         }
         
+        AskAvailabilityOrderRequest request = null; 
         try{
-            // AskAvailabilityOrderRequest request = AskAvailabilityOrderRequest.fromJSON(data);
-        }catch(Exception e){
-            
+            request = AskAvailabilityOrderRequest.fromJSON(data);
+        }catch(InvalidRequestException e){
+            System.out.println("Erreur lors de la récupération de la requête");
+            System.exit(0);
         }
+
+        // Verification de la disponibilité de l'énergie
+
     }
+
 
 }

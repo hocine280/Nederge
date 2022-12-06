@@ -1,6 +1,8 @@
 package MarcheGrosServer.ManageMarcheGrosServer;
 
 import java.util.Hashtable;
+import java.util.Vector;
+
 import org.json.JSONObject;
 import TrackingCode.Energy;
 
@@ -8,14 +10,15 @@ import TrackingCode.Energy;
 public class StockManage{
     // Integer = Identifiant unique de l'énergie
     // Energy = TrackingCode + certificat
-    private Hashtable<Integer,Energy> stockEnergy;
+    private Hashtable<Integer,Hashtable<Energy, Double>> stockEnergy;
 
     public StockManage(){
-        stockEnergy = new Hashtable<Integer,Energy>();
+        stockEnergy = new Hashtable<Integer, Hashtable<Energy, Double>>();
     }
 
-    public void addEnergy(Energy energy){
-        stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), energy);
+    public void addEnergy(Energy energy, double price){
+        stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), new Hashtable<Energy, Double>());
+        stockEnergy.get(energy.getTrackingCode().getUniqueIdentifier()).put(energy, price);
     }
     
     public void removeEnergy(Energy energy){
@@ -30,12 +33,10 @@ public class StockManage{
         }
     }
 
-    public Hashtable<Integer,Energy> checkEnergyAvailability(Energy desiredEnergy){
+    public JSONObject checkEnergyAvailability(Energy desiredEnergy){
         Hashtable<Integer,Energy> energyAvailable = new Hashtable<Integer,Energy>();
-        // for(Energy energy : stockEnergy.values()){
-            
-        // }
-        return energyAvailable;
+        
+        return null;
     }
 
     public JSONObject toJSON(){

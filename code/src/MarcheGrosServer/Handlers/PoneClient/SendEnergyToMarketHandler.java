@@ -21,7 +21,6 @@ public class SendEnergyToMarketHandler extends Handler{
     
 
     public void handle(DatagramPacket messageReceived){
-        System.out.println("Je suis dans le handler SendEnergyToMarketHandler"); 
         JSONObject data = receiveJSON(messageReceived); 
         try{
             SendEnergyToMarketRequest.check(data);

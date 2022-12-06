@@ -18,11 +18,13 @@ import java.util.Date;
 public class SendEnergyToMarketRequest extends MarcheGrosRequest{
     private Energy energy;
     private int codeProducer;
+    private double price; 
 
-    private SendEnergyToMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy){
+    private SendEnergyToMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
         super(sender, receiver, timestamp, TypeRequestEnum.SendEnergyToMarket);
         this.codeProducer = codeProducer;
         this.energy = energy;
+        this.price = price;
     }
     
     public static SendEnergyToMarketRequest fromJSON(JSONObject requestJSON) throws InvalidRequestException{
@@ -31,6 +33,7 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         String receiver = requestJSON.getString("receiver");
         SimpleDateFormat timestamp = new SimpleDateFormat(requestJSON.getString("timestamp"));
         int codeProducer = requestJSON.getInt("codeProducer");
+        double price = requestJSON.getDouble("price");
         Energy energy = null;
         try{
             energy = Energy.fromJSON(requestJSON.getJSONObject("energy"));
@@ -38,7 +41,7 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
             System.err.println("Erreur de récupération du tracking code et/ou de l'énergie: "+e);
             System.exit(0); 
         }
-        return new SendEnergyToMarketRequest(sender, receiver, timestamp, codeProducer, energy);
+        return new SendEnergyToMarketRequest(sender, receiver, timestamp, codeProducer, energy, price);
     }
 
 
