@@ -61,6 +61,8 @@ public class TrackingCode implements Comparable{
 		return new TrackingCode(CountryEnum.fromCode(codeSplit[0]), Integer.valueOf(codeSplit[1]), TypeEnergyEnum.fromCode(codeSplit[2]), false, ExtractModeEnum.fromCode(codeSplit[4]), Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
 	}
 
+
+	
 	/**
 	 * Le constructeur privé d'un code de suivi car il construit un code de suivi avec un identifiant unique donné
 	 * 
@@ -73,7 +75,7 @@ public class TrackingCode implements Comparable{
 	 * @param uniqueIdentifier L'identifiant unique de suivi
 	 * @param quantity La quantité d'énergie
 	 */
-	private TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
+	public TrackingCode(CountryEnum country, int codeProducer, TypeEnergyEnum typeEnergy, boolean greenEnergy, ExtractModeEnum extractMode, int productionYear, int uniqueIdentifier, int quantity){
 		this.country = country;
 		this.codeProducer = codeProducer;
 		this.typeEnergy = typeEnergy;
@@ -83,6 +85,9 @@ public class TrackingCode implements Comparable{
 		this.uniqueIdentifier = uniqueIdentifier;
 		this.quantity = quantity;
 	}
+
+
+
 
 	/**
 	 * Getter du pays de production de l'énergie

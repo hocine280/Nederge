@@ -2,12 +2,12 @@ package MarcheGrosServer.Requests.RequestsTare;
 
 import MarcheGrosServer.Requests.MarcheGrosRequest;
 import MarcheGrosServer.Requests.TypeRequestEnum;
-import MarcheGrosServer.Stock.Energy;
 import Server.TypeServerEnum;
 import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import org.json.JSONObject;
+import TrackingCode.Energy;
 
 import java.text.SimpleDateFormat;
 
@@ -30,7 +30,13 @@ public class AskAvailabilityOrderRequest extends MarcheGrosRequest{
         String receiver = requestJSON.getString("receiver");
         SimpleDateFormat timestamp = new SimpleDateFormat(requestJSON.getString("timestamp"));
         int idOrder = requestJSON.getInt("idOrder");
-        Energy order = Energy.fromJSON(requestJSON.getJSONObject("order"));
+        Energy order = null;
+        try{
+            order = Energy.fromJSON(requestJSON.getJSONObject("order"));
+        }catch(Exception e){
+            System.err.println("Erreur de récupération de l'énergie: "+e);
+            System.exit(0); 
+        }
         LogManager logManager = new LogManager(TypeServerEnum.UDP_Server, receiver);
         return new AskAvailabilityOrderRequest(sender, receiver, timestamp, idOrder, order, logManager);
     }

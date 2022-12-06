@@ -7,13 +7,13 @@ import java.util.Date;
 import org.json.JSONObject;
 
 import MarcheGrosServer.Handlers.Handler;
-// import MarcheGrosServer.Requests.RequestsTare.AskAvailabilityOrderRequest;
 import Server.LogManage.LogManager;
+import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 
 public class AskAvailabilityOrderHandler extends Handler{
     
-    public AskAvailabilityOrderHandler(LogManager logManager){
-        super(logManager);
+    public AskAvailabilityOrderHandler(LogManager logManager, StockManage stockManage){
+        super(logManager, stockManage);
     }
 
 

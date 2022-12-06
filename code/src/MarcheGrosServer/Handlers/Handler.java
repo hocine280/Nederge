@@ -5,10 +5,10 @@ import org.json.JSONObject;
 import MarcheGrosServer.Handlers.TareServer.AskAvailabilityOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.BuyEnergyOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.VerifyFutureAvailabilityOrderHandler;
+import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Handlers.PoneClient.SendEnergyToMarketHandler;
 import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
 import MarcheGrosServer.Requests.TypeRequestEnum;
-import MarcheGrosServer.Stock.StockManage;
 import Server.LogManage.LogManager;
 
 import java.io.IOException;
@@ -61,24 +61,22 @@ public class Handler{
         }
     }
 
-    public void checkTypeRequest(DatagramPacket messageReceived) throws InvalidRequestException{
+    public void checkTypeRequest(DatagramPacket messageReceived, StockManage stock) throws InvalidRequestException{
         String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
         if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
             System.out.println("checkTypeRequest validé !");
-            AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager);
+            AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock);
             askAvailabilityOrderHandler.handle(messageReceived);
         }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.BuyEnergyOrder.toString())){
-            BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager);
+            BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager, stock);
             buyEnergyOrderHandler.handle(messageReceived);
         }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.VerifyFutureAvailabilityOrder.toString())){
-            VerifyFutureAvailabilityOrderHandler verifyFutureAvailabilityOrderHandler = new VerifyFutureAvailabilityOrderHandler(this.logManager);
+            VerifyFutureAvailabilityOrderHandler verifyFutureAvailabilityOrderHandler = new VerifyFutureAvailabilityOrderHandler(this.logManager,stock);
             verifyFutureAvailabilityOrderHandler.handle(messageReceived);
         }else if(data.getString("sender").equals("PoneClient") && data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
-
-        }else if(data.getString("sender").equals("AmiServer") && data.getString("typeRequest").equals(TypeRequestEnum.CheckEnergyMarket.toString())){
-            
+            // Rien pour l'instant
         }
 
     }

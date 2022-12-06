@@ -1,12 +1,13 @@
 package MarcheGrosServer.Requests.RequestsPone;
 
+import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Requests.MarcheGrosRequest;
 import MarcheGrosServer.Requests.TypeRequestEnum;
-import MarcheGrosServer.Stock.Energy;
-import MarcheGrosServer.Stock.StockManage;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import TrackingCode.TrackingCode;
+
+import TrackingCode.Energy;
 
 import java.lang.Exception;
 import java.text.SimpleDateFormat;

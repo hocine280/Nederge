@@ -2,6 +2,11 @@ package MarcheGrosServer;
 
 import Server.Server; 
 import Server.TypeServerEnum;
+import TrackingCode.CountryEnum;
+import TrackingCode.Energy;
+import TrackingCode.ExtractModeEnum;
+import TrackingCode.TrackingCode;
+import TrackingCode.TypeEnergyEnum;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -12,12 +17,14 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 import MarcheGrosServer.Handlers.Handler;
-import MarcheGrosServer.Stock.StockManage; 
+import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
+import MarcheGrosServer.ManageMarcheGrosServer.StockManage; 
+
+import org.json.JSONObject;
 
 
 public class MarcheGrosServer extends Server{
     private static Vector<Integer> listServerUDP = new Vector<Integer>(); 
-
 
     private MarcheGrosServer(String name, int port) throws IOException{
         super(name, port,TypeServerEnum.UDP_Server);
@@ -54,11 +61,23 @@ public class MarcheGrosServer extends Server{
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-            listenRequest(socket, stock);
+            // listenRequest(socket, stock);
+            sendRequestMarcheGrosToAmi(stock);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
             System.exit(0);
         }
+    }
+
+    /**
+     * Test de la requête de vérification de l'énergie vers l'AMI
+     * @param stock
+     */
+    public void sendRequestMarcheGrosToAmi(StockManage stock){
+        CheckEnergyMarketHandler checkEnergyMarketHandler = new CheckEnergyMarketHandler(this.logManager, stock);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
+        checkEnergyMarketHandler.handleMarcheGrosToAmi(energy);
     }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
@@ -70,7 +89,7 @@ public class MarcheGrosServer extends Server{
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
             System.out.println("Message reçu : " + text);
             this.logManager.addLog("Message reçu : " + text);
-            handler.checkTypeRequest(messageReceived);
+            handler.checkTypeRequest(messageReceived, stock);
             listenRequest(socket, stock);
         }catch(Exception e){
             System.err.println("Erreur lors de la réception du message : " + e); 
