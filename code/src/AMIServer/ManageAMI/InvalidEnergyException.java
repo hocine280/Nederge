@@ -20,7 +20,7 @@ public class InvalidEnergyException extends Exception{
 
 	@Override
 	public String toString() {
-		return "Problème dans l'énergie : " + this.situation.toString();
+		return "Problème dans l'énergie : " + this.situation.toString() + (message != null ? "\nInfos supplémentaires : " + this.message : "");
 	}
 
 }

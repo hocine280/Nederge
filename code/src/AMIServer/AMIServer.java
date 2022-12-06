@@ -80,8 +80,10 @@ public class AMIServer extends Server{
 		return false;
 	}
 
+	@Override
 	public void start(){
 		Socket socketClient;
+		this.logManager.addLog("Serveur démarré !");
 		while (true) {
 			try {
 				socketClient = this.serverSocket.accept();

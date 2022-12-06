@@ -37,7 +37,8 @@ public class ManageTareServer extends Server{
 		return manageTareServer;
 	}
 
-	public void start() throws IOException{
+	@Override
+	public void start(){
 		this.server.createContext("/list-server", new ListServerHandler(this.logManager, this.listServer));
 
 		this.server.start();

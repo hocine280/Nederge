@@ -252,4 +252,6 @@ public abstract class Server {
 		return requestEncrypt;
 	}
 
+	public abstract void start();
+
 }

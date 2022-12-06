@@ -44,7 +44,8 @@ public class TareServer extends Server{
 		return null;
 	}
 
-	public void start() throws IOException{
+	@Override
+	public void start(){
 		this.server.createContext("/add-order", new AddOrderHandler(this.logManager, this.orderManage));
 		this.server.createContext("/remove-order", new RemoveOrderHandler(this.logManager, this.orderManage));
 		this.server.createContext("/infos-market", new InfosMarketHandler(this.logManager));
