@@ -66,25 +66,27 @@ public class Handler{
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
         if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
-            System.out.println("checkTypeRequest validé !");
             AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock);
             askAvailabilityOrderHandler.handle(messageReceived);
+            this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | AskAvailabilityOrder");
         }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.BuyEnergyOrder.toString())){
             BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager, stock);
             buyEnergyOrderHandler.handle(messageReceived);
+            this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | BuyEnergyOrder");
         }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.VerifyFutureAvailabilityOrder.toString())){
             VerifyFutureAvailabilityOrderHandler verifyFutureAvailabilityOrderHandler = new VerifyFutureAvailabilityOrderHandler(this.logManager,stock);
             verifyFutureAvailabilityOrderHandler.handle(messageReceived);
+            this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | VerifyFutureAvailabilityOrder");
         }else if(data.getString("sender").equals("PoneClient") && data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
-            // Rien pour l'instant
+            SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this.logManager, stock);
+            sendEnergyToMarketHandler.handle(messageReceived);
+            this.logManager.addLog("Réception requete | PoneClient->MarcheGrosServer | SendEnergyToMarket");
         }
 
     }
 
     
     public void sendResponse(DatagramPacket messageReiceived, JSONObject json){
-        System.out.println("La réponse est envoyé !");
-
         DatagramSocket socket = null; 
         try{
             socket = new DatagramSocket();

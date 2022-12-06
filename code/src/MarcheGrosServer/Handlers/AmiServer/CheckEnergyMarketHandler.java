@@ -7,7 +7,6 @@ import MarcheGrosServer.Requests.RequestsAmi.CheckEnergyMarketRequest;
 import Server.LogManage.LogManager;
 
 import TrackingCode.Energy;
-import TrackingCode.TrackingCode;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,6 +21,8 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 public class CheckEnergyMarketHandler extends Handler{
+
+    private final int listeningPort = 5000; 
     
     public CheckEnergyMarketHandler(LogManager logManager, StockManage stockManage){
         super(logManager, stockManage); 
@@ -29,15 +30,16 @@ public class CheckEnergyMarketHandler extends Handler{
     
     /*
      * Vérifie que l'énergie du PONE est bien enregistrer chez l'AMI
-     * Envoie de la requetes March"
+     * Envoie de la requetes MarcheGrosServer -> AMIServer
      */
-    public void handle(Energy energy){
+    public boolean handle(Energy energy){
         CheckEnergyMarketRequest request = new CheckEnergyMarketRequest("MarcheGrosServer", "AMIServer", 
-                                                                        new SimpleDateFormat(), energy.getTrackingCode().getCodeProducteur(), energy) ;
+                                            new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),
+                                            energy.getTrackingCode().getCodeProducteur(), energy) ;
         // Création de la socket
         Socket socket = null; 
         try{
-            socket = new Socket("localhost", 5000);
+            socket = new Socket("localhost", listeningPort);
         }catch(UnknownHostException e){
             System.err.println("Erreur sur l'hôte : "+e);
             System.exit(0);
@@ -60,7 +62,8 @@ public class CheckEnergyMarketHandler extends Handler{
         // Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI
         JSONObject requestJSON = request.process();
         String messageToSend = requestJSON.toString();
-        System.out.println("Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI : \n " + messageToSend);
+        System.out.println("Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI : " + messageToSend);
+        this.logManager.addLog("Envoie requête | MarcheGrosServer -> AMIServer | Vérification de l'énergie du PONE");
         output.println(messageToSend);
 
         // Lecture de la réponse
@@ -71,6 +74,7 @@ public class CheckEnergyMarketHandler extends Handler{
             System.err.println("Erreur lors de la lecture de la réponse : "+e);
             System.exit(0);
         }
+        this.logManager.addLog("Réception requête | AMIServer -> MarcheGrosServer | Réponse de l'AMI");
         System.out.println("\n\n\nRéponse de l'AMI : " + messageReceived);
 
         // Fermeture des flux et de la socket
@@ -82,6 +86,29 @@ public class CheckEnergyMarketHandler extends Handler{
             System.err.println("Erreur lors de la fermeture des flux et de la socket : " + e);
             System.exit(0);
         }
+
+        // Traitement de la réponse 
+        boolean status = AmiResponseTreatment(messageReceived);
+        if(status==true){
+            this.addEnergyOnMarket(energy);
+            this.logManager.addLog("Energie n°"+energy.getTrackingCode().getCodeProducteur()+" ajouté au marché");
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean AmiResponseTreatment(String response){
+        JSONObject responseJSON = new JSONObject(response);
+        if(responseJSON.getBoolean("status")==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void addEnergyOnMarket(Energy energy){
+        this.stockManage.addEnergy(energy);
     }
     
 }

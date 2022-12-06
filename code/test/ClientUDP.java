@@ -9,6 +9,12 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import TrackingCode.TrackingCode;
+import TrackingCode.CountryEnum;
+import TrackingCode.TypeEnergyEnum;
+import TrackingCode.ExtractModeEnum;
+import TrackingCode.Energy;
+
 import org.json.JSONObject;
 
 /**
@@ -37,12 +43,18 @@ public class ClientUDP {
         DatagramPacket msg = null;
         try {
             InetAddress adresse = InetAddress.getByName(null);
-            JSONObject json = new JSONObject();
-            json.put("sender", "TareServer"); 
-            json.put("receiver", "MarcheGrosServer");
-            json.put("typeRequest", "AskAvailabilityOrder");
-            json.put("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()).toString());
-            String message = json.toString();
+            
+            TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+            Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
+            JSONObject response = new JSONObject(); 
+            response.put("sender", "PoneClient"); 
+            response.put("receiver", "MarcheGrosServer");
+            response.put("typeRequest", "SendEnergyToMarket"); 
+            response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+            response.put("energy", energy.toJson());
+            response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
+
+            String message = response.toString();
             byte[] tampon = message.getBytes();
             msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
             

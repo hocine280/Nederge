@@ -61,8 +61,8 @@ public class MarcheGrosServer extends Server{
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-            // listenRequest(socket, stock);
-            sendRequestMarcheGrosToAmi(stock);
+            // sendRequestMarcheGrosToAmi(stock);
+            listenRequest(socket, stock);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
             System.exit(0);
@@ -77,7 +77,7 @@ public class MarcheGrosServer extends Server{
         CheckEnergyMarketHandler checkEnergyMarketHandler = new CheckEnergyMarketHandler(this.logManager, stock);
         TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
-        checkEnergyMarketHandler.handleMarcheGrosToAmi(energy);
+        checkEnergyMarketHandler.handle(energy);
     }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
@@ -88,7 +88,6 @@ public class MarcheGrosServer extends Server{
             socket.receive(messageReceived);
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
             System.out.println("Message reçu : " + text);
-            this.logManager.addLog("Message reçu : " + text);
             handler.checkTypeRequest(messageReceived, stock);
             listenRequest(socket, stock);
         }catch(Exception e){

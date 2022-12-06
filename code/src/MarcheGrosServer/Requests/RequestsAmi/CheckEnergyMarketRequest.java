@@ -10,6 +10,7 @@ import TrackingCode.Energy;
 import java.lang.Exception;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -63,7 +64,7 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         data.put("sender", this.sender); 
         data.put("receiver", this.receiver);
         data.put("typeRequest", "CheckEnergyMarket");
-        data.put("timestamp", this.timestamp.toString());
+        data.put("timestamp", this.timestamp.format(new Date()));
         data.put("codeProducer", codeProducer);
         data.put("energy", energy.toJson());
         return data;

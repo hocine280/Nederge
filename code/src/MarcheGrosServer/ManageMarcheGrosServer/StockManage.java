@@ -14,10 +14,13 @@ public class StockManage{
         stockEnergy = new Hashtable<Integer,Energy>();
     }
 
-    public void addEnergy(Energy energy, int codeProducer){
+    public void addEnergy(Energy energy){
         stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), energy);
     }
     
+    public void removeEnergy(Energy energy){
+        stockEnergy.remove(energy.getTrackingCode().getUniqueIdentifier());
+    }
 
     public Energy getEnergy(int uniqueIdentifier){
         if(!this.stockEnergy.containsKey(uniqueIdentifier)){
@@ -27,7 +30,7 @@ public class StockManage{
         }
     }
 
-    public Hashtable<Integer,Energy> checkEnergyAvailabiliy(Energy desiredEnergy){
+    public Hashtable<Integer,Energy> checkEnergyAvailability(Energy desiredEnergy){
         Hashtable<Integer,Energy> energyAvailable = new Hashtable<Integer,Energy>();
         // for(Energy energy : stockEnergy.values()){
             
