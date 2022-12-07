@@ -2,7 +2,6 @@ package AMIServer.RequestAMI.ProcessRequestAMI;
 
 import java.text.SimpleDateFormat;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import AMIServer.AMIServer;
