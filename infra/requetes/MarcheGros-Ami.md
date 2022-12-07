@@ -11,6 +11,7 @@
     "timestamp" : "15/02/2019 10:00:00",
     "energy" : {Energy},  // Contient l'energie
     "codeProducer" : 587, 
+    "priceOrder" : 152.23
 }
 ```
 
