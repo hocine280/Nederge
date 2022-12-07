@@ -40,7 +40,7 @@ public class PublicKeyRequest extends RequestAMI{
 
 	@Override
 	public JSONObject process() {
-		JSONObject response = this.server.constructBaseRequest(this.receiver);
+		JSONObject response = this.server.constructBaseRequest(this.sender);
 
 		response.put("typeRequest", this.typeRequest);
 

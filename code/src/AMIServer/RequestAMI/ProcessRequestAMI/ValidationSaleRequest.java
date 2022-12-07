@@ -61,7 +61,7 @@ public class ValidationSaleRequest extends RequestAMI{
 
 	@Override
 	public JSONObject process() {
-		JSONObject response = this.server.constructBaseRequest(this.receiver);
+		JSONObject response = this.server.constructBaseRequest(this.sender);
 
 		response.put("typeRequest", this.typeRequest);
 
@@ -69,14 +69,15 @@ public class ValidationSaleRequest extends RequestAMI{
 			this.energy.setPrice(this.price);
 			this.energy.setBuyer(this.buyer);
 			this.server.certifySaleEnergy(this.energy);
-
-			response.put("energy", this.energy.toJson());
+			
 			response.put("status", true);
 		}else{
 			response.put("status", false);
 			response.put("message", "La vente n'a pas pu être validé");
 		}
-
+		
+		response.put("energy", this.energy.toJson());
+		
 		return response;
 	}
 	

@@ -50,6 +50,10 @@ public abstract class RequestAMI extends Request{
 			case ValidationSale:
 				ret = ValidationSaleRequest.fromJSON(server, object);
 				break;
+
+			case CheckSaleEnergy:
+				ret = null;
+				break;
 		
 			default:
 				throw new InvalidRequestException(InvalidRequestSituationEnum.NotExist);
