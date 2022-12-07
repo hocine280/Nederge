@@ -11,22 +11,22 @@ import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import TrackingCode.Energy;
 
-public class CheckEnergyMarket extends RequestAMI{
+public class CheckEnergyMarketRequest extends RequestAMI{
 
 	private Energy energy;
 	private int codeProducer;
 
-	public CheckEnergyMarket(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, Energy energy, int codeProducer) {
+	public CheckEnergyMarketRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, Energy energy, int codeProducer) {
 		super(server, sender, receiver, timestamp, TypeRequestAMI.CheckEnergyMarket);
 		this.energy = energy;
 		this.codeProducer = codeProducer;
 	}
 
-	public static CheckEnergyMarket fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static CheckEnergyMarketRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		try {
-			return new CheckEnergyMarket(
+			return new CheckEnergyMarketRequest(
 				server,
 				object.getString("sender"),
 				object.getString("receiver"),
