@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import AMIServer.AMIServer;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import TrackingCode.Energy;
@@ -15,18 +16,19 @@ public class CheckSaleEnergyRequest extends RequestAMI{
 
 	private Energy energy;
 
-	public CheckSaleEnergyRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, Energy energy) {
-		super(server, sender, receiver, timestamp, TypeRequestAMI.CheckSaleEnergy);
+	public CheckSaleEnergyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, Energy energy) {
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.CheckSaleEnergy);
 		
 		this.energy = energy;
 	}
 
-	public static CheckSaleEnergyRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static CheckSaleEnergyRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		try {
 			return new CheckSaleEnergyRequest(
 				server,
+				logManager,
 				object.getString("sender"),
 				object.getString("receiver"),
 				new SimpleDateFormat(),

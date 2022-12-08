@@ -11,3 +11,14 @@ Pour compiler :
 Pour exécuter :
 
 	java -cp "cls;lib/json.jar" TestTARE
+
+
+### Lancement du test de l'AMI (uniquement)
+
+Pour compiler :
+
+	javac -d cls -cp "lib/json.jar" -sourcepath src test/TestAMI.java
+
+Pour exécuter :
+
+	java -cp "cls;lib/json.jar" TestAMI

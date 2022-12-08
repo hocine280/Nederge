@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import AMIServer.AMIServer;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import TrackingCode.Energy;
@@ -17,20 +18,21 @@ public class ValidationSaleRequest extends RequestAMI{
 	private double price;
 	private String buyer;
 
-	public ValidationSaleRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, Energy energy, double price, String buyer) {
-		super(server, sender, receiver, timestamp, TypeRequestAMI.ValidationSale);
+	public ValidationSaleRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, Energy energy, double price, String buyer) {
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.ValidationSale);
 		
 		this.energy = energy;
 		this.price = price;
 		this.buyer = buyer;
 	}
 
-	public static ValidationSaleRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static ValidationSaleRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		try {
 			return new ValidationSaleRequest(
 				server,
+				logManager,
 				object.getString("sender"),
 				object.getString("receiver"),
 				new SimpleDateFormat(),
@@ -71,6 +73,7 @@ public class ValidationSaleRequest extends RequestAMI{
 			this.server.certifySaleEnergy(this.energy);
 			
 			response.put("status", true);
+			this.logManager.addLog("Une énergie vient d'être vendu. Energie : " + this.energy.toJson());
 		}else{
 			response.put("status", false);
 			response.put("message", "La vente n'a pas pu être validé");

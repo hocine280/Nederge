@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import AMIServer.AMIServer;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 
@@ -14,16 +15,17 @@ public class RegisterPoneRequest extends RequestAMI{
 
 	private String nameProducer;
 
-	public RegisterPoneRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, String nameProducer) {
-		super(server, sender, receiver, timestamp, TypeRequestAMI.RegisterPone);
+	public RegisterPoneRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, String nameProducer) {
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.RegisterPone);
 		this.nameProducer = nameProducer;
 	}
 
-	public static RegisterPoneRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static RegisterPoneRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		return new RegisterPoneRequest(
 			server,
+			logManager,
 			object.getString("sender"),
 			object.getString("receiver"),
 			new SimpleDateFormat(),
@@ -46,7 +48,9 @@ public class RegisterPoneRequest extends RequestAMI{
 		response.put("typeRequest", this.typeRequest);
 
 		response.put("status", true);
-		response.put("codeProducer", this.server.getProducerManage().addProducer(nameProducer));
+		response.put("codeProducer", this.server.getProducerManage().addProducer(this.nameProducer));
+
+		this.logManager.addLog("Producteur ajouté : " + this.server.getProducerManage().getCodeProducer(nameProducer));
 
 		return response;
 	}

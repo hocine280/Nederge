@@ -8,6 +8,7 @@ import AMIServer.AMIServer;
 import AMIServer.ManageAMI.InvalidEnergyException;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import TrackingCode.CountryEnum;
@@ -25,9 +26,9 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 	private double price;
 
 	
-	public ValidationSellEnergyRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp,
+	public ValidationSellEnergyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp,
 		TypeEnergyEnum typeEnergy, ExtractModeEnum extractionMode, boolean green, CountryEnum countryOrigin, int quantity, double price) {
-		super(server, sender, receiver, timestamp, TypeRequestAMI.ValidationSellEnergy);
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.ValidationSellEnergy);
 
 		this.typeEnergy = typeEnergy;
 		this.extractionMode = extractionMode;
@@ -37,20 +38,22 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 		this.price = price;
 	}
 
-	public static ValidationSellEnergyRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static ValidationSellEnergyRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
+		JSONObject energy = object.getJSONObject("energy");
 		return new ValidationSellEnergyRequest(
 			server,
+			logManager,
 			object.getString("sender"),
 			object.getString("receiver"),
 			new SimpleDateFormat(),
-			TypeEnergyEnum.valueOf(object.getString("typeEnergy")),
-			ExtractModeEnum.valueOf(object.getString("extractionMode")),
-			object.getBoolean("green"),
-			CountryEnum.valueOf(object.getString("countryOrigin")),
-			object.getInt("quantity"),
-			object.getDouble("price")
+			TypeEnergyEnum.valueOf(energy.getString("typeEnergy")),
+			ExtractModeEnum.valueOf(energy.getString("extractionMode")),
+			energy.getBoolean("green"),
+			CountryEnum.valueOf(energy.getString("countryOrigin")),
+			energy.getInt("quantity"),
+			energy.getDouble("price")
 		);
 	}
 
@@ -100,6 +103,7 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 			response.put("status", true);
 			response.put("energy", energy.toJson());
+			this.logManager.addLog("Une énergie vient d'être validé et certifié. Energie : " + energy.toJson());
 		} catch (InvalidEnergyException e) {
 			response.put("status", false);
 			response.put("message", "L'énergie n'a pas pu être ajouté. Motif : " + e.toString());

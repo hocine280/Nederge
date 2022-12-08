@@ -26,6 +26,7 @@ public class ThreadConnectionAMI extends Thread{
 	private LogManager logManager;
 
 	public ThreadConnectionAMI(Socket socketClient, AMIServer server, LogManager logManager) throws IOException{
+		this.server = server;
 		this.socketClient = socketClient;
 		this.logManager = logManager;
 
@@ -55,26 +56,26 @@ public class ThreadConnectionAMI extends Thread{
 				try {
 					requestJson = new JSONObject(reception);
 				} catch (JSONException e) {
-					requestJson = new JSONObject(this.server.receiveDecrypt(reception));
+					requestJson = this.server.receiveDecrypt(reception);
 					encrypt = true;
 				}
 
 				try {
-					RequestAMI request = RequestAMI.fromJSON(this.server, requestJson);
-
+					RequestAMI request = RequestAMI.fromJSON(this.server, this.logManager, requestJson);
+					this.logManager.addLog("Réception d'une requête envoyé par " + request.getSender());
 					JSONObject response;
-
-					if(encrypt){
+					String send;
+					if(encrypt || request.getTypeRequest().equals(TypeRequestAMI.PublicKeyRequest)){
 						response = request.process();
-					}else if(request.getTypeRequest().equals(TypeRequestAMI.PublicKeyRequest)){
-						response = this.server.responseFirstConnectionServer(requestJson);
+						send = this.server.encryptRequest(request.getSender(), response);
 					}else{
 						response = this.server.constructBaseRequest(request.getSender());
 						response.put("status", false);
 						response.put("error", "La requête n'est pas chiffré");
+						send = this.server.encryptRequest(request.getSender(), response);
 					}
 
-					this.output.println(this.server.encryptRequest(request.getSender(), response));
+					this.output.println(send);
 					
 				} catch (InvalidRequestException e) {
 					this.logManager.addLog("Requête invalide. Motif : " + e.toString());

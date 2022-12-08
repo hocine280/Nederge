@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import AMIServer.AMIServer;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 
@@ -14,15 +15,18 @@ public class PublicKeyRequest extends RequestAMI{
 
 	private String publicKey;
 
-	public PublicKeyRequest(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, String publicKey) {
-		super(server, sender, receiver, timestamp, TypeRequestAMI.PublicKeyRequest);
+	public PublicKeyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, String publicKey) {
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.PublicKeyRequest);
+
+		this.publicKey = publicKey;
 	}
 
-	public static PublicKeyRequest fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static PublicKeyRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		return new PublicKeyRequest(
 			server,
+			logManager,
 			object.getString("sender"),
 			object.getString("receiver"),
 			new SimpleDateFormat(),
@@ -44,7 +48,8 @@ public class PublicKeyRequest extends RequestAMI{
 
 		response.put("typeRequest", this.typeRequest);
 
-		if(this.server.addServerToList(receiver, this.publicKey)){
+		if(this.server.addServerToList(this.sender, this.publicKey)){
+			this.logManager.addLog("Ajout d'un serveur et de sa clé public. Serveur : " + this.sender);
 			response.put("publicKeySender", this.server.getPublicKeyEncode());
 			response.put("status", true);
 		}else{

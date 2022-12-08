@@ -1,5 +1,8 @@
 package Server;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -10,6 +13,7 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import Server.LogManage.LogManager;
+import Server.Request.InvalidRequestException;
+import Server.Request.Request;
 import Server.InvalidServerException.SituationServerException;
 
 /**
@@ -181,10 +187,10 @@ public abstract class Server {
 	public JSONObject responseFirstConnectionServer(JSONObject request){
 		JSONObject response = constructBaseRequest(request.getString("sender"));
 		
-		response.put("publicKey", this.getPublicKeyEncode());
+		response.put("publicKeySender", this.getPublicKeyEncode());
 
 		if(!this.listServerConnected.containsKey(request.getString("sender"))){
-			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(request.getString("publicKey")));
+			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(request.getString("publicKeySender")));
 	
 			try {
 				this.addServerToList(request.getString("sender"), KeyFactory.getInstance("RSA").generatePublic(spec));
@@ -214,10 +220,18 @@ public abstract class Server {
 			Cipher crypt = Cipher.getInstance("RSA");
 			crypt.init(Cipher.DECRYPT_MODE, this.privateKey);
 
-			String requestString = new String(crypt.doFinal(Base64.getDecoder().decode(request)));
-			ret = new JSONObject(requestString);
+			byte[] requestEncrypt = Base64.getDecoder().decode(request);
+			
+			ByteArrayOutputStream result = new ByteArrayOutputStream();
+			int offset = 0;
+			while (offset < requestEncrypt.length) {
+				int length = requestEncrypt.length - offset;
+				result.write(crypt.doFinal(requestEncrypt, offset, length > 256 ? 256 : length));
+				offset += 256;
+			}
+
+			ret = new JSONObject(new String(result.toByteArray()));
 		} catch (Exception e) {
-			System.out.println("Problème à la réception d'une requête : " + e.toString());
 			this.logManager.addLog("Problème à la réception d'une requête : " + e.toString());
 		}
 
@@ -239,12 +253,22 @@ public abstract class Server {
 
 		String requestEncrypt = "";
 
-		Cipher crypt;
 		try {
-			crypt = Cipher.getInstance("RSA");
+			Cipher crypt = Cipher.getInstance("RSA");
 			crypt.init(Cipher.ENCRYPT_MODE, this.listServerConnected.get(nameReceiver));
-			requestEncrypt = Base64.getEncoder().encodeToString(crypt.doFinal(request.toString().getBytes()));
-		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+
+			byte[] requestToEncrypt = request.toString().getBytes();
+			ByteArrayOutputStream test = new ByteArrayOutputStream();
+			int offset = 0;
+			while (offset < requestToEncrypt.length) {
+				int length = requestToEncrypt.length - offset;
+				test.write(crypt.doFinal(requestToEncrypt, offset, length > 245 ? 245 : length));
+				
+				offset += 245;
+			}
+			
+			requestEncrypt = Base64.getEncoder().encodeToString(test.toByteArray());
+		} catch (Exception e) {
 			this.logManager.addLog("Problème lors du cryptage d'une requête pour le destinataire : " + nameReceiver + ". Erreur : " + e.toString());
 			throw new InvalidServerException(SituationServerException.EncryptionError, e.toString());
 		}

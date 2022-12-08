@@ -10,6 +10,7 @@ import AMIServer.RequestAMI.ProcessRequestAMI.PublicKeyRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.RegisterPoneRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.ValidationSaleRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.ValidationSellEnergyRequest;
+import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.Request;
@@ -18,37 +19,39 @@ public abstract class RequestAMI extends Request{
 
 	protected TypeRequestAMI typeRequest;
 	protected AMIServer server;
+	protected LogManager logManager;
 
-	public RequestAMI(AMIServer server, String sender, String receiver, SimpleDateFormat timestamp, TypeRequestAMI typeRequest) {
+	public RequestAMI(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, TypeRequestAMI typeRequest) {
 		super(sender, receiver, timestamp);
+		this.logManager = logManager;
 		this.server = server;
 		this.typeRequest = typeRequest;
 	}
 
-	public static RequestAMI fromJSON(AMIServer server, JSONObject object) throws InvalidRequestException{
+	public static RequestAMI fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
 		check(object);
 
 		RequestAMI ret;
 
 		switch (TypeRequestAMI.valueOf(object.getString("typeRequest"))) {
 			case PublicKeyRequest:
-				ret = PublicKeyRequest.fromJSON(server, object);
+				ret = PublicKeyRequest.fromJSON(server, logManager, object);
 				break;
 
 			case RegisterPone:
-				ret = RegisterPoneRequest.fromJSON(server, object);
+				ret = RegisterPoneRequest.fromJSON(server, logManager, object);
 				break;
 
 			case ValidationSellEnergy:
-				ret = ValidationSellEnergyRequest.fromJSON(server, object);
+				ret = ValidationSellEnergyRequest.fromJSON(server, logManager, object);
 				break;
 
 			case CheckEnergyMarket:
-				ret = CheckEnergyMarketRequest.fromJSON(server, object);
+				ret = CheckEnergyMarketRequest.fromJSON(server, logManager, object);
 				break;
 			
 			case ValidationSale:
-				ret = ValidationSaleRequest.fromJSON(server, object);
+				ret = ValidationSaleRequest.fromJSON(server, logManager, object);
 				break;
 
 			case CheckSaleEnergy:
