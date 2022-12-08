@@ -16,12 +16,38 @@ import Server.Server;
 import Server.TypeServerEnum;
 import TrackingCode.Energy;
 
+/**
+ * Classe representant le serveur TCP de l'AMI
+ * 
+ * @author Pierre CHEMIN
+ * @version 1.0
+ */
 public class AMIServer extends Server{
 
+	/**
+	 * La socket du serveur
+	 * @since 1.0
+	 */
 	private ServerSocket serverSocket;
+	/**
+	 * Attribut permettant de gerer les producteurs du syseme SALE
+	 * @since 1.0
+	 */
 	private ProducerManage producerManage;
+	/**
+	 * Attribut permettant de gerer les energies valides par l'AMI
+	 * @since 1.0
+	 */
 	private EnergyManage energyManage;
 
+	/**
+	 * Constructeur par initialisation du serveur TCP de l'AMI
+	 * @param name Le nom du serveur
+	 * @param port Le port du serveur
+	 * @throws IOException Si la socket du serveur n'a pas pu etre construite
+	 * 
+	 * @since 1.0
+	 */
 	public AMIServer(String name, int port) throws IOException{
 		super(name, port, TypeServerEnum.TCP_Server);
 		this.producerManage = new ProducerManage();
@@ -30,14 +56,32 @@ public class AMIServer extends Server{
 		this.serverSocket = new ServerSocket(this.port);
 	}
 
+	/**
+	 * Permet d'obtenir l'attribut permettant de gerer les producteurs du systeme SALE
+	 * @return Attribut permettant de gerer les producteurs du syseme SALE
+	 * 
+	 * @since 1.0
+	 */
 	public ProducerManage getProducerManage() {
 		return this.producerManage;
 	}
 
+	/**
+	 * Permet d'obtenir l'attribut permettant de gerer les energies valides par l'AMI
+	 * @return Attribut permettant de gerer les energies valides par l'AMI
+	 * 
+	 * @since 1.0
+	 */
 	public EnergyManage getEnergyManage() {
 		return this.energyManage;
 	}
 
+	/**
+	 * Permet de certifier une energie et de lui ajouter le certificat ainsi generer
+	 * @param energy L'energie a certifie
+	 * 
+	 * @since 1.0
+	 */
 	public void certifyEnergy(Energy energy){
 		try {
 			Signature signature = Signature.getInstance("SHA256withRSA");
@@ -59,6 +103,13 @@ public class AMIServer extends Server{
 		}
 	}
 
+	/**
+	 * Permet de verifier le certificat d'une energie
+	 * @param energy L'energie dont il faut verifier le certificat
+	 * @return Vrai si le certificat correspond bien au code de suivi de l'energie, faux sinon
+	 * 
+	 * @since 1.0
+	 */
 	public boolean verifyCertificateEnergy(Energy energy){
 		try {
 			Signature signature = Signature.getInstance("SHA256withRSA");
@@ -81,6 +132,12 @@ public class AMIServer extends Server{
 		return false;
 	}
 
+	/**
+	 * Permet de certifier la vente d'une energie et de lui ajouter le certificat ainsi generer 
+	 * @param energy L'energie dont on certifie la vente
+	 * 
+	 * @since 1.0
+	 */
 	public void certifySaleEnergy(Energy energy){
 		try {
 			Signature signature = Signature.getInstance("SHA256withRSA");
@@ -104,6 +161,13 @@ public class AMIServer extends Server{
 		}
 	}
 
+	/**
+	 * Permet de verifier le certificat de vente d'une energie 
+	 * @param energy L'energie dont il faut verifier le certificat de vente
+	 * @return Vrai si le certificat de vente est correcte, faux sinon
+	 * 
+	 * @since 1.0
+	 */
 	public boolean verifyCertificateSaleEnergy(Energy energy){
 		try {
 			Signature signature = Signature.getInstance("SHA256withRSA");
@@ -128,6 +192,11 @@ public class AMIServer extends Server{
 		return false;
 	}
 
+	/**
+	 * Permet de demarrer un serveur
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void start(){
 		Socket socketClient;
@@ -144,6 +213,12 @@ public class AMIServer extends Server{
 		}
 	}
 
+	/**
+	 * Permet d'arreter un serveur
+	 * 
+	 * @since 1.0
+	 */
+	@Override
 	public void shutdown() {
 		try {
 			this.serverSocket.close();

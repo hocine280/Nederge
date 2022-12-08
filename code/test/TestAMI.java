@@ -6,11 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -22,7 +18,6 @@ import AMIServer.AMIServer;
 import Server.InvalidServerException;
 import Server.Server;
 import Server.TypeServerEnum;
-import Server.Request.Request;
 
 public class TestAMI {
 	public static void main(String[] args) {
@@ -171,6 +166,15 @@ public class TestAMI {
 
 			this.logManager.addLog("Lancement du serveur !");
 			System.out.println("Lancement du server PONE de test de l'AMI");
+		}
+
+		@Override
+		public void shutdown() {
+			try {
+				this.socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

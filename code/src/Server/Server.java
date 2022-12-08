@@ -1,9 +1,6 @@
 package Server;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -13,47 +10,59 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import Server.LogManage.LogManager;
-import Server.Request.InvalidRequestException;
-import Server.Request.Request;
 import Server.InvalidServerException.SituationServerException;
 
 /**
- * La classe permettant de gerer un serveur de maniere generale
+ * La classe permettant de gerer un serveur de maniere generale avec le chiffrement et dechiffrement des requetes
  * 
  * @author Pierre CHEMIN
  * @version 1.0
  */
 public abstract class Server {
 	
-	/** Le nom du serveur @since 1.0 */
+	/** 
+	 * Le nom du serveur
+	 * @since 1.0 
+	 */
 	protected String name;
-	/** Le port du serveur @since 1.0 */
+	/** 
+	 * Le port du serveur
+	 * @since 1.0
+	 */
 	protected int port;
-
-	/** Le type du serveur @since 1.0 */
+	/** 
+	 * Le type du serveur
+	 * @since 1.0
+	 */
 	protected TypeServerEnum typeServer;
-	/** Le logManager du serveur @since 1.0 */
+	/** 
+	 * Le logManager du serveur
+	 * @since 1.0
+	 */
 	protected LogManager logManager;
-
-	/** La cle privee du serveur @since 1.0 */
+	/** 
+	 * La cle privee du serveur
+	 * @since 1.0 
+	 */
 	protected PrivateKey privateKey;
-	/** La cle publique du serveur @since 1.0 */
+	/** 
+	 * La cle publique du serveur
+	 * @since 1.0 
+	 */
 	protected PublicKey publicKey;
-
+	/**
+	 * La liste des serveurs connectes, dont on connait la cle publique
+	 * @since 1.0
+	 */
 	protected HashMap<String, PublicKey> listServerConnected;
 
 	/**
@@ -62,6 +71,8 @@ public abstract class Server {
 	 * @param name Le nom du serveur
 	 * @param port Le port du serveur
 	 * @param typeServer Le type du serveur
+	 * 
+	 * @since 1.0
 	 */
 	public Server(String name, int port, TypeServerEnum typeServer){
 		this.name = name;
@@ -77,6 +88,8 @@ public abstract class Server {
 	 * Permet de connaitre le nom du serveur
 	 * 
 	 * @return Le nom du serveur
+	 * 
+	 * @since 1.0
 	 */
 	public String getName(){
 		return this.name;
@@ -86,6 +99,8 @@ public abstract class Server {
 	 * Permet de connaitre le port du serveur
 	 * 
 	 * @return Le port du serveur
+	 * 
+	 * @since 1.0
 	 */
 	public int getPort(){
 		return this.port;
@@ -95,6 +110,8 @@ public abstract class Server {
 	 * Permet de connaitre le type du serveur
 	 * 
 	 * @return Le type du serveur
+	 * 
+	 * @since 1.0
 	 */
 	public TypeServerEnum getTypeServer(){
 		return this.typeServer;
@@ -104,6 +121,13 @@ public abstract class Server {
 		return Base64.getEncoder().encodeToString(new X509EncodedKeySpec(this.publicKey.getEncoded()).getEncoded());
 	}
 
+	/**
+	 * Permet d'obtenir la chaine de caractere representant un serveur
+	 * 
+	 * @return La chaine de caractere representant le serveur
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public String toString() {
 		return "[" + this.name + ":" + this.port + "]";
@@ -111,6 +135,8 @@ public abstract class Server {
 
 	/**
 	 * Permet d'initialiser la paire de cle privee et publique du serveur
+	 * 
+	 * @since 1.0
 	 */
 	private void initialiseKey(){
 		KeyPairGenerator generator = null;
@@ -129,17 +155,32 @@ public abstract class Server {
 		this.privateKey = keyPair.getPrivate();
 	}
 
+	/**
+	 * Permet d'ajouter un serveur dans la liste des serveurs dont on connait la cle publique
+	 * @param nameServer Le nom du serveur a ajoute
+	 * @param publicKeyServer La cle publique du serveur a ajoute
+	 * 
+	 * @since 1.0
+	 */
 	public void addServerToList(String nameServer, PublicKey publicKeyServer){
 		this.listServerConnected.putIfAbsent(nameServer, publicKeyServer);
 	}
 
+	/**
+	 * Permet d'ajouter un serveur dans la liste des serveurs dont on connait la cle publique
+	 * 
+	 * @param nameServer Le nom du serveur a ajouter
+	 * @param publicKeyEncode La cle publique du serveur a ajoute
+	 * @return Vrai si le serveur a bien ete ajoute, faux sinon
+	 * 
+	 * @since 1.0
+	 */
 	public boolean addServerToList(String nameServer, String publicKeyEncode){
 		X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyEncode));
 	
 		try {
 			this.addServerToList(nameServer, KeyFactory.getInstance("RSA").generatePublic(spec));
 		} catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-			System.out.println("Erreur lors de l'ajout de la clé publique d'un serveur : " + e.toString());
 			this.logManager.addLog("Erreur lors de l'ajout de la clé publique d'un serveur. Motif : " + e.toString());
 			return false;
 		}
@@ -152,6 +193,8 @@ public abstract class Server {
 	 * 
 	 * @param receiver Le destinataire de la requete
 	 * @return La requete de base construite
+	 * 
+	 * @since 1.0
 	 */
 	public JSONObject constructBaseRequest(String receiver){
 		JSONObject request = new JSONObject();
@@ -168,6 +211,8 @@ public abstract class Server {
 	 * 
 	 * @param nameServer Le serveur avec lequel on souhaite se connecter
 	 * @return La requete construite et a envoyer
+	 * 
+	 * @since 1.0
 	 */
 	public JSONObject sendFirstConnectionServe(String nameServer){
 		JSONObject request = constructBaseRequest(nameServer);
@@ -179,39 +224,12 @@ public abstract class Server {
 	}
 
 	/**
-	 * Permet de traiter et d'envoyer une reponse pour la premiere connexion entre deux serveurs. il s'agit de l'echange de leur cle publique respective.
-	 * 
-	 * @param request La requete a traiter contenant la cle publique du serveur qui veut se connecter
-	 * @return La reponse a retourner au serveur qui veut se connecter
-	 */
-	public JSONObject responseFirstConnectionServer(JSONObject request){
-		JSONObject response = constructBaseRequest(request.getString("sender"));
-		
-		response.put("publicKeySender", this.getPublicKeyEncode());
-
-		if(!this.listServerConnected.containsKey(request.getString("sender"))){
-			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(request.getString("publicKeySender")));
-	
-			try {
-				this.addServerToList(request.getString("sender"), KeyFactory.getInstance("RSA").generatePublic(spec));
-				response.put("status", true);
-			} catch (JSONException | InvalidKeySpecException | NoSuchAlgorithmException e) {
-				System.out.println("Erreur lors de l'ajout de la clé publique d'un serveur : " + e.toString());
-				this.logManager.addLog("Erreur lors de l'ajout de la clé publique d'un serveur. Motif : " + e.toString());
-				response.put("status", false);
-			}
-		}else{
-			response.put("status", true);
-		}
-
-		return response;
-	}
-
-	/**
 	 * Permet de decrypter une requete reçu
 	 * 
 	 * @param request La chaine de caractere contenant la requete encrypte
 	 * @return L'objet JSONObject correspondant a la requete decrypte, null si la requete n'a pas pu etre decrypte
+	 * 
+	 * @since 1.0
 	 */
 	public JSONObject receiveDecrypt(String request){
 		JSONObject ret = null;
@@ -244,7 +262,9 @@ public abstract class Server {
 	 * @param nameReceiver Le nom du serveur de destination dont on connait deja la cle publique
 	 * @param request La requete a crypte
 	 * @return La chaine de caractere correspondant a la requete encrypte qu'il faut envoyer
-	 * @throws InvalidServerException Si la cle publique du serveur de destination n'est pas connu ou s'il y a eu un probleme lors de l'encryption
+	 * @throws InvalidServerException Si la cle publique du serveur de destination n'est pas connu ou s'il y a eu un probleme lors u chiffrement
+	 * 
+	 * @since 1.0
 	 */
 	public String encryptRequest(String nameReceiver, JSONObject request) throws InvalidServerException{
 		if(!this.listServerConnected.containsKey(nameReceiver)){
@@ -258,16 +278,16 @@ public abstract class Server {
 			crypt.init(Cipher.ENCRYPT_MODE, this.listServerConnected.get(nameReceiver));
 
 			byte[] requestToEncrypt = request.toString().getBytes();
-			ByteArrayOutputStream test = new ByteArrayOutputStream();
+			ByteArrayOutputStream result = new ByteArrayOutputStream();
 			int offset = 0;
 			while (offset < requestToEncrypt.length) {
 				int length = requestToEncrypt.length - offset;
-				test.write(crypt.doFinal(requestToEncrypt, offset, length > 245 ? 245 : length));
+				result.write(crypt.doFinal(requestToEncrypt, offset, length > 245 ? 245 : length));
 				
 				offset += 245;
 			}
 			
-			requestEncrypt = Base64.getEncoder().encodeToString(test.toByteArray());
+			requestEncrypt = Base64.getEncoder().encodeToString(result.toByteArray());
 		} catch (Exception e) {
 			this.logManager.addLog("Problème lors du cryptage d'une requête pour le destinataire : " + nameReceiver + ". Erreur : " + e.toString());
 			throw new InvalidServerException(SituationServerException.EncryptionError, e.toString());
@@ -276,6 +296,18 @@ public abstract class Server {
 		return requestEncrypt;
 	}
 
+	/**
+	 * Permet de demarrer un serveur
+	 * 
+	 * @since 1.0
+	 */
 	public abstract void start();
+
+	/**
+	 * Permet d'arreter un serveur
+	 * 
+	 * @since 1.0
+	 */
+	public abstract void shutdown();
 
 }
