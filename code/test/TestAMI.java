@@ -18,6 +18,8 @@ import AMIServer.AMIServer;
 import Server.InvalidServerException;
 import Server.Server;
 import Server.TypeServerEnum;
+import TrackingCode.Energy;
+import TrackingCode.TrackingCode;
 
 public class TestAMI {
 	public static void main(String[] args) {
@@ -69,7 +71,43 @@ public class TestAMI {
 				newEnergy.put("countryOrigin", "FRANCE");
 				newEnergy.put("quantity", 50);
 				newEnergy.put("price", 50);
+				newEnergy.put("productionYear", 2022);
 				request.put("energy", newEnergy);
+
+				pone.sendRequest(request, true);
+				pone.read();
+
+				System.out.println(pone.getEnergyTest().toJson());
+
+				Energy energy = null;
+				try {
+					energy = new Energy(TrackingCode.fromCode("FR-1370176118-PE-00-MO1-Q50-50-907319372"));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				energy.setCertificateEnergy(pone.getEnergyTest().getCertificateEnergy());
+
+				request = pone.constructBaseRequest("serverAMI");
+				request.put("typeRequest", "CheckEnergyMarket");
+				request.put("energy", energy.toJson());
+				request.put("codeProducer", 1370176118);
+
+				pone.sendRequest(request, true);
+				pone.read();
+
+				request = pone.constructBaseRequest("serverAMI");
+				request.put("typeRequest", "CheckEnergyMarket");
+				request.put("energy", pone.getEnergyTest().toJson());
+				request.put("codeProducer", pone.getEnergyTest().getTrackingCode().getCodeProducer());
+
+				pone.sendRequest(request, true);
+				pone.read();
+
+				request = pone.constructBaseRequest("serverAMI");
+				request.put("typeRequest", "ValidationSale");
+				request.put("energy", pone.getEnergyTest().toJson());
+				request.put("price", 50);
+				request.put("buyer", "Acheteur");
 
 				pone.sendRequest(request, true);
 				pone.read();
@@ -80,12 +118,17 @@ public class TestAMI {
 
 	public static class PoneTestAmi extends Server{
 
+		private Energy energyTest;
 		private BufferedReader input;
 		private PrintWriter output;
 		private Socket socket;
 
 		public PoneTestAmi(String name, int port, TypeServerEnum typeServer) {
 			super(name, port, typeServer);
+		}
+
+		public Energy getEnergyTest() {
+			return energyTest;
 		}
 
 		public void sendRequest(JSONObject request, boolean encrypt){
@@ -143,6 +186,15 @@ public class TestAMI {
 					requestJson = this.receiveDecrypt(reception);
 					this.logManager.addLog("Réception d'une requête de " + requestJson.getString("sender"));
 				}
+
+				if(requestJson.has("typeRequest") && requestJson.getString("typeRequest").equals("ValidationSellEnergy") && 
+					requestJson.has("energy")){
+						try {
+							this.energyTest = Energy.fromJSON(requestJson.getJSONObject("energy"));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 
 				this.logManager.addLog(requestJson.toString());
 				System.out.println(requestJson);

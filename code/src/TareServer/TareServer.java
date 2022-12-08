@@ -63,4 +63,10 @@ public class TareServer extends Server{
 	public String toString() {
 		return "{Nom : " + this.name + ", Adresse : " + this.server.getAddress() + "}";
 	}
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
 }

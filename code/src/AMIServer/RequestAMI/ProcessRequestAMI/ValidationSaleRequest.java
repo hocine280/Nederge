@@ -56,8 +56,8 @@ public class ValidationSaleRequest extends RequestAMI{
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "price absent");
 		}
 
-		if(!data.has("nameBuyer")){
-			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "nameBuyer absent");
+		if(!data.has("buyer")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "buyer absent");
 		}
 	}
 

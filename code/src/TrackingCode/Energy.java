@@ -31,11 +31,15 @@ public class Energy {
 	private String certificateOwnership;
 
 	public Energy(TrackingCode trackingCode){
-		this.trackingCode = trackingCode;
+		this(trackingCode, null);
 	}
 
 	public Energy(TrackingCode trackingCode, String certificateEnergy){
 		this(trackingCode, certificateEnergy, -1, null, null);
+	}
+
+	public Energy(TrackingCode trackingCode, String certificateEnergy, double price){
+		this(trackingCode, certificateEnergy, price, null, null);
 	}
 
 	public Energy(TrackingCode trackingCode, String certificateEnergy, double price, String buyer, String certificateOwnership){
@@ -48,13 +52,21 @@ public class Energy {
 	}
 
 	public static Energy fromJSON(JSONObject object) throws Exception{
-		return new Energy(
+		Energy energy =  new Energy(
 			TrackingCode.fromCode(object.getString("trackingCode")),
 			object.getString("certificateEnergy"),
-			object.getDouble("price"),
-			object.getString("buyer"),
-			object.getString("certificateOwnership")
+			object.getDouble("price")
 		);
+
+		if(object.has("buyer")){
+			energy.buyer = object.getString("buyer");
+		}
+
+		if(object.has("certificateOwnership")){
+			energy.certificateOwnership = object.getString("certificateOwnership");
+		}
+
+		return energy;
 	}
 
 	public TrackingCode getTrackingCode() {

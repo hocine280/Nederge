@@ -24,10 +24,11 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 	private CountryEnum countryOrigin;
 	private int quantity;
 	private double price;
+	private int productionYear;
 
 	
 	public ValidationSellEnergyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp,
-		TypeEnergyEnum typeEnergy, ExtractModeEnum extractionMode, boolean green, CountryEnum countryOrigin, int quantity, double price) {
+		TypeEnergyEnum typeEnergy, ExtractModeEnum extractionMode, boolean green, CountryEnum countryOrigin, int quantity, double price, int productionYear) {
 		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.ValidationSellEnergy);
 
 		this.typeEnergy = typeEnergy;
@@ -36,6 +37,7 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 		this.countryOrigin = countryOrigin;
 		this.quantity = quantity;
 		this.price = price;
+		this.productionYear = productionYear;
 	}
 
 	public static ValidationSellEnergyRequest fromJSON(AMIServer server, LogManager logManager, JSONObject object) throws InvalidRequestException{
@@ -53,7 +55,8 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 			energy.getBoolean("green"),
 			CountryEnum.valueOf(energy.getString("countryOrigin")),
 			energy.getInt("quantity"),
-			energy.getDouble("price")
+			energy.getDouble("price"),
+			energy.getInt("productionYear")
 		);
 	}
 
@@ -88,6 +91,10 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 		if(!energy.has("price")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "price absent");
 		}
+
+		if(!energy.has("productionYear")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "productionYear absent");
+		}
 	}
 
 	@Override
@@ -98,7 +105,7 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 		Energy energy;
 		try {
-			energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.quantity, this.price);
+			energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.productionYear, this.price);
 			this.server.certifyEnergy(energy);
 
 			response.put("status", true);

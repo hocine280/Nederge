@@ -89,6 +89,7 @@ public class AMIServer extends Server{
 			signature.initSign(this.privateKey);
 			
 			signature.update(energy.getTrackingCode().toString().getBytes());
+			signature.update(ByteBuffer.allocate(Double.SIZE).putDouble(energy.getPrice()));
 
 			energy.setCertificateEnergy(Base64.getEncoder().encodeToString(signature.sign()));
 		} catch (NoSuchAlgorithmException e) {
@@ -117,6 +118,7 @@ public class AMIServer extends Server{
 			signature.initVerify(this.publicKey);
 			
 			signature.update(energy.getTrackingCode().toString().getBytes());
+			signature.update(ByteBuffer.allocate(Double.SIZE).putDouble(energy.getPrice()));
 			
 			return signature.verify(Base64.getDecoder().decode(energy.getCertificateEnergy()));
 		} catch (NoSuchAlgorithmException e) {

@@ -61,4 +61,8 @@ public class ManageTareServer extends Server{
 		}
 	}
 
+	@Override
+	public void shutdown() {
+	}
+
 }
