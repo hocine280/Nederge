@@ -27,9 +27,10 @@ import org.json.JSONObject;
  */
 public class ClientUDP {
 
-    public static int portEcoute = 2025;
+    public static int portEcoute = 2300;
     
     public static void main(String[] args) {
+        System.out.println("Client démarré sur le port "+portEcoute);
         DatagramSocket socket = null;
         // Création de la socket
         try {
@@ -48,13 +49,12 @@ public class ClientUDP {
             JSONObject response = requeteTARE1();
             String message = response.toString();
             byte[] tampon = message.getBytes();
-            msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
+            msg = new DatagramPacket(tampon, tampon.length, adresse, 2025);
             System.out.println("Message envoyer : " +message);
         } catch(UnknownHostException e) {
             System.err.println("Erreur lors de la création du message : " + e);
             System.exit(0);
         }
-
 
         // Envoi du message
         try {
@@ -64,13 +64,24 @@ public class ClientUDP {
             System.exit(0);
         }
 
+        DatagramSocket socketBis = null;
+        // Création de la socket
+        try {
+            // Instanciation de la socket sans passer de paramètre
+            socketBis = new DatagramSocket();
+        } catch(SocketException e) {
+            // Traitement en cas d'erreur
+            System.err.println("Erreur lors de la création de la socket : " + e);
+            System.exit(0);
+        }
+
         // Lecture de la réponse
         byte[] buffer = new byte[2048];
         DatagramPacket msgRecu = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(msgRecu);
             String txt = new String(msgRecu.getData(), 0, msgRecu.getLength());
-            System.out.println("message reçu" + txt);
+            System.out.println("message reçu : " + txt);
         } catch(IOException e) {
             System.err.println("Erreur lors de la réception du message : " + e);
             System.exit(0);
@@ -98,7 +109,7 @@ public class ClientUDP {
     public static JSONObject requeteTARE1(){
         JSONObject response = new JSONObject(); 
         Order order = new Order(TypeEnergyEnum.GAZ, CountryEnum.ALLEMAGNE, ExtractModeEnum.MODE_1, true, 150, 50, 1500, 1);
-        response.put("sender", "Test"); 
+        response.put("sender", "TAREServer1"); 
         response.put("receiver", "MarcheGrosServer");
         response.put("typeRequest", "AskAvailabilityOrder"); 
         response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));

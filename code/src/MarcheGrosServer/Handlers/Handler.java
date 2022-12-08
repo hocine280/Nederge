@@ -38,9 +38,10 @@ public class Handler{
         return data;
     }
 
-    public ListServerRequest recoveryListTareServer(){
+    public ListServerRequest recoveryListTareServer(DatagramPacket messageReceived){
+        System.out.println("Requete de récupération de la liste des TARE"); 
         ListServerHandler listServerHandler = new ListServerHandler(logManager, stockManage);
-        ListServerRequest listServerRequest = listServerHandler.handle();
+        ListServerRequest listServerRequest = listServerHandler.handle(messageReceived);
         return listServerRequest;
     }
 
@@ -73,8 +74,18 @@ public class Handler{
         String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
-        if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
+        if(data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
             System.out.println("\nje suis dans la condition de askAvailabilityOrder - checkTypeRequest\n ");
+            JSONObject json = receiveJSON(messageReceived);
+            int port = 0;
+            ListServerRequest listServerRequest = recoveryListTareServer(messageReceived);
+            for(String name : listServerRequest.getServerTare().keySet()){
+                System.out.println("Je suis dans la boucle for pour la liste des server"); 
+                if(name.equals(json.getString("receiver"))){
+                    port = listServerRequest.getServerTare().get(name);
+                }
+            }
+            System.out.println("Port : " + port);
             AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock);
             askAvailabilityOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | AskAvailabilityOrder");
@@ -88,10 +99,8 @@ public class Handler{
             sendEnergyToMarketHandler.handle(messageReceived);
             this.logManager.addLog("\nRéception requete | PoneClient->MarcheGrosServer | SendEnergyToMarket\n");
         }
-
     }
 
-    
     public void sendResponse(DatagramPacket messageReiceived, JSONObject json){
         DatagramSocket socket = null; 
         try{
@@ -121,6 +130,7 @@ public class Handler{
     }
 
     public void sendResponseTARE(DatagramPacket messageReiceived, JSONObject json){
+        System.out.println("Je suis dans sendResponseTARE");
         DatagramSocket socket = null; 
         try{
             socket = new DatagramSocket();
@@ -130,18 +140,21 @@ public class Handler{
         }
         
         int port=0; 
+        // ListServerRequest listServerRequest = recoveryListTareServer();
+        // for(String name : listServerRequest.getServerTare().keySet()){
+        //     System.out.println("Je suis dans la boucle for pour la liste des server"); 
+        //     if(name.equals(json.getString("receiver"))){
+        //         port = listServerRequest.getServerTare().get(name);
+        //     }
+        // }
 
-        ListServerRequest listServerRequest = recoveryListTareServer();
-        for(String name : listServerRequest.getServerTare().keySet()){
-            if(name.equals(json.getString("receiver"))){
-                port = listServerRequest.getServerTare().get(name);
-            }
-        }
+        System.out.println("port : "+port);
 
         DatagramPacket messageToSend = null; 
         try{
             byte[] buffer = json.toString().getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, messageReiceived.getAddress(), port);
+            System.out.println("Message au envoyé au "+json.getString("receiver")+" avec le port : "+port);
         }catch(Exception e){
             System.err.println("Erreur lors de la création du message");
             System.exit(0); 

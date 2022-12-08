@@ -14,9 +14,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ListServerTARE {
-    public static int portEcoute = 5000;
+    public static int portEcoute = 2025;
 
     public static void main(String[] args) {
+        System.out.println("ServerManage démarré sur le port "+portEcoute);
         DatagramSocket socket = null;
         // Création de la socket
         try {
@@ -28,61 +29,56 @@ public class ListServerTARE {
             System.exit(0);
         }
 
-        // Création du message
-        DatagramPacket msg = null;
-        try {
-            InetAddress adresse = InetAddress.getByName(null);
-            System.out.println("Adresse : " + adresse);
-            JSONObject response = listServer();
-            String message = response.toString();
-
-            // HashMap<String, Integer> serverTARE; 
-            // serverTARE = new HashMap<String, Integer>();
-            
-            //     String nomServer; 
-            //     Integer port; 
-            //     for(String cle : response.getJSONObject("servers").keySet()){
-            //         nomServer = response.getJSONObject("servers").getJSONObject(cle).getString("name");
-            //         port = response.getJSONObject("servers").getJSONObject(cle).getInt("port");
-            //         System.out.println("nomServer : " + nomServer);
-            //         System.out.println("port : " + port);
-            //         serverTARE.put(nomServer, port);
-            //     }
-
-            // for(String nameServe : serverTARE.keySet()){
-            //     System.out.println("Port : " + serverTARE.get(nameServe));
-            // }
-            byte[] tampon = message.getBytes();
-            msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
-            // System.out.println("Message envoyer : " +message);
-        } catch(UnknownHostException e) {
-            System.err.println("Erreur lors de la création du message : " + e);
-            System.exit(0);
-        }
-
-
-        // Envoi du message
-        try {
-            socket.send(msg);
-        } catch(IOException e) {
-            System.err.println("Erreur lors de l'envoi du message : " + e);
-            System.exit(0);
-        }
-
-        // Lecture de la réponse
+        // Lecture de la requete reçu
         byte[] buffer = new byte[2048];
         DatagramPacket msgRecu = new DatagramPacket(buffer, buffer.length);
         try {
             socket.receive(msgRecu);
+            System.out.println("J'ai recu un message!"); 
             String txt = new String(msgRecu.getData(), 0, msgRecu.getLength());
-            System.out.println("message reçu" + txt);
+            System.out.println("Message recu de la part du Marché de gros" + txt);
         } catch(IOException e) {
             System.err.println("Erreur lors de la réception du message : " + e);
             System.exit(0);
         }
-
         // Fermeture de la socket
         socket.close();
+
+        // DatagramSocket socketBis=null;
+        // // Création de la socket
+        // try {
+        //     // Instanciation de la socket sans passer de paramètre
+        //     socketBis = new DatagramSocket();
+        // } catch(SocketException e) {
+        //     // Traitement en cas d'erreur
+        //     System.err.println("Erreur lors de la création de la socket : " + e);
+        //     System.exit(0);
+        // } 
+        // // Création du message
+        // DatagramPacket msg = null;
+        // try {
+        //     InetAddress adresse = InetAddress.getByName(null);
+        //     JSONObject response = listServer();
+        //     String message = response.toString();
+
+        //     byte[] tampon = message.getBytes();
+        //     msg = new DatagramPacket(tampon, tampon.length, adresse, 2025);
+        //     System.out.println("Message envoyer au Marche de gros : " +message);
+        // } catch(UnknownHostException e) {
+        //     System.err.println("Erreur lors de la création du message : " + e);
+        //     System.exit(0);
+        // }
+
+        // // Envoi du message
+        // try {
+        //     socket.send(msg);
+        // } catch(IOException e) {
+        //     System.err.println("Erreur lors de l'envoi du message : " + e);
+        //     System.exit(0);
+        // }
+        // socketBis.close();
+
+
     }
 
     public static JSONObject listServer(){
@@ -101,7 +97,14 @@ public class ListServerTARE {
 		}
 
 		JSONArray jsonArray = new JSONArray(fileContent);
-        return jsonArray.getJSONObject(0);
+        JSONObject json = new JSONObject();
+        json.put("sender", "ManageServer"); 
+        json.put("receiver", "MarcheGrosServer"); 
+        json.put("typeReqest", "ListServer"); 
+        json.put("timestamp", "2020-12-01 12:00:00");
+        json.put("servers", jsonArray.getJSONObject(0)); 
+
+        return json; 
 
     }
 

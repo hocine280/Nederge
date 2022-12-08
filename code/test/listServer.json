@@ -6,9 +6,9 @@
               "port":8050,
               "name":"Inc"
            },
-           "8080":{
+           "2300":{
               "typeServer":"HTTP_Server",
-              "port":8080,
+              "port":2300,
               "name":"Test"
            }
         }
