@@ -45,7 +45,7 @@ public class ClientUDP {
         DatagramPacket msg = null;
         try {
             InetAddress adresse = InetAddress.getByName(null);
-            JSONObject response = requeteTARE2();
+            JSONObject response = requeteTARE1();
             String message = response.toString();
             byte[] tampon = message.getBytes();
             msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
@@ -98,7 +98,7 @@ public class ClientUDP {
     public static JSONObject requeteTARE1(){
         JSONObject response = new JSONObject(); 
         Order order = new Order(TypeEnergyEnum.GAZ, CountryEnum.ALLEMAGNE, ExtractModeEnum.MODE_1, true, 150, 50, 1500, 1);
-        response.put("sender", "TareServer"); 
+        response.put("sender", "Test"); 
         response.put("receiver", "MarcheGrosServer");
         response.put("typeRequest", "AskAvailabilityOrder"); 
         response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));

@@ -4,11 +4,11 @@ import org.json.JSONObject;
 
 import MarcheGrosServer.Handlers.TareServer.AskAvailabilityOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.BuyEnergyOrderHandler;
-import MarcheGrosServer.Handlers.TareServer.VerifyFutureAvailabilityOrderHandler;
+import MarcheGrosServer.Handlers.TareServer.ListServerHandler;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Handlers.PoneClient.SendEnergyToMarketHandler;
 import MarcheGrosServer.Requests.TypeRequestEnum;
-
+import MarcheGrosServer.Requests.RequestsTare.ListServerRequest;
 import Server.LogManage.LogManager;
 
 import java.io.IOException;
@@ -36,6 +36,12 @@ public class Handler{
         String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
         JSONObject data = new JSONObject(text);
         return data;
+    }
+
+    public ListServerRequest recoveryListTareServer(){
+        ListServerHandler listServerHandler = new ListServerHandler(logManager, stockManage);
+        ListServerRequest listServerRequest = listServerHandler.handle();
+        return listServerRequest;
     }
 
     public JSONObject invalidRequest(String sender, String receiver, TypeRequestEnum typeRequest){
@@ -76,10 +82,6 @@ public class Handler{
             BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager, stock);
             buyEnergyOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | BuyEnergyOrder");
-        }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.VerifyFutureAvailabilityOrder.toString())){
-            VerifyFutureAvailabilityOrderHandler verifyFutureAvailabilityOrderHandler = new VerifyFutureAvailabilityOrderHandler(this.logManager,stock);
-            verifyFutureAvailabilityOrderHandler.handle(messageReceived);
-            this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | VerifyFutureAvailabilityOrder");
         }else if(data.getString("sender").equals("PoneClient") && data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
             System.out.println("je suis dans la condition de sendEnergyToMarket - checkTypeRequest");
             SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this.logManager, stock);
@@ -103,6 +105,43 @@ public class Handler{
         try{
             byte[] buffer = json.toString().getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, messageReiceived.getAddress(), messageReiceived.getPort());
+        }catch(Exception e){
+            System.err.println("Erreur lors de la création du message");
+            System.exit(0); 
+        }
+        
+        try{
+            socket.send(messageToSend); 
+        }catch(IOException e){
+            System.err.println("Erreur lors de l'envoi du message");
+            System.exit(0); 
+        }
+        
+        socket.close();
+    }
+
+    public void sendResponseTARE(DatagramPacket messageReiceived, JSONObject json){
+        DatagramSocket socket = null; 
+        try{
+            socket = new DatagramSocket();
+        }catch(Exception e){
+            System.err.println("Erreur lors de la création du socket");
+            System.exit(0); 
+        }
+        
+        int port=0; 
+
+        ListServerRequest listServerRequest = recoveryListTareServer();
+        for(String name : listServerRequest.getServerTare().keySet()){
+            if(name.equals(json.getString("receiver"))){
+                port = listServerRequest.getServerTare().get(name);
+            }
+        }
+
+        DatagramPacket messageToSend = null; 
+        try{
+            byte[] buffer = json.toString().getBytes();
+            messageToSend = new DatagramPacket(buffer, buffer.length, messageReiceived.getAddress(), port);
         }catch(Exception e){
             System.err.println("Erreur lors de la création du message");
             System.exit(0); 

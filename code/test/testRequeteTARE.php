@@ -48,6 +48,10 @@ switch ($argv[1]) {
 		$method = 'GET';
 		break;
 
+	case 'list-server':
+		$method = 'GET';
+		break;
+
 	case 'order-status':
 		if(empty($argv[2]) || empty($argv[3])){
 			echo "L'identifiant de la commande ou son login n'est pas renseigné";
@@ -87,11 +91,11 @@ $options = [
 
 // Envoi de la requête et lecture du JSON reçu
 // Remplacez l'URL par l'adresse locale vers generateur.php
-$URL = "http://localhost:8080/" . $argv[1];
+$URL = "http://localhost:5000/" . $argv[1];
 $contexte  = stream_context_create($options);
 
 if(($jsonTexte = @file_get_contents($URL, false, $contexte)) !== false) {
 	echo $jsonTexte;
-}
-else
+}else{
 	echo "Une erreur est survenue lors de la récupération des données.";
+}

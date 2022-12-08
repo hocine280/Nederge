@@ -26,7 +26,7 @@ public class BuyEnergyOrderHandler extends Handler{
             BuyEnergyOrderRequest.check(data);
         }catch(Exception e){
             JSONObject response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.BuyEnergyOrder); 
-            sendResponse(messageReceived, response);
+            sendResponseTARE(messageReceived, response);
             return; 
         }
         BuyEnergyOrderRequest request = null; 
@@ -40,13 +40,13 @@ public class BuyEnergyOrderHandler extends Handler{
         boolean saleIsValid = checkSaleAtAMI(request); 
         if(saleIsValid){
             JSONObject responseToTARE = request.process(saleIsValid);
-            sendResponse(messageReceived, responseToTARE);
+            sendResponseTARE(messageReceived, responseToTARE);
             this.stockManage.buyEnergy(request.getEnergy());
             System.out.println("Commande acheter : " + request.getEnergy().getTrackingCode().toString());
             System.out.println("Stock energie : " +this.stockManage.toString()); 
         }else{
             JSONObject responseToTARE = request.process(saleIsValid);
-            sendResponse(messageReceived, responseToTARE);
+            sendResponseTARE(messageReceived, responseToTARE);
         }
     }
 
