@@ -73,18 +73,7 @@ public class ServeurTCP {
         System.out.println("Lu: " + message);
 
         // Envoi de la réponse
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
-        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
-
-        JSONObject response = new JSONObject(); 
-        response.put("sender", "AMIServer"); 
-        response.put("receiver", "MarcheGrosServer");
-        response.put("typeRequest", "CheckEnergyMarket"); 
-        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-        response.put("status", true); 
-        response.put("energy", energy.toJson());
-        response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
-        response.put("priceOrder", 152.6);
+        JSONObject response = responseSale();
         message = response.toString(); 
 
 
@@ -101,6 +90,38 @@ public class ServeurTCP {
             System.err.println("Erreur lors de la fermeture des flux et des sockets : " + e);
             System.exit(0);
         }
+    }
+
+    public static JSONObject responseCheck(){
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
+
+        JSONObject response = new JSONObject(); 
+        response.put("sender", "AMIServer"); 
+        response.put("receiver", "MarcheGrosServer");
+        response.put("typeRequest", "CheckEnergyMarket"); 
+        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        response.put("status", true); 
+        response.put("energy", energy.toJson());
+        response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
+        response.put("priceOrder", 152.6);
+
+        return response;
+    }
+
+    public static JSONObject responseSale(){
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 150.5, "TareServer1", "hbvfhebfhbvfhbvf-fjfhbvhfbv");
+
+        JSONObject response = new JSONObject();
+        response.put("sender", "AMIServer");
+        response.put("receiver", "MarcheGrosServer");
+        response.put("typeRequest", "ValidationSale");
+        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        response.put("status", true);
+        response.put("energy", energy.toJson());
+        response.put("message", "L'energy n'est pas valide"); 
+        return response;
     }
 
 }

@@ -36,7 +36,7 @@ public class ValidationSaleRequest extends MarcheGrosRequest{
             System.exit(0); 
         }
         double price = requestJSON.getDouble("price");
-        String buyer = requestJSON.getString("buyer");
+        String buyer = energy.getBuyer(); 
         return new ValidationSaleRequest(sender, receiver, timestamp, energy, price, buyer);
     }
 
@@ -63,5 +63,17 @@ public class ValidationSaleRequest extends MarcheGrosRequest{
         responseJSON.put("price", this.price);
         responseJSON.put("buyer", this.buyer);
         return responseJSON;
+    }
+
+    public Energy getEnergy() {
+        return energy;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getBuyer() {
+        return buyer;
     }
 }

@@ -34,7 +34,7 @@ public class Energy {
 		this.trackingCode = trackingCode;
 	}
 
-	public Energy(TrackingCode trackingCode, String certificateEnergy){
+	public 	Energy(TrackingCode trackingCode, String certificateEnergy){
 		this(trackingCode, certificateEnergy, -1, null, null);
 	}
 

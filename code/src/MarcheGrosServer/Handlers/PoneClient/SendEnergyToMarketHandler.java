@@ -34,8 +34,7 @@ public class SendEnergyToMarketHandler extends Handler{
         try{
             request = SendEnergyToMarketRequest.fromJSON(data);
         }catch(InvalidRequestException e){
-            System.out.println("Erreur lors de la récupération de la requête: "+e);
-            System.exit(0);
+            System.err.println("Erreur lors de la récupération de la requête: "+e);
         }
         boolean statusAddEnergieToMarket = checkEnergyAtAmi(request); 
         System.out.println("JE SUIS ICI !");

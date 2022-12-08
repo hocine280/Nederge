@@ -56,6 +56,7 @@ public class ValidationSaleHandler extends Handler{
         JSONObject responseJSON = request.process(); 
         String response = responseJSON.toString();
         this.logManager.addLog("Envoie reqûete [ MarcheGrosServer -> AMIServer ] : Vérification de l'achat d'une énergie");
+        System.out.println("Requete envoyé : " + response);
         output.println(response);
 
         // Lecture de la réponse de l'AMI
@@ -65,6 +66,7 @@ public class ValidationSaleHandler extends Handler{
         }catch(IOException e){
             System.err.println("Lecture de la réponse impossible : "+e);
         }
+        System.out.println("Réponse reçu : " + responseAMI);
 
         // Fermeture de la socket
         try {

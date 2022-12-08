@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 
 import MarcheGrosServer.Handlers.Handler;
 import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
+import MarcheGrosServer.Handlers.AmiServer.ValidationSaleHandler;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage; 
 
 import org.json.JSONObject;
@@ -62,6 +63,7 @@ public class MarcheGrosServer extends Server{
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
             // sendRequestMarcheGrosToAmi(stock);
+            // simuSaleEnergy(stock);
             listenRequest(socket, stock);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
@@ -69,6 +71,13 @@ public class MarcheGrosServer extends Server{
         }
     }
 
+    public void simuSaleEnergy(StockManage stock){
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 150.5, "TareServer1", "hbvfhebfhbvfhbvf-fjfhbvhfbv");
+
+        ValidationSaleHandler validationSaleHandler = new ValidationSaleHandler(this.logManager,stock);
+        validationSaleHandler.handle(energy, 150.5, "Hocine");
+    }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
         byte[] buffer = new byte[2048];        

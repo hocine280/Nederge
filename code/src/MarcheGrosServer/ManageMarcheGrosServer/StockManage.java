@@ -29,6 +29,10 @@ public class StockManage{
         stockEnergy.remove(energy.getTrackingCode().getUniqueIdentifier());
     }
 
+    public void buyEnergy(Energy energy){
+        removeEnergy(energy);
+    }
+
     // Remplir le stock d'énergie -- fonction de test
     public void simulationStockEnergie(){
         TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);

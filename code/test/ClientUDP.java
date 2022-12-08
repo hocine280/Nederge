@@ -45,7 +45,7 @@ public class ClientUDP {
         DatagramPacket msg = null;
         try {
             InetAddress adresse = InetAddress.getByName(null);
-            JSONObject response = requeteTARE1();
+            JSONObject response = requeteTARE2();
             String message = response.toString();
             byte[] tampon = message.getBytes();
             msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
@@ -104,6 +104,20 @@ public class ClientUDP {
         response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
         response.put("idOrder", 152); 
         response.put("order", order.toJSON());
+        return response;
+    }
+
+    public static JSONObject requeteTARE2(){
+        JSONObject response = new JSONObject(); 
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 1500, "TAREServer", "tyuinjjdchbgvhhb-chhcbfbf");
+        response.put("sender", "TareServer");
+        response.put("receiver", "MarcheGrosServer");
+        response.put("typeRequest", "BuyEnergyOrder"); 
+        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        response.put("idOrder", 152); 
+        response.put("energy", energy.toJson());
+        response.put("price", 152.6);
         return response;
     }
 }

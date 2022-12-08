@@ -72,7 +72,7 @@ public class Handler{
             AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock);
             askAvailabilityOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | AskAvailabilityOrder");
-        }else if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.BuyEnergyOrder.toString())){
+        }else if(data.getString("typeRequest").equals(TypeRequestEnum.BuyEnergyOrder.toString())){
             BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager, stock);
             buyEnergyOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | BuyEnergyOrder");

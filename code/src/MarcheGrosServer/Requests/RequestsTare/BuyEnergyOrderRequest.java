@@ -61,9 +61,17 @@ public class BuyEnergyOrderRequest extends MarcheGrosRequest{
         responseJSON.put("timestamp", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         responseJSON.put("idOrder", idOrder);
         responseJSON.put("status", status);
-        if(status){
+        if(status == false){
             responseJSON.put("message", "L'achat de l'énergie a échoué");
         }
         return responseJSON;
+    }
+
+    public Energy getEnergy() {
+        return energy;
+    }
+
+    public double getPrice() {
+        return price;
     }
 }
