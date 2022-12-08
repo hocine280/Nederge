@@ -13,38 +13,94 @@ public class Energy {
 	 * Certificat encodé en Base64
 	 * @since 1.0
 	 */
-	private String certificate;
+	private String certificateEnergy;
+	/**
+	 * Le prix à laquelle est acheté l'énergie
+	 * @since 1.0
+	 */
+	private double price;
+	/**
+	 * Le nom de l'acheteur de l'énergie
+	 * @since 1.0
+	 */
+	private String buyer;
+	/**
+	 * Le certificat d'achat de l'énergie
+	 * @since 1.0
+	 */
+	private String certificateOwnership;
 
 	public Energy(TrackingCode trackingCode){
 		this.trackingCode = trackingCode;
 	}
 
-	public Energy(TrackingCode trackingCode, String certificate){
+	public Energy(TrackingCode trackingCode, String certificateEnergy){
+		this(trackingCode, certificateEnergy, -1, null, null);
+	}
+
+	public Energy(TrackingCode trackingCode, String certificateEnergy, double price, String buyer, String certificateOwnership){
 		this.trackingCode = trackingCode;
-		this.certificate = certificate;
+		this.certificateEnergy = certificateEnergy;
+
+		this.price = price;
+		this.buyer = buyer;
+		this.certificateOwnership = certificateOwnership;
 	}
 
 	public static Energy fromJSON(JSONObject object) throws Exception{
-		return new Energy(TrackingCode.fromCode(object.getString("trackingCode")), object.getString("certificate"));
+		return new Energy(
+			TrackingCode.fromCode(object.getString("trackingCode")),
+			object.getString("certificateEnergy"),
+			object.getDouble("price"),
+			object.getString("buyer"),
+			object.getString("certificateOwnership")
+		);
 	}
 
 	public TrackingCode getTrackingCode() {
 		return this.trackingCode;
 	}
 
-	public String getCertificate() {
-		return this.certificate;
+	public double getPrice() {
+		return this.price;
 	}
 
-	public void setCertificate(String certificate) {
-		this.certificate = certificate;
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public String getCertificateEnergy() {
+		return this.certificateEnergy;
+	}
+
+	public String getCertificateOwnership() {
+		return this.certificateOwnership;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
+	}
+
+	public void setCertificateEnergy(String certificateEnergy) {
+		this.certificateEnergy = certificateEnergy;
+	}
+
+	public void setCertificateOwnership(String certificateOwnership) {
+		this.certificateOwnership = certificateOwnership;
 	}
 
 	public JSONObject toJson(){
 		JSONObject json = new JSONObject();
 
 		json.put("trackingCode", this.trackingCode.toString());
-		json.put("certificate", this.certificate);
+		json.put("certificateEnergy", this.certificateEnergy);
+		json.put("price", this.price);
+		json.put("buyer", this.buyer);
+		json.put("certificateOwnership", this.certificateOwnership);
 
 		return json;
 	}

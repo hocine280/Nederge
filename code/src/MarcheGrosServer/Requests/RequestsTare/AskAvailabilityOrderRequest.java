@@ -50,7 +50,7 @@ public class AskAvailabilityOrderRequest extends MarcheGrosRequest{
         }
     }
 
-    public JSONObject process(boolean status, double priceOrder, Energy listEnergy){
+    public JSONObject process(boolean status, JSONObject listEnergy){
         JSONObject responseJSON = new JSONObject();
             responseJSON.put("sender", "MarcheGrosServer"); 
             responseJSON.put("receiver", "ServerTare");
@@ -59,20 +59,11 @@ public class AskAvailabilityOrderRequest extends MarcheGrosRequest{
             responseJSON.put("idOrder", idOrder);
             responseJSON.put("status", status);
         if(status==true){
-            responseJSON.put("priceOrder", priceOrder); 
+            responseJSON.put("priceOrder", listEnergy.getDouble("priceOrder")); 
             responseJSON.put("listEnergy", listEnergy); 
         }else{
             responseJSON.put("message", "Energie non disponible");
         }
-
-    
-            responseJSON.put("sender", "MarcheGrosServer"); 
-            responseJSON.put("receiver", "ServerTare");
-            responseJSON.put("typeRequest", "AskAvailabilityOrder");
-            responseJSON.put("timestamp", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
-            responseJSON.put("idOrder", idOrder);
-            responseJSON.put("status",false); 
-            responseJSON.put("message", "Energie non disponible");
         return responseJSON;
     }
 

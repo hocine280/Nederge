@@ -84,6 +84,7 @@ public class ServeurTCP {
         response.put("status", true); 
         response.put("energy", energy.toJson());
         response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
+        response.put("priceOrder", 152.6);
         message = response.toString(); 
 
 

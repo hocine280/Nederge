@@ -1,23 +1,27 @@
 package MarcheGrosServer.ManageMarcheGrosServer;
 
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.HashMap;
+
+import TrackingCode.TrackingCode;
+import TrackingCode.CountryEnum;
+import TrackingCode.TypeEnergyEnum;
+import TrackingCode.ExtractModeEnum;
+import TrackingCode.Energy;
 
 import org.json.JSONObject;
-import TrackingCode.Energy;
 
 
 public class StockManage{
     // Integer = Identifiant unique de l'énergie
     // Energy = TrackingCode + certificat
-    private Hashtable<Integer,Hashtable<Energy, Double>> stockEnergy;
+    private HashMap<Integer,HashMap<Energy, Double>> stockEnergy;
 
     public StockManage(){
-        stockEnergy = new Hashtable<Integer, Hashtable<Energy, Double>>();
+        stockEnergy = new HashMap<Integer, HashMap<Energy, Double>>();
     }
 
     public void addEnergy(Energy energy, double price){
-        stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), new Hashtable<Energy, Double>());
+        stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), new HashMap<Energy, Double>());
         stockEnergy.get(energy.getTrackingCode().getUniqueIdentifier()).put(energy, price);
     }
     
@@ -25,25 +29,67 @@ public class StockManage{
         stockEnergy.remove(energy.getTrackingCode().getUniqueIdentifier());
     }
 
+    // Remplir le stock d'énergie -- fonction de test
+    public void simulationStockEnergie(){
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 1500, "TAREServer", "tyuinjjdchbgvhhb-chhcbfbf");
+        addEnergy(energy, energy.getPrice());
+    }   
+
+    public JSONObject checkEnergyAvailability(Order order){
+        simulationStockEnergie();
+        ListEnergy listEnergy = new ListEnergy();
+        boolean isAvailable = true;
+        for(Integer key : stockEnergy.keySet()){
+            for(Energy energy : stockEnergy.get(key).keySet()){
+                System.out.println("pays order : " + order.getCountryOrigin());
+                System.out.println("\npays energy : " + energy.getTrackingCode().getCountry());
+                if(order.getTypeEnergy() != energy.getTrackingCode().getTypeEnergy()){
+                    isAvailable = false;
+                }
+                if(order.getCountryOrigin() != energy.getTrackingCode().getCountry()){
+                    isAvailable = false;
+                }
+                if(order.getGreenEnergy() != energy.getTrackingCode().getGreenEnergy()){
+                    isAvailable = false;
+                }
+                if(order.getExtractionMode() != energy.getTrackingCode().getExtractMode()){
+                    isAvailable = false;
+                }
+                if(order.getQuantityMin() > energy.getTrackingCode().getQuantity()){
+                    isAvailable = false;   
+                }
+                if(order.getBudget() > energy.getPrice()){
+                    isAvailable = false;
+                }
+                System.out.println("isAvailable : " + isAvailable);
+                System.out.println("\n");
+                if(isAvailable == true){
+                    listEnergy.addEnergy(stockEnergy.get(key).keySet().iterator().next());
+                }
+            }
+            
+        }
+        return listEnergy.toJSON();
+    }
+    
     public Energy getEnergy(int uniqueIdentifier){
         if(!this.stockEnergy.containsKey(uniqueIdentifier)){
             throw new IllegalArgumentException("L'énergie n'est pas dans le stock");
         }else{
-            return stockEnergy.get(uniqueIdentifier);
+            return stockEnergy.get(uniqueIdentifier).keySet().iterator().next();
         }
     }
 
-    public JSONObject checkEnergyAvailability(Energy desiredEnergy){
-        Hashtable<Integer,Energy> energyAvailable = new Hashtable<Integer,Energy>();
-        
-        return null;
-    }
-
-    public JSONObject toJSON(){
-        JSONObject object = new JSONObject();
-        for(Energy energy : stockEnergy.values()){
-            object.put(Integer.toString(energy.getTrackingCode().getCodeProducteur()), energy.toJson());
+    public String toString(){
+        String str = "Stock : \n";
+        for(Integer key : stockEnergy.keySet()){
+            str += "Identifiant unique : " + key + "\n";
+            for(Energy energy : stockEnergy.get(key).keySet()){
+                str += "\t" + energy.getTrackingCode().toString() + "\n";
+            }
+            str += "\t" + stockEnergy.get(key).values().iterator().next() + " €/kWh" + "\n";
         }
-        return object;
+        return str;
     }
 }

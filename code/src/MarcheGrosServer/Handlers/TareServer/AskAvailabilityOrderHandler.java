@@ -1,15 +1,16 @@
 package MarcheGrosServer.Handlers.TareServer; 
 
 import java.net.DatagramPacket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.json.JSONObject;
 
 import MarcheGrosServer.Handlers.Handler;
 import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
+
+import MarcheGrosServer.ManageMarcheGrosServer.Order;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
+import MarcheGrosServer.Requests.TypeRequestEnum;
 import MarcheGrosServer.Requests.RequestsTare.AskAvailabilityOrderRequest;
 
 public class AskAvailabilityOrderHandler extends Handler{
@@ -20,13 +21,12 @@ public class AskAvailabilityOrderHandler extends Handler{
 
 
     public void handle(DatagramPacket messageReceived){
-        System.out.println("Je suis dans le handle de AskAvailabilityOrderHandler\n\n");
         JSONObject data = receiveJSON(messageReceived); 
         JSONObject response; 
         try{
             AskAvailabilityOrderRequest.check(data);
         }catch(InvalidRequestException e){
-            response = invalidRequest(); 
+            response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.AskAvailabilityOrder); 
             sendResponse(messageReceived, response);
             return; 
         }
@@ -40,8 +40,18 @@ public class AskAvailabilityOrderHandler extends Handler{
         }
 
         // Verification de la disponibilité de l'énergie
-
+        Order order = Order.fromJSON(data.getJSONObject("order"));
+        JSONObject listEnergy = stockManage.checkEnergyAvailability(order);
+        if(listEnergy.isEmpty()){
+            response = request.process(false, null); 
+            System.out.println("JSON envoyé vers le TARE : "+response+"\n"); 
+            sendResponse(messageReceived, response);
+            this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie indisponible");
+        }else{
+            response = request.process(true, listEnergy);
+            System.out.println("JSON envoyé vers le TARE : "+response+"\n");
+            sendResponse(messageReceived, response);
+            this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie disponible !");
+        }
     }
-
-
 }

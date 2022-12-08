@@ -32,10 +32,10 @@ public class CheckEnergyMarketHandler extends Handler{
      * Vérifie que l'énergie du PONE est bien enregistrer chez l'AMI
      * Envoie de la requetes MarcheGrosServer -> AMIServer
      */
-    public boolean handle(Energy energy){
+    public boolean handle(Energy energy, double price){
         CheckEnergyMarketRequest request = new CheckEnergyMarketRequest("MarcheGrosServer", "AMIServer", 
                                             new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),
-                                            energy.getTrackingCode().getCodeProducteur(), energy) ;
+                                            energy.getTrackingCode().getCodeProducteur(), energy, price);
         // Création de la socket
         Socket socket = null; 
         try{
@@ -64,6 +64,7 @@ public class CheckEnergyMarketHandler extends Handler{
         String messageToSend = requestJSON.toString();
         System.out.println("Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI : " + messageToSend);
         this.logManager.addLog("Envoie requête | MarcheGrosServer -> AMIServer | Vérification de l'énergie du PONE");
+        
         output.println(messageToSend);
 
         // Lecture de la réponse
@@ -90,7 +91,7 @@ public class CheckEnergyMarketHandler extends Handler{
         // Traitement de la réponse 
         boolean status = AmiResponseTreatment(messageReceived);
         if(status==true){
-            this.addEnergyOnMarket(energy);
+            this.addEnergyOnMarket(energy, price);
             this.logManager.addLog("Energie n°"+energy.getTrackingCode().getCodeProducteur()+" ajouté au marché");
             return true;
         }else{
@@ -107,8 +108,7 @@ public class CheckEnergyMarketHandler extends Handler{
         }
     }
 
-    public void addEnergyOnMarket(Energy energy){
-        this.stockManage.addEnergy(energy);
+    public void addEnergyOnMarket(Energy energy, double price){
+        this.stockManage.addEnergy(energy, price);
     }
-    
 }

@@ -18,12 +18,14 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
 
     private Energy energy;
     private int codeProducer;
+    private double price;
 
 
-    public CheckEnergyMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy){
+    public CheckEnergyMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
         super(sender, receiver, timestamp, TypeRequestEnum.SendEnergyToMarket);
         this.codeProducer = codeProducer;
         this.energy = energy;
+        this.price = price; 
     }
  
     
@@ -33,6 +35,7 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         String receiver = requestJSON.getString("receiver");
         SimpleDateFormat timestamp = new SimpleDateFormat(requestJSON.getString("timestamp"));
         int codeProducer = requestJSON.getInt("codeProducer");
+        double price = requestJSON.getDouble("priceOrder");
         Energy energy = null;
         try{
             energy = Energy.fromJSON(requestJSON.getJSONObject("energy"));
@@ -40,7 +43,7 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
             System.err.println("Erreur de récupération du tracking code/energie : "+e);
             System.exit(0);
         }
-        return new CheckEnergyMarketRequest(sender, receiver, timestamp, codeProducer, energy);
+        return new CheckEnergyMarketRequest(sender, receiver, timestamp, codeProducer, energy, price);
     }
 
     public static void check(JSONObject data) throws InvalidRequestException{
@@ -50,9 +53,6 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         }
         if(!data.has("energy")){
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "energy absent");
-        }
-        if(!data.has("trackingCode")){
-            throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "trackingCode absent");
         }
     }
     /**
@@ -67,6 +67,7 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         data.put("timestamp", this.timestamp.format(new Date()));
         data.put("codeProducer", codeProducer);
         data.put("energy", energy.toJson());
+        data.put("priceOrder", this.price); 
         return data;
     }
 }

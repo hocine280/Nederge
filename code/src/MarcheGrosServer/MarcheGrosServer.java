@@ -69,16 +69,6 @@ public class MarcheGrosServer extends Server{
         }
     }
 
-    /**
-     * Test de la requête de vérification de l'énergie vers l'AMI
-     * @param stock
-     */
-    public void sendRequestMarcheGrosToAmi(StockManage stock){
-        CheckEnergyMarketHandler checkEnergyMarketHandler = new CheckEnergyMarketHandler(this.logManager, stock);
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
-        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
-        checkEnergyMarketHandler.handle(energy);
-    }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
         byte[] buffer = new byte[2048];        

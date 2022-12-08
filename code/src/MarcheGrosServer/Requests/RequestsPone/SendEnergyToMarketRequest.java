@@ -33,7 +33,7 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         String receiver = requestJSON.getString("receiver");
         SimpleDateFormat timestamp = new SimpleDateFormat(requestJSON.getString("timestamp"));
         int codeProducer = requestJSON.getInt("codeProducer");
-        double price = requestJSON.getDouble("price");
+        double price = requestJSON.getDouble("priceOrder");
         Energy energy = null;
         try{
             energy = Energy.fromJSON(requestJSON.getJSONObject("energy"));
@@ -49,6 +49,10 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         return this.energy;
     }
 
+    public double getPrice(){
+        return this.price;
+    }
+
     public static void check(JSONObject data) throws InvalidRequestException{
         MarcheGrosRequest.check(data);
         if(!data.has("codeProducer")){
@@ -56,6 +60,9 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         }
         if(!data.has("energy")){
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "energy absent");
+        }
+        if(!data.has("priceOrder")){
+            throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "price absent");
         }
     }
 

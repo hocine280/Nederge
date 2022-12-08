@@ -35,10 +35,10 @@ public class Order{
             CountryEnum.valueOf(orderJSON.getString("countryOrigin")),
             ExtractModeEnum.valueOf(orderJSON.getString("extractionMode")),
             Boolean.valueOf(orderJSON.getBoolean("greenEnergy")),
-            Integer.valueOf(orderJSON.getString("quantity")),
-            Integer.valueOf(orderJSON.getString("quantityMin")),
-            Integer.valueOf(orderJSON.getString("budget")),
-            Integer.valueOf(orderJSON.getString("maxPriceUnitEnergy"))
+            Integer.valueOf(orderJSON.getInt("quantity")),
+            Integer.valueOf(orderJSON.getInt("quantityMin")),
+            Integer.valueOf(orderJSON.getInt("budget")),
+            Integer.valueOf(orderJSON.getInt("maxPriceUnitEnergy"))
         ); 
     }
 
@@ -54,4 +54,38 @@ public class Order{
         orderJSON.put("maxPriceUnitEnergy", this.maxPriceUnitEnergy);
         return orderJSON;
     }
+
+    // Getter
+    public TypeEnergyEnum getTypeEnergy(){
+        return this.typeEnergy;
+    }
+
+    public CountryEnum getCountryOrigin(){
+        return this.countryOrigin;
+    }
+
+    public ExtractModeEnum getExtractionMode(){
+        return this.extractionMode;
+    }
+
+    public boolean getGreenEnergy(){
+        return this.greenEnergy;
+    }
+
+    public int getQuantity(){
+        return this.quantity;
+    }
+
+    public int getQuantityMin(){
+        return this.quantityMin;
+    }
+
+    public int getBudget(){
+        return this.budget;
+    }
+
+    public int getMaxPriceUnitEnergy(){
+        return this.maxPriceUnitEnergy;
+    }
+
 }

@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import MarcheGrosServer.ManageMarcheGrosServer.Order;
 
 import TrackingCode.TrackingCode;
 import TrackingCode.CountryEnum;
@@ -16,6 +17,7 @@ import TrackingCode.ExtractModeEnum;
 import TrackingCode.Energy;
 
 import org.json.JSONObject;
+
 
 /**
  * Classe correspondant à un client UDP.
@@ -43,21 +45,11 @@ public class ClientUDP {
         DatagramPacket msg = null;
         try {
             InetAddress adresse = InetAddress.getByName(null);
-            
-            TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
-            Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
-            JSONObject response = new JSONObject(); 
-            response.put("sender", "PoneClient"); 
-            response.put("receiver", "MarcheGrosServer");
-            response.put("typeRequest", "SendEnergyToMarket"); 
-            response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-            response.put("energy", energy.toJson());
-            response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
-
+            JSONObject response = requeteTARE1();
             String message = response.toString();
             byte[] tampon = message.getBytes();
             msg = new DatagramPacket(tampon, tampon.length, adresse, portEcoute);
-            
+            System.out.println("Message envoyer : " +message);
         } catch(UnknownHostException e) {
             System.err.println("Erreur lors de la création du message : " + e);
             System.exit(0);
@@ -78,7 +70,7 @@ public class ClientUDP {
         try {
             socket.receive(msgRecu);
             String txt = new String(msgRecu.getData(), 0, msgRecu.getLength());
-            System.out.println(txt);
+            System.out.println("message reçu" + txt);
         } catch(IOException e) {
             System.err.println("Erreur lors de la réception du message : " + e);
             System.exit(0);
@@ -88,4 +80,30 @@ public class ClientUDP {
         socket.close();
     }
 
+    public static JSONObject requetePONE(){
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
+        JSONObject response = new JSONObject(); 
+        response.put("sender", "PoneClient"); 
+        response.put("receiver", "MarcheGrosServer");
+        response.put("typeRequest", "SendEnergyToMarket"); 
+        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        response.put("energy", energy.toJson());
+        response.put("codeProducer", energy.getTrackingCode().getCodeProducteur());
+        response.put("priceOrder", 152.6); 
+
+        return response;
+    }
+
+    public static JSONObject requeteTARE1(){
+        JSONObject response = new JSONObject(); 
+        Order order = new Order(TypeEnergyEnum.GAZ, CountryEnum.ALLEMAGNE, ExtractModeEnum.MODE_1, true, 150, 50, 1500, 1);
+        response.put("sender", "TareServer"); 
+        response.put("receiver", "MarcheGrosServer");
+        response.put("typeRequest", "AskAvailabilityOrder"); 
+        response.put("timestamp", new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
+        response.put("idOrder", 152); 
+        response.put("order", order.toJSON());
+        return response;
+    }
 }

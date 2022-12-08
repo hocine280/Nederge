@@ -7,13 +7,15 @@ import MarcheGrosServer.Handlers.TareServer.BuyEnergyOrderHandler;
 import MarcheGrosServer.Handlers.TareServer.VerifyFutureAvailabilityOrderHandler;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Handlers.PoneClient.SendEnergyToMarketHandler;
-import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
 import MarcheGrosServer.Requests.TypeRequestEnum;
+
 import Server.LogManage.LogManager;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,11 +38,11 @@ public class Handler{
         return data;
     }
 
-    public JSONObject invalidRequest(){
+    public JSONObject invalidRequest(String sender, String receiver, TypeRequestEnum typeRequest){
         JSONObject messageToSend = new JSONObject(); 
-        messageToSend.put("sender", "MarcheGrosServer");
-        messageToSend.put("receiver", "TareServer");
-        messageToSend.put("typeRequest", "AskAvailabilityOrder");
+        messageToSend.put("sender",sender);
+        messageToSend.put("receiver", receiver);
+        messageToSend.put("typeRequest", typeRequest.toString());
         messageToSend.put("timestamp", SimpleDateFormat.getDateTimeInstance().format(new Date()).toString());
         messageToSend.put("status", false);
         messageToSend.put("message", "Requete invalide");
@@ -66,6 +68,7 @@ public class Handler{
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
         if(data.getString("sender").equals("TareServer") && data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
+            System.out.println("\nje suis dans la condition de askAvailabilityOrder - checkTypeRequest\n ");
             AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock);
             askAvailabilityOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | AskAvailabilityOrder");
@@ -78,9 +81,10 @@ public class Handler{
             verifyFutureAvailabilityOrderHandler.handle(messageReceived);
             this.logManager.addLog("Réception requete | TareServer->MarcheGrosServer | VerifyFutureAvailabilityOrder");
         }else if(data.getString("sender").equals("PoneClient") && data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
+            System.out.println("je suis dans la condition de sendEnergyToMarket - checkTypeRequest");
             SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this.logManager, stock);
             sendEnergyToMarketHandler.handle(messageReceived);
-            this.logManager.addLog("Réception requete | PoneClient->MarcheGrosServer | SendEnergyToMarket");
+            this.logManager.addLog("\nRéception requete | PoneClient->MarcheGrosServer | SendEnergyToMarket\n");
         }
 
     }
