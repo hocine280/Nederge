@@ -18,6 +18,7 @@ import javax.crypto.Cipher;
 
 import org.json.JSONObject;
 
+import Server.LogManage.LogHandler;
 import Server.LogManage.LogManager;
 import Server.InvalidServerException.SituationServerException;
 
@@ -186,6 +187,16 @@ public abstract class Server {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Permet d'ajouter un handler sur le logManager
+	 * @param handler Le handler a ajouter
+	 * 
+	 * @since 1.0
+	 */
+	public void addLogHandler(LogHandler handler){
+		this.logManager.addHandler(handler);
 	}
 
 	/**

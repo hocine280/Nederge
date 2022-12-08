@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import Server.TypeServerEnum;
 
@@ -15,6 +17,8 @@ public class LogManager {
 	private TypeServerEnum typeServer;
 	private String nameServer;
 	private String pathToLog;
+
+	private List<LogHandler> handlers = new ArrayList<LogHandler>();
 	
 	public LogManager(TypeServerEnum typeServer, String nameServer){
 		this.typeServer = typeServer;
@@ -45,12 +49,23 @@ public class LogManager {
 
 	public void addLog(String log){
 		try {
+			sendListener(log);
 			FileWriter fw = new FileWriter(this.pathToLog, true);
 			fw.write(this.signature() + log);
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void sendListener(String message){
+		for (LogHandler handler : this.handlers) {
+			handler.handle(message);
+		}
+	}
+
+	public void addHandler(LogHandler handler){
+		this.handlers.add(handler);
 	}
 
 }
