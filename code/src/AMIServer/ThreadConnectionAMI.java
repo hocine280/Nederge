@@ -45,6 +45,7 @@ public class ThreadConnectionAMI extends Thread{
 				reception = this.input.readLine();
 			} catch (IOException e) {
 				this.logManager.addLog("Erreur lors de la lecture d'une requête. Requête : " + reception);
+				reception = null;
 			}
 
 			if(reception == null){

@@ -24,32 +24,32 @@ import TrackingCode.TrackingCode;
 public class TestAMI {
 	public static void main(String[] args) {
 
-		Thread t = new Thread(){
-			public void run() {
-				AMIServer server = null;
-				try {
-					server = new AMIServer("serverAMI", 6840);
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.exit(0);
-				}
-				server.start();
-			};
-		};
+		// Thread t = new Thread(){
+		// 	public void run() {
+		// 		AMIServer server = null;
+		// 		try {
+		// 			server = new AMIServer("serverAMI", 6840);
+		// 		} catch (IOException e) {
+		// 			e.printStackTrace();
+		// 			System.exit(0);
+		// 		}
+		// 		server.start();
+		// 	};
+		// };
 
-		t.start();
+		// t.start();
 
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// try {
+		// 	Thread.sleep(2000);
+		// } catch (InterruptedException e) {
+		// 	// TODO Auto-generated catch block
+		// 	e.printStackTrace();
+		// }
 		Thread tPone = new Thread(){
 			
 			@Override
 			public void run() {
-				PoneTestAmi pone = new PoneTestAmi("PONE test", 6840, TypeServerEnum.TCP_Server);
+				PoneTestAmi pone = new PoneTestAmi("PONE test", 6000, TypeServerEnum.TCP_Server);
 				pone.start();
 
 				pone.sendRequest(pone.sendFirstConnectionServe("serverAMI"), false);
@@ -62,7 +62,7 @@ public class TestAMI {
 				pone.sendRequest(request, true);
 				pone.read();
 				
-				request = pone.constructBaseRequest("serverAMI");
+				request = pone.constructBaseRequest("AMI");
 				request.put("typeRequest", "ValidationSellEnergy");
 				JSONObject newEnergy = new JSONObject();
 				newEnergy.put("typeEnergy", "PETROLE");
@@ -87,7 +87,7 @@ public class TestAMI {
 				}
 				energy.setCertificateEnergy(pone.getEnergyTest().getCertificateEnergy());
 
-				request = pone.constructBaseRequest("serverAMI");
+				request = pone.constructBaseRequest("AMI");
 				request.put("typeRequest", "CheckEnergyMarket");
 				request.put("energy", energy.toJson());
 				request.put("codeProducer", 1370176118);
@@ -95,7 +95,7 @@ public class TestAMI {
 				pone.sendRequest(request, true);
 				pone.read();
 
-				request = pone.constructBaseRequest("serverAMI");
+				request = pone.constructBaseRequest("AMI");
 				request.put("typeRequest", "CheckEnergyMarket");
 				request.put("energy", pone.getEnergyTest().toJson());
 				request.put("codeProducer", pone.getEnergyTest().getTrackingCode().getCodeProducer());
@@ -135,7 +135,7 @@ public class TestAMI {
 			try {
 				String requestSend;
 				if(encrypt){
-					requestSend = this.encryptRequest("serverAMI", request);
+					requestSend = this.encryptRequest("AMI", request);
 				}else{
 					requestSend = request.toString();
 				}

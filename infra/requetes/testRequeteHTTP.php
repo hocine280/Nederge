@@ -87,7 +87,7 @@ $options = [
 
 // Envoi de la requête et lecture du JSON reçu
 // Remplacez l'URL par l'adresse locale vers generateur.php
-$URL = "http://localhost:8080/" . $argv[1];
+$URL = "http://localhost:5110/" . $argv[1];
 $contexte  = stream_context_create($options);
 
 if(($jsonTexte = @file_get_contents($URL, false, $contexte)) !== false) {
