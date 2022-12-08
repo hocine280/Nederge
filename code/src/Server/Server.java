@@ -22,6 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import Server.LogManage.LogHandler;
 import Server.LogManage.LogManager;
 import Server.InvalidServerException.SituationServerException;
 
@@ -121,6 +122,16 @@ public abstract class Server {
 
 	public void addServerToList(String nameServer, PublicKey publicKeyServer){
 		this.listServerConnected.put(nameServer, publicKeyServer);
+	}
+
+	/**
+	 * Permet d'ajouter un listener sur le logManager
+	 * @param handler Le listener a ajouter
+	 * 
+	 * @since 1.0
+	 */
+	public void addLogListener(LogHandler handler){
+		this.logManager.addListener(handler);
 	}
 
 	/**
