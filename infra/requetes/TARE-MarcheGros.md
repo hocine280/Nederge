@@ -7,9 +7,18 @@ Description du format des requêtes.
 
 ```json
 {
-	"sender" = "MarcheGrosServer", 
-	"receiver" = "ManageTareServer", 
-	"typeRequest" = "ListServer", 
+	"sender" : "MarcheGrosServer", 
+	"receiver" : "ManageTareServer", 
+	"typeRequest" : "ListServer", 
+	"timestamp" : "15/02/2019 10:00:00",
+}
+```
+#### *TARE -> Marche de gros*
+```json
+{	
+	"sender" : "MarcheGrosServer", 
+	"receiver" : "ManageTareServer", 
+	"typeRequest" : "ListServer", 
 	"timestamp" : "15/02/2019 10:00:00",
 	"servers":{
            "8050":{
@@ -23,15 +32,7 @@ Description du format des requêtes.
               "name":"Test"
            }
         }
-}
-```
-#### *TARE -> Marche de gros*
-```json
-{	
-	"sender" = "MarcheGrosServer", 
-	"receiver" = "ManageTareServer", 
-	"typeRequest" = "ListServer", 
-	"timestamp" : "15/02/2019 10:00:00",
+}```
 
 ### Envoie de la commande vers le Marché de gros : 
 
