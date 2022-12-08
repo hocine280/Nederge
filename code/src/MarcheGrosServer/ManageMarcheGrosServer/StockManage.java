@@ -42,8 +42,6 @@ public class StockManage{
         boolean isAvailable = true;
         for(Integer key : stockEnergy.keySet()){
             for(Energy energy : stockEnergy.get(key).keySet()){
-                System.out.println("pays order : " + order.getCountryOrigin());
-                System.out.println("\npays energy : " + energy.getTrackingCode().getCountry());
                 if(order.getTypeEnergy() != energy.getTrackingCode().getTypeEnergy()){
                     isAvailable = false;
                 }
@@ -62,8 +60,6 @@ public class StockManage{
                 if(order.getBudget() > energy.getPrice()){
                     isAvailable = false;
                 }
-                System.out.println("isAvailable : " + isAvailable);
-                System.out.println("\n");
                 if(isAvailable == true){
                     listEnergy.addEnergy(stockEnergy.get(key).keySet().iterator().next());
                 }

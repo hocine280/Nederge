@@ -46,7 +46,7 @@ public class AskAvailabilityOrderHandler extends Handler{
             response = request.process(false, null); 
             System.out.println("JSON envoyé vers le TARE : "+response+"\n"); 
             sendResponse(messageReceived, response);
-            this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie indisponible");
+            this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie indisponible !");
         }else{
             response = request.process(true, listEnergy);
             System.out.println("JSON envoyé vers le TARE : "+response+"\n");

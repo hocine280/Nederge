@@ -7,7 +7,8 @@ public enum TypeRequestEnum{
     BuyEnergyOrder("BuyEnergyOrder"), 
     VerifyFutureAvailabilityOrder("VerifyFutureAvailabilityOrder"),
     SendEnergyToMarket("SendEnergyToMarket"), 
-    CheckEnergyMarket("CheckEnergyMarket");
+    CheckEnergyMarket("CheckEnergyMarket"),
+    ValidationSale("ValidationSale");
 
     private String typeRequest; 
 

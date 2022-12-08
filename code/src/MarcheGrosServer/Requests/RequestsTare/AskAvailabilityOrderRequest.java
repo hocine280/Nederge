@@ -7,7 +7,6 @@ import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 import org.json.JSONObject;
-import TrackingCode.Energy;
 import MarcheGrosServer.ManageMarcheGrosServer.Order;
 
 import java.text.SimpleDateFormat;

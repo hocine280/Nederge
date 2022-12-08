@@ -23,10 +23,7 @@ public class ListServerHandler extends Handler{
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		JSONObject response = new JSONObject();
-	
 		response.put("servers", this.listServer);
-
 		sendResponse(exchange, response);
 	}
-	
 }

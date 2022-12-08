@@ -42,10 +42,8 @@ public class CheckEnergyMarketHandler extends Handler{
             socket = new Socket("localhost", listeningPort);
         }catch(UnknownHostException e){
             System.err.println("Erreur sur l'hôte : "+e);
-            System.exit(0);
         }catch(IOException e){
             System.err.println("Création de la socket impossible: "+e);
-            System.exit(0);
         }
 
         // Association d'un flux d'entreé et de sortie
@@ -56,15 +54,13 @@ public class CheckEnergyMarketHandler extends Handler{
             output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
         }catch(IOException e){
             System.err.println("Association des flux impossible");
-            System.exit(0);
         }
 
         // Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI
         JSONObject requestJSON = request.process();
         String messageToSend = requestJSON.toString();
         System.out.println("Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI : " + messageToSend);
-        this.logManager.addLog("Envoie requête | MarcheGrosServer -> AMIServer | Vérification de l'énergie du PONE");
-        
+        this.logManager.addLog("Envoie requête [ MarcheGrosServer -> AMIServer ] : Vérification de l'énergie du PONE");
         output.println(messageToSend);
 
         // Lecture de la réponse
@@ -73,7 +69,6 @@ public class CheckEnergyMarketHandler extends Handler{
             messageReceived = input.readLine();
         }catch(IOException e){
             System.err.println("Erreur lors de la lecture de la réponse : "+e);
-            System.exit(0);
         }
         this.logManager.addLog("Réception requête | AMIServer -> MarcheGrosServer | Réponse de l'AMI");
         System.out.println("\n\n\nRéponse de l'AMI : " + messageReceived);
@@ -85,7 +80,6 @@ public class CheckEnergyMarketHandler extends Handler{
             socket.close();
         } catch(IOException e) {
             System.err.println("Erreur lors de la fermeture des flux et de la socket : " + e);
-            System.exit(0);
         }
 
         // Traitement de la réponse 
