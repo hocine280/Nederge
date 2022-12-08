@@ -2,6 +2,37 @@
 
 Description du format des requêtes.
 
+### Demande du marché de gros de la liste des serveurs TARE : 
+#### *Marche de gros -> TARE*
+
+```json
+{
+	"sender" = "MarcheGrosServer", 
+	"receiver" = "ManageTareServer", 
+	"typeRequest" = "ListServer", 
+	"timestamp" : "15/02/2019 10:00:00",
+	"servers":{
+           "8050":{
+              "typeServer":"HTTP_Server",
+              "port":8050,
+              "name":"Inc"
+           },
+           "8080":{
+              "typeServer":"HTTP_Server",
+              "port":8080,
+              "name":"Test"
+           }
+        }
+}
+```
+#### *TARE -> Marche de gros*
+```json
+{	
+	"sender" = "MarcheGrosServer", 
+	"receiver" = "ManageTareServer", 
+	"typeRequest" = "ListServer", 
+	"timestamp" : "15/02/2019 10:00:00",
+
 ### Envoie de la commande vers le Marché de gros : 
 
 **nomDeLaRequete :** ``AskAvailabilityOrder``
