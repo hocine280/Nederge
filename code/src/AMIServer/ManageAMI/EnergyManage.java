@@ -49,9 +49,9 @@ public class EnergyManage {
 
 		double mediumPriceEnergy = price / quantity; 
 
-		if(mediumPriceEnergy < this.mediumPrice){
+		if(mediumPriceEnergy < this.mediumPrice * 0.8){
 			throw new InvalidEnergyException(InvalidEnergySituation.PriceTooLow);
-		}else if(mediumPriceEnergy > this.mediumPrice){
+		}else if(mediumPriceEnergy > this.mediumPrice * 1.2){
 			throw new InvalidEnergyException(InvalidEnergySituation.PriceTooHigh);
 		}
 

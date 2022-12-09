@@ -93,7 +93,7 @@ public class ServeurTCP {
     }
 
     public static JSONObject responseCheck(){
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.FORAGE, 2022, 150015, 120);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
 
         JSONObject response = new JSONObject(); 
@@ -110,7 +110,7 @@ public class ServeurTCP {
     }
 
     public static JSONObject responseSale(){
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.FORAGE, 2022, 150015, 120);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 150.5, "TareServer1", "hbvfhebfhbvfhbvf-fjfhbvhfbv");
 
         JSONObject response = new JSONObject();

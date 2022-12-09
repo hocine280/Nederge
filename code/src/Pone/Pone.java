@@ -1,84 +1,248 @@
 package Pone;
 
+import Server.InvalidServerException;
 import Server.Server;
 import Server.TypeServerEnum;
 
 import TrackingCode.Energy;
-import TrackingCode.CountryEnum;
-import TrackingCode.ExtractModeEnum;
-import TrackingCode.TypeEnergyEnum;
 
-import java.util.HashMap;
+import java.util.Base64;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import Pone.Energy.EnergyManage;
 import Pone.Energy.EnergyPone;
 import Pone.Handlers.RegisterPoneHandler;
 import Pone.Handlers.SendEnergyToMarketHandler;
 import Pone.Handlers.ValidationSellEnergyHandler;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 public class Pone extends Server{
     
     private int codeProducer; 
-    private HashMap<Integer, Energy> energyList;
+	private EnergyManage energyManage;
+	private ThreadPone processProduction;
 
-    public Pone(String name, int port, TypeServerEnum typeServer) throws IOException{
-        super(name, port, typeServer);
-        this.energyList = new HashMap<Integer, Energy>();
+    public Pone(String name, int port){
+        super(name, port, TypeServerEnum.PONE_Server);
+		this.energyManage = new EnergyManage();
     }
+
+	public int getCodeProducer() {
+		return codeProducer;
+	}
+
+	public EnergyManage getEnergyManage() {
+		return energyManage;
+	}
 
     public void start(){
 		logManager.addLog("Serveur Pone démarré sur le port " + this.port);
-		System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
+
+		this.sendPublicKeyAMI();
+		RegisterPoneHandler register = new RegisterPoneHandler(this, this.logManager);
+		this.codeProducer = register.handle();
+
+		this.processProduction = new ThreadPone(this, this.logManager);
+		this.processProduction.start();
     }
 
-    public void addCodeProducer(int codeProducer){
-        this.codeProducer = codeProducer;
-    }
+	public void sendPublicKeyAMI(){
+		JSONObject request = this.sendFirstConnectionServe("AMI");
 
-    public void removeEnergyInList(int idEnergy){
-        this.energyList.remove(idEnergy);
-    }
+		this.processResponsePublicKey(this.sendRequestAMI(request, false));
+	}
 
-    public void addEnergyInList(int idEnergy, Energy energy){
-        this.energyList.put(idEnergy, energy);
-    }
+	public void sendPublicKeyMarcheGros(){
+		JSONObject request = this.sendFirstConnectionServe("Marche de gros");
 
-    public EnergyPone createEnergyPone(TypeEnergyEnum typeEnergy, ExtractModeEnum extractMode, int quantity, boolean green, CountryEnum country, double price){
-        return new EnergyPone(typeEnergy, extractMode, quantity, green, country, price);
-    }
+		this.processResponsePublicKey(this.sendRequestMarcheGros(request, false));
+	}
 
-    public void registerPoneAtAmi(){
-        RegisterPoneHandler registerPoneHandler = new RegisterPoneHandler(logManager);
-        if((registerPoneHandler.handle(this.getName(), this.getPort())!=0)){
-            addCodeProducer(codeProducer);
-        }else{
-            logManager.addLog("Impossible d'enregistrer le pone auprès du serveur AMI");
+	private void processResponsePublicKey(JSONObject response){
+		if(response.has("status") && response.getBoolean("status") && response.has("publicKeySender") && response.has("sender")){
+			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(response.getString("publicKeySender")));
+			try {
+				this.listServerConnected.put(response.getString("sender"), KeyFactory.getInstance("RSA").generatePublic(spec));
+				this.logManager.addLog("Ajout d'un serveur à la liste. Serveur : " + response.getString("sender"));
+			} catch (JSONException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+				
+			}
+		}else{
+			this.logManager.addLog("Impossible de traiter la réponse lors de l'échange de clé publique");
+		}
+	}
+
+	/**
+	 * Permet d'envoyer une requete a l'AMI de maniere chiffre ou non et retourne la reponse de l'AMI
+	 * @param request La requete a envoye
+	 * @param encrypt s'il faut chiffre la requete ou non
+	 * @return la reponse a la requete ou null en cas d'erreur
+	 * 
+	 * @since 1.0
+	 */
+	public JSONObject sendRequestAMI(JSONObject request, boolean encrypt){
+		// Création de la socket 
+        Socket socket = null;
+        try{
+            socket = new Socket("localhost", 6000);
+        }catch(UnknownHostException e){
+            this.logManager.addLog("Erreur sur l'hôte");
+        }catch(IOException e){
+            this.logManager.addLog("Création de la socket impossible");
         }
+
+        // Association d'un flux d'entrée et de sortie
+        BufferedReader input = null; 
+        PrintWriter output = null; 
+
+        try{
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
+            output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); 
+        }catch(IOException e){
+            this.logManager.addLog("Association des flux impossible"); 
+        }
+
+		String messageEncrypt = "";
+		if(encrypt){
+			boolean retry = false;
+			do {
+				try {
+					messageEncrypt = this.encryptRequest("AMI", request);
+				} catch (InvalidServerException e1) {
+					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
+						this.sendPublicKeyAMI();
+						retry = true;
+					}else{
+						this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+						return null;
+					}
+				}
+			} while (retry);
+		}else{
+			messageEncrypt = request.toString();
+		}
+
+		output.println(messageEncrypt);
+
+		// Lecture de la réponse
+		JSONObject response;
+
+        String messageReceived = null;
+        try{
+            messageReceived = input.readLine();
+        }catch(IOException e){
+			this.logManager.addLog("Lecture de la réponse impossible");
+        }
+		response = this.receiveDecrypt(messageReceived);
+		this.logManager.addLog("Réception d'une requête de " + (response.has("sender") ? response.getString("sender") : "Inconnu"));
+
+		// Fermeture des flux et de la socket
+		try {
+			input.close();
+			output.close();
+			socket.close();
+		} catch(IOException e) {
+			this.logManager.addLog("Erreur lors de la fermeture des flux et de la socket : " + e.toString());
+		}
+
+		return response;
+	}
+
+	public JSONObject sendRequestMarcheGros(JSONObject request, boolean encrypt){
+		DatagramSocket socket = null; 
+        try{
+            socket = new DatagramSocket(this.port);
+        }catch(Exception e){
+            this.logManager.addLog("Erreur lors de la création du socket");
+			return null;
+        }
+
+		String messageEncrypt = "";
+		if(encrypt){
+			boolean retry = false;
+			do {
+				try {
+					messageEncrypt = this.encryptRequest("Marche de gros", request);
+				} catch (InvalidServerException e1) {
+					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
+						this.sendPublicKeyMarcheGros();
+						retry = true;
+					}else{
+						this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+						return null;
+					}
+				}
+			} while (retry);
+		}else{
+			messageEncrypt = request.toString();
+		}
+
+		// Envoie de la requête
+        DatagramPacket messageToSend = null; 
+        try{
+            InetAddress address = InetAddress.getByName(null);
+            byte[] buffer = messageEncrypt.getBytes();
+            messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
+        }catch(UnknownHostException e){
+            this.logManager.addLog("Erreur lors de la création du message");
+			return null;
+        }
+
+		// Réception de la réponse
+        byte[] tampon = new byte[1024];
+        DatagramPacket msg = new DatagramPacket(tampon, tampon.length);
+		String messageResponse = "";
+        try {
+            socket.receive(msg);
+            messageResponse = new String(msg.getData(), 0, msg.getLength());
+        } catch(IOException e) {
+            this.logManager.addLog("Erreur lors de la réception du message : " + e.toString());
+			return null;
+        }
+
+		JSONObject response = this.receiveDecrypt(messageResponse);
+
+        try{
+            socket.send(messageToSend);
+        }catch(IOException e){
+            this.logManager.addLog("Erreur lors de l'envoi du message");
+			return null;
+        }
+
+        socket.close();
+
+		return response;
+	}
+
+    public Energy sendValidationSellEnergy(EnergyPone energyPone){
+        ValidationSellEnergyHandler validationSellEnergyHandler = new ValidationSellEnergyHandler(this, this.logManager);
+        return validationSellEnergyHandler.handle(energyPone);
     }
 
-    public void validationSellEnergy(EnergyPone energyPone){
-        ValidationSellEnergyHandler validationSellEnergyHandler = new ValidationSellEnergyHandler(logManager);
-        Energy energy = validationSellEnergyHandler.handle(this.getName(), energyPone, this.getPort());
-        if(energy == null){
-            System.err.println("Impossible de valider la vente d'énergie auprès du serveur AMI");
-        }else{
-            addEnergyInList(energy.getTrackingCode().getUniqueIdentifier(), energy);
-        }
-    }
-
-    public void sendEnergyToMarket(int codeProducer, Energy energy, double price){
-        SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(logManager);
-        sendEnergyToMarketHandler.handle(codeProducer, energy, price, this.getName());
-        boolean status = sendEnergyToMarketHandler.receiveResponse(this.getPort());
-        if(status){
-            removeEnergyInList(energy.getTrackingCode().getUniqueIdentifier());
-        }else{
-            System.err.println("L'envoie de l'énergie au marché de gros a échoué");
-        }
+    public void sendEnergyToMarket(Energy energy){
+        SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this, this.logManager);
+        sendEnergyToMarketHandler.handle(energy);
     }
     
     public void shutdown(){
-       // TODO
+		this.processProduction.interrupt();
+		this.logManager.addLog("Serveur éteint");
     }
 }

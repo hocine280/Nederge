@@ -92,7 +92,7 @@ public class ClientUDP {
     }
 
     public static JSONObject requetePONE(){
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.FORAGE, 2022, 150015, 120);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn"); 
         JSONObject response = new JSONObject(); 
         response.put("sender", "PoneClient"); 
@@ -108,7 +108,7 @@ public class ClientUDP {
 
     public static JSONObject requeteTARE1(){
         JSONObject response = new JSONObject(); 
-        Order order = new Order(TypeEnergyEnum.GAZ, CountryEnum.ALLEMAGNE, ExtractModeEnum.MODE_1, true, 150, 50, 1500, 1);
+        Order order = new Order(TypeEnergyEnum.GAZ, CountryEnum.ALLEMAGNE, ExtractModeEnum.FORAGE, true, 150, 50, 1500, 1);
         response.put("sender", "TAREServer1"); 
         response.put("receiver", "MarcheGrosServer");
         response.put("typeRequest", "AskAvailabilityOrder"); 
@@ -120,7 +120,7 @@ public class ClientUDP {
 
     public static JSONObject requeteTARE2(){
         JSONObject response = new JSONObject(); 
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.FORAGE, 2022, 150015, 150);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 1500, "TAREServer", "tyuinjjdchbgvhhb-chhcbfbf");
         response.put("sender", "TareServer");
         response.put("receiver", "MarcheGrosServer");

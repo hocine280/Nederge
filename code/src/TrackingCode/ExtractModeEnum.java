@@ -6,8 +6,13 @@ package TrackingCode;
  * @version 1.0
  */
 public enum ExtractModeEnum {
-	MODE_1("MO1"),
-	MODE_2("MO2");
+	FORAGE("FO"),
+	PANNEAUSOLAIRE("PA"),
+	EOLIENNE("EO"),
+	BARRAGE("BA"),
+	NUCLEAIRE("NU"),
+	CENTRALCHARBON("CC"),
+	MINAGE("MI");
 
 	/** Attribut contenant le code d'un mode d'extraction */
 	private String code = "";
