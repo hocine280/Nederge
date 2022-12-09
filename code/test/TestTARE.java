@@ -1,5 +1,3 @@
-import java.io.IOException;
-
 import TareServer.ManageTareServer;
 import TareServer.TareServer;
 
