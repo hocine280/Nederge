@@ -42,7 +42,7 @@ public abstract class RequestAMI extends Request{
 				ret = RegisterPoneRequest.fromJSON(server, logManager, object);
 				break;
 
-			case ValidationSellEnergy:
+			case RequestValidationSellEnergy:
 				ret = ValidationSellEnergyRequest.fromJSON(server, logManager, object);
 				break;
 

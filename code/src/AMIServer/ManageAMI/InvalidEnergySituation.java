@@ -36,7 +36,12 @@ public enum InvalidEnergySituation {
 		 * Si le code de suivi TrackingCode est invalide
 		 * @since 1.0
 		 */
-		TrackingCodeInvalid("Le code de suivi (TrackingCode) est invalide");
+		TrackingCodeInvalid("Le code de suivi (TrackingCode) est invalide"),
+		/**
+		 * Si le code du producteur est incorrect
+		 * @since 1.0
+		 */
+		ProducerInvalid("Le code du producteur ne correspond pas");
 
 		/** Le message expliqant le problème qui est survenue */
 		private String message;

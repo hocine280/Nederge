@@ -10,8 +10,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 
+import Pone.Pone;
+import Pone.TypeRequestPoneEnum;
 import Pone.Energy.EnergyPone;
-import Pone.Request.ProcessRequest.ValidationSellEnergyRequest;
 import Server.LogManage.LogManager;
 import TrackingCode.Energy;
 
@@ -19,73 +20,37 @@ import org.json.JSONObject;
 
 public class ValidationSellEnergyHandler {
     private LogManager logManager;
+	private Pone server;
 
-    public ValidationSellEnergyHandler(LogManager logManager){
+    public ValidationSellEnergyHandler(Pone server, LogManager logManager){
+		this.server = server;
         this.logManager = logManager;
     }
 
-    public Energy handle(String namePone, EnergyPone energy, int port){
-        ValidationSellEnergyRequest validationSellEnergyRequest = new ValidationSellEnergyRequest(namePone, "ServerAMI", 
-                                                                    new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), energy); 
+    public Energy handle(EnergyPone energy){
 
-        // Création de la socket 
-        Socket socket = null; 
-        try{
-            socket = new Socket("localhost", port);
-        }catch(UnknownHostException e){
-            System.err.println("Erreur sur l'hôte");
-        }catch(IOException e){
-            System.err.println("Création de la socket impossible");
-        }
+		JSONObject request = this.server.constructBaseRequest("AMI");
+       
+		request.put("typeRequest", TypeRequestPoneEnum.RequestValidationSellEnergy);
+		request.put("codeProducer", this.server.getCodeProducer());
+		request.put("energy", energy.toJSON());
 
-        // Association d'un flux d'entrée et de sortie
-        BufferedReader input = null; 
-        PrintWriter output = null; 
+        JSONObject response = this.server.sendRequestAMI(request, true);
 
-        try{
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream())); 
-            output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); 
-        }catch(IOException e){
-            System.err.println("Association des flux impossible"); 
-        }
-
-        // Envoie de la requête pour la confirmation d'une energie par l'AMI
-        JSONObject requestJSON = validationSellEnergyRequest.process();
-        String messageToSend = requestJSON.toString();
-        this.logManager.addLog("Envoie requête [Pone(" + namePone + ") -> AMIServer] : Demande de confirmation de la vente d'énergie");
-        output.println(messageToSend);
-
-        // Lecture de la réponse
-        String messageReceived = null;
-        try{
-            messageReceived = input.readLine();
-        }catch(IOException e){
-            System.err.println("Lecture de la réponse impossible");
-        }
-        this.logManager.addLog("Reception requête [AMIServer -> Pone(" + namePone + ")] : Réponse recue pour la vente d'énergie");
-
-        // Fermeture de la socket
-        try {
-            input.close();
-            output.close();
-            socket.close();
-        } catch(IOException e) {
-            System.err.println("Erreur lors de la fermeture des flux et de la socket : " + e);
-        }
-
+		Energy energyValidate = null;
         // Traitement de la réponse
-        Energy energyReceived = null;
-        JSONObject responseJSON = new JSONObject(messageReceived);
-        if(responseJSON.getBoolean("status")){
-            try{
-                energyReceived = Energy.fromJSON(responseJSON.getJSONObject("energy"));
-            }catch(Exception e){
-                System.err.println("Erreur lors de la création de l'énergie");
-            }
-            this.logManager.addLog("Traitement requête [Pone(" + namePone + ")] : Vente d'énergie confirmée");
+        if(response.has("status") && response.getBoolean("status") && response.has("energy")){
+			try {
+				energyValidate = Energy.fromJSON(response.getJSONObject("energy"));
+				this.server.getEnergyManage().addEnergy(energyValidate);
+				this.logManager.addLog("Energie validé pour l'ajout sur le marché !");
+			} catch (Exception e) {
+				this.logManager.addLog("Une erreur est survenue lors de la construction de l'énergie reçu. Motif : " + e.toString());
+			}
         }else{
-            this.logManager.addLog("Traitement requête [Pone(" + namePone + ")] : Vente d'énergie refusée");
+            this.logManager.addLog("L'énergie a été refeusé pour la mise sur le marché. Motif : " + (response.has("message") ? response.getString("message") : "Pas de motif"));
         }
-        return energyReceived;
+		
+		return energyValidate;
     }
 }

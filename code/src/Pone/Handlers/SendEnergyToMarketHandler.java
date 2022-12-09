@@ -11,76 +11,36 @@ import java.text.SimpleDateFormat;
 import org.json.JSONObject;
 
 import MarcheGrosServer.Requests.RequestsPone.SendEnergyToMarketRequest;
+import Pone.Pone;
+import Pone.TypeRequestPoneEnum;
 import Server.LogManage.LogManager;
 import TrackingCode.Energy;
 
 public class SendEnergyToMarketHandler {
 
     private LogManager logManager;
-    public SendEnergyToMarketHandler(LogManager logManager){
+	private Pone server;
+
+    public SendEnergyToMarketHandler(Pone server, LogManager logManager){
+		this.server = server;
         this.logManager = logManager;
     }
 
-    public void handle(int codeProducer, Energy energy, double price, String namePone){
-        SendEnergyToMarketRequest sendEnergyToMarketRequest = new SendEnergyToMarketRequest(namePone, "MarcheGrosServer", 
-                                                                new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), codeProducer, energy, price);
-        JSONObject data = sendEnergyToMarketRequest.process();
-        DatagramSocket socket = null; 
-        try{
-            socket = new DatagramSocket();
-        }catch(Exception e){
-            System.err.println("Erreur lors de la création du socket");
-            System.exit(0); 
-        }
+    public void handle(Energy energy){
+		
+		JSONObject request = this.server.constructBaseRequest("Marche de gros");
 
-        DatagramPacket messageToSend = null; 
-        try{
-            InetAddress address = InetAddress.getByName(null);
-            byte[] buffer = data.toString().getBytes();
-            messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
-        }catch(UnknownHostException e){
-            System.err.println("Erreur lors de la création du message");
-            System.exit(0);
-        }
+		request.put("typeRequest", TypeRequestPoneEnum.SendEnergyToMarket);
+		request.put("codeProducer", this.server.getCodeProducer());
+        request.put("energy", energy);
 
-        try{
-            socket.send(messageToSend);
-        }catch(IOException e){
-            System.err.println("Erreur lors de l'envoi du message");
-            System.exit(0);
-        }
+		JSONObject response = this.server.sendRequestMarcheGros(request, true);
 
-        socket.close(); 
-    }
-
-    public boolean receiveResponse(int port){
-        // Création de la socket
-        DatagramSocket socket = null;
-        try {        
-            socket = new DatagramSocket(port);
-        } catch(SocketException e) {
-            System.err.println("Erreur lors de la création de la socket : " + e);
-            System.exit(0);
-        }
-
-        // Création du message
-        byte[] tampon = new byte[1024];
-        DatagramPacket msg = new DatagramPacket(tampon, tampon.length);
-
-        // Lecture du message du client
-        try {
-            socket.receive(msg);
-            String texte = new String(msg.getData(), 0, msg.getLength());
-        } catch(IOException e) {
-            System.err.println("Erreur lors de la réception du message : " + e);
-            System.exit(0);
-        }
-
-        // Fermeture de la socket
-        socket.close();
-
-        JSONObject data = new JSONObject(new String(msg.getData(), 0, msg.getLength()));
-        boolean response = data.getBoolean("status");
-        return response;
+		// Traitement de la réponse
+		if(response.has("status") && response.getBoolean("status")){
+			this.logManager.addLog("Energie ajouté sur le marché ! Energie : " + energy.toString());
+		}else{
+			this.logManager.addLog("L'énergie n'a pas pu être ajouté sur le marché ! Motif : " + (response.has("message") ? response.getString("message") : "Inconnu"));
+		}
     }
 }

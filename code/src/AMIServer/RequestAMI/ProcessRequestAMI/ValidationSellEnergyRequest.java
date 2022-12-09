@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import AMIServer.AMIServer;
 import AMIServer.ManageAMI.InvalidEnergyException;
+import AMIServer.ManageAMI.InvalidEnergySituation;
 import AMIServer.RequestAMI.RequestAMI;
 import AMIServer.RequestAMI.TypeRequestAMI;
 import Server.LogManage.LogManager;
@@ -18,6 +19,7 @@ import TrackingCode.TypeEnergyEnum;
 
 public class ValidationSellEnergyRequest extends RequestAMI{
 
+	private int codeProducer;
 	private TypeEnergyEnum typeEnergy;
 	private ExtractModeEnum extractionMode;
 	private boolean green;
@@ -27,10 +29,11 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 	private int productionYear;
 
 	
-	public ValidationSellEnergyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp,
+	public ValidationSellEnergyRequest(AMIServer server, LogManager logManager, String sender, String receiver, SimpleDateFormat timestamp, int codeProducer,
 		TypeEnergyEnum typeEnergy, ExtractModeEnum extractionMode, boolean green, CountryEnum countryOrigin, int quantity, double price, int productionYear) {
-		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.ValidationSellEnergy);
-
+		super(server, logManager, sender, receiver, timestamp, TypeRequestAMI.RequestValidationSellEnergy);
+		
+		this.codeProducer = codeProducer;
 		this.typeEnergy = typeEnergy;
 		this.extractionMode = extractionMode;
 		this.green = green;
@@ -50,6 +53,7 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 			object.getString("sender"),
 			object.getString("receiver"),
 			new SimpleDateFormat(),
+			object.getInt("codeProducer"),
 			TypeEnergyEnum.valueOf(energy.getString("typeEnergy")),
 			ExtractModeEnum.valueOf(energy.getString("extractionMode")),
 			energy.getBoolean("green"),
@@ -62,6 +66,10 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 	public static void check(JSONObject data) throws InvalidRequestException{
 		RequestAMI.check(data);
+
+		if(!data.has("codeProducer")){
+			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "codeProducer absent");
+		}
 
 		if(!data.has("energy")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "energy absent");
@@ -105,6 +113,9 @@ public class ValidationSellEnergyRequest extends RequestAMI{
 
 		Energy energy;
 		try {
+			if(this.codeProducer != this.server.getProducerManage().getCodeProducer(this.sender)){
+				throw new InvalidEnergyException(InvalidEnergySituation.ProducerInvalid);
+			}
 			energy = this.server.getEnergyManage().addEnergy(this.server.getProducerManage(), this.countryOrigin, this.server.getProducerManage().getCodeProducer(this.sender), this.typeEnergy, this.green, this.extractionMode, this.quantity, this.productionYear, this.price);
 			this.server.certifyEnergy(energy);
 

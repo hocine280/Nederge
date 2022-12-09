@@ -35,7 +35,7 @@ public class StockManage{
 
     // Remplir le stock d'énergie -- fonction de test
     public void simulationStockEnergie(){
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);
+        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.FORAGE, 2022, 150015, 150);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 1500, "TAREServer", "tyuinjjdchbgvhhb-chhcbfbf");
         addEnergy(energy, energy.getPrice());
     }   
