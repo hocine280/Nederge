@@ -23,7 +23,7 @@ public class ListServerHandler extends Handler{
         super(logManager, stockManage);
     }
 
-    public ListServerRequest handle(DatagramPacket messageReceived){
+    public ListServerRequest handle(){
         
         // Creation de la socket
         DatagramSocket socket = null; 

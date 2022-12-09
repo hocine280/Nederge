@@ -38,10 +38,10 @@ public class Handler{
         return data;
     }
 
-    public ListServerRequest recoveryListTareServer(DatagramPacket messageReceived){
+    public ListServerRequest recoveryListTareServer(){
         System.out.println("Requete de récupération de la liste des TARE"); 
         ListServerHandler listServerHandler = new ListServerHandler(logManager, stockManage);
-        ListServerRequest listServerRequest = listServerHandler.handle(messageReceived);
+        ListServerRequest listServerRequest = listServerHandler.handle();
         return listServerRequest;
     }
 
@@ -78,7 +78,7 @@ public class Handler{
             System.out.println("\nje suis dans la condition de askAvailabilityOrder - checkTypeRequest\n ");
             JSONObject json = receiveJSON(messageReceived);
             int port = 0;
-            ListServerRequest listServerRequest = recoveryListTareServer(messageReceived);
+            ListServerRequest listServerRequest = recoveryListTareServer();
             for(String name : listServerRequest.getServerTare().keySet()){
                 System.out.println("Je suis dans la boucle for pour la liste des server"); 
                 if(name.equals(json.getString("receiver"))){

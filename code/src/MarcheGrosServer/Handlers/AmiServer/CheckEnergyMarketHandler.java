@@ -59,7 +59,6 @@ public class CheckEnergyMarketHandler extends Handler{
         // Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI
         JSONObject requestJSON = request.process();
         String messageToSend = requestJSON.toString();
-        System.out.println("Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI : " + messageToSend);
         this.logManager.addLog("Envoie requête [ MarcheGrosServer -> AMIServer ] : Vérification de l'énergie du PONE");
         output.println(messageToSend);
 

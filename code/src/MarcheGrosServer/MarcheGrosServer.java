@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import MarcheGrosServer.Handlers.Handler;
 import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
 import MarcheGrosServer.Handlers.AmiServer.ValidationSaleHandler;
+import MarcheGrosServer.Handlers.TareServer.ListServerHandler;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage; 
 
 import org.json.JSONObject;
@@ -64,7 +65,8 @@ public class MarcheGrosServer extends Server{
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
             // sendRequestMarcheGrosToAmi(stock);
             // simuSaleEnergy(stock);
-            listenRequest(socket, stock);
+            ListeServerTARE(stock);
+            // listenRequest(socket, stock);
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
             System.exit(0);
@@ -77,6 +79,11 @@ public class MarcheGrosServer extends Server{
 
         ValidationSaleHandler validationSaleHandler = new ValidationSaleHandler(this.logManager,stock);
         validationSaleHandler.handle(energy, 150.5, "Hocine");
+    }
+
+    public void ListeServerTARE(StockManage stock){
+        ListServerHandler listServerHandler = new ListServerHandler(this.logManager, stock);
+        listServerHandler.handle();
     }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
