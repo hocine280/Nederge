@@ -34,13 +34,4 @@ public class ListServerRequest {
     public HashMap<String, Integer> getServerTare(){
         return this.serverTARE;
     }
-
-    public JSONObject process(){
-        JSONObject responseJSON = new JSONObject();
-        responseJSON.put("sender", "MarcheGrosServer");
-        responseJSON.put("receiver", "ManageTareServer");
-        responseJSON.put("typeRequest", "ListServer");
-        responseJSON.put("timestamp", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        return responseJSON;
-    }
 }

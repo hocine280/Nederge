@@ -31,7 +31,7 @@ public class ValidationSellEnergyHandler {
         // Création de la socket 
         Socket socket = null; 
         try{
-            socket = new Socket("localhost", port);
+            socket = new Socket("localhost", 6000);
         }catch(UnknownHostException e){
             System.err.println("Erreur sur l'hôte");
         }catch(IOException e){

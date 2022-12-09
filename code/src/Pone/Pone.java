@@ -33,7 +33,7 @@ public class Pone extends Server{
         this.energyList = new HashMap<Integer, Energy>();
     }
 
-    public Pone start(String name, int port){
+    public Pone createPone(String name, int port){
         if(ManagePone.addPone(port, name)){
             try{
                 logManager.addLog("Création du serveur Pone [" + name + "] sur le port " + port);
