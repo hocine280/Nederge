@@ -3,7 +3,7 @@ package Pone.Request;
 public enum TypeRequestPoneEnum {
     RegisterPone("RegisterPone"), 
     RequestValidationSellEnergy("RequestValidationSellEnergy"),
-    CheckEnergyMarket("CheckEnergyMarket");
+    SendEnergyToMarket("SendEnergyToMarket");
 
     private String typeRequest; 
 

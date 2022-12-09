@@ -3,14 +3,21 @@ package Pone;
 import Server.Server;
 import Server.TypeServerEnum;
 import Server.LogManage.LogManager;
+
 import TrackingCode.Energy;
+import TrackingCode.CountryEnum;
+import TrackingCode.ExtractModeEnum;
+import TrackingCode.TypeEnergyEnum;
 
 import java.util.HashMap;
 import java.util.Vector;
 
 import Pone.Energy.EnergyPone;
 import Pone.Handlers.RegisterPoneHandler;
+import Pone.Handlers.SendEnergyToMarketHandler;
 import Pone.Handlers.ValidationSellEnergyHandler;
+
+
 
 import java.io.IOException;
 
@@ -46,8 +53,16 @@ public class Pone extends Server{
         this.codeProducer = codeProducer;
     }
 
+    public void removeEnergyInList(int idEnergy){
+        this.energyList.remove(idEnergy);
+    }
+
     public void addEnergyInList(int idEnergy, Energy energy){
         this.energyList.put(idEnergy, energy);
+    }
+
+    public EnergyPone createEnergyPone(TypeEnergyEnum typeEnergy, ExtractModeEnum extractMode, int quantity, boolean green, CountryEnum country, double price){
+        return new EnergyPone(typeEnergy, extractMode, quantity, green, country, price);
     }
 
     public void registerPoneAtAmi(){
@@ -66,6 +81,17 @@ public class Pone extends Server{
             System.err.println("Impossible de valider la vente d'énergie auprès du serveur AMI");
         }else{
             addEnergyInList(energy.getTrackingCode().getUniqueIdentifier(), energy);
+        }
+    }
+
+    public void sendEnergyToMarket(int codeProducer, Energy energy, double price){
+        SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(logManager);
+        sendEnergyToMarketHandler.handle(codeProducer, energy, price, this.getName());
+        boolean status = sendEnergyToMarketHandler.receiveResponse(this.getPort());
+        if(status){
+            removeEnergyInList(energy.getTrackingCode().getUniqueIdentifier());
+        }else{
+            System.err.println("L'envoie de l'énergie au marché de gros a échoué");
         }
     }
     

@@ -77,7 +77,11 @@ public class ValidationSellEnergyHandler {
         Energy energyReceived = null;
         JSONObject responseJSON = new JSONObject(messageReceived);
         if(responseJSON.getBoolean("status")){
-            energyReceived = Energy.fromJSON(responseJSON.getJSONObject("energy"));
+            try{
+                energyReceived = Energy.fromJSON(responseJSON.getJSONObject("energy"));
+            }catch(Exception e){
+                System.err.println("Erreur lors de la création de l'énergie");
+            }
             this.logManager.addLog("Traitement requête [Pone(" + namePone + ")] : Vente d'énergie confirmée");
         }else{
             this.logManager.addLog("Traitement requête [Pone(" + namePone + ")] : Vente d'énergie refusée");

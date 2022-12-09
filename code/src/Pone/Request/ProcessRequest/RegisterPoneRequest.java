@@ -1,6 +1,7 @@
 package Pone.Request.ProcessRequest;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
@@ -36,7 +37,7 @@ public class RegisterPoneRequest extends PoneRequest{
         JSONObject data = new JSONObject();
         data.put("sender", this.sender);
         data.put("receiver", this.receiver);
-        data.put("timestamp", this.timestamp);  
+        data.put("timestamp", timestamp.format(new Date()));
         data.put("typeRequest", TypeRequestPoneEnum.RegisterPone.toString());
         data.put("nameProducer", this.nameProducer);
         return data;

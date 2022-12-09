@@ -20,7 +20,7 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
     private int codeProducer;
     private double price; 
 
-    private SendEnergyToMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
+    public SendEnergyToMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
         super(sender, receiver, timestamp, TypeRequestEnum.SendEnergyToMarket);
         this.codeProducer = codeProducer;
         this.energy = energy;

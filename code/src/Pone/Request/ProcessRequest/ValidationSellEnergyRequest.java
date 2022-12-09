@@ -1,6 +1,7 @@
 package Pone.Request.ProcessRequest;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ public class ValidationSellEnergyRequest extends PoneRequest {
         data.put("type", TypeRequestPoneEnum.RequestValidationSellEnergy);
         data.put("sender", sender);
         data.put("receiver", receiver);
-        data.put("timestamp", timestamp);
+        data.put("timestamp", timestamp.format(new Date()));
         data.put("energy", energy.toJSON());
         return data;
     }
