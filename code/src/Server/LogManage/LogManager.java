@@ -49,7 +49,7 @@ public class LogManager {
 
 	public void addLog(String log){
 		try {
-			sendListener(log);
+			sendListener(this.signature() + log);
 			FileWriter fw = new FileWriter(this.pathToLog, true);
 			fw.write(this.signature() + log);
 			fw.close();

@@ -39,6 +39,7 @@ public class AMIServer extends Server{
 	 * @since 1.0
 	 */
 	private EnergyManage energyManage;
+	private boolean start;
 
 	/**
 	 * Constructeur par initialisation du serveur TCP de l'AMI
@@ -201,9 +202,10 @@ public class AMIServer extends Server{
 	 */
 	@Override
 	public void start(){
+		this.start = true;
 		Socket socketClient;
 		this.logManager.addLog("Serveur démarré !");
-		while (true) {
+		while (this.start) {
 			try {
 				socketClient = this.serverSocket.accept();
 				ThreadConnectionAMI connection = new ThreadConnectionAMI(socketClient, this, this.logManager);
@@ -222,11 +224,13 @@ public class AMIServer extends Server{
 	 */
 	@Override
 	public void shutdown() {
+		this.start = false;
 		try {
 			this.serverSocket.close();
 		} catch (IOException e) {
 			this.logManager.addLog("Une erreur est survenue lors de l'arrêt du serveur");
 		}
+		this.logManager.addLog("Serveur éteint");
 	}
 
 }

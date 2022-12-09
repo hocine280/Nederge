@@ -63,6 +63,10 @@ public class ManageTareServer extends Server{
 
 	@Override
 	public void shutdown() {
+		this.server.stop(0);
+		this.logManager.addLog("Serveur éteint");
 	}
+
+	
 
 }

@@ -66,7 +66,7 @@ public class TareServer extends Server{
 
 	@Override
 	public void shutdown() {
-		// TODO Auto-generated method stub
-		
+		this.server.stop(0);
+		this.logManager.addLog("Serveur éteint");
 	}
 }
