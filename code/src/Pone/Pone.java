@@ -2,7 +2,6 @@ package Pone;
 
 import Server.Server;
 import Server.TypeServerEnum;
-import Server.LogManage.LogManager;
 
 import TrackingCode.Energy;
 import TrackingCode.CountryEnum;
@@ -10,53 +9,27 @@ import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 import Pone.Energy.EnergyPone;
 import Pone.Handlers.RegisterPoneHandler;
 import Pone.Handlers.SendEnergyToMarketHandler;
 import Pone.Handlers.ValidationSellEnergyHandler;
 
-
-
 import java.io.IOException;
 
 public class Pone extends Server{
     
-    private LogManager logManager;
     private int codeProducer; 
     private HashMap<Integer, Energy> energyList;
 
-    public Pone(String name, int port, TypeServerEnum typeServer, LogManager logManager) throws IOException{
+    public Pone(String name, int port, TypeServerEnum typeServer) throws IOException{
         super(name, port, typeServer);
-        this.logManager = logManager;
         this.energyList = new HashMap<Integer, Energy>();
     }
 
-    public Pone start(String name, int port){
-        if(ManagePone.addPone(port, name)){
-            try{
-                logManager.addLog("Création du serveur Pone [" + name + "] sur le port " + port);
-                return new Pone(name, port, TypeServerEnum.PONE_Server, logManager);
-            }catch(IOException e){
-                System.err.println("Impossible de créer le serveur Pone"); 
-                System.err.println("Le port spécifié est déjà utilisé");
-            }
-        }else{
-            System.err.println("Impossible de créer le serveur Pone"); 
-            System.err.println("Le port ou le nom spécifié est déjà utilisé");
-        }
-        return null; 
-    }
-
     public void start(){
-        if(ManagePone.addPone(port, name)){
-            logManager.addLog("Serveur Pone démarré sur le port " + this.port);
-            System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-        }else{
-            System.err.println("Impossible de démarrer le serveur Pone"); 
-            System.err.println("Le port ou le nom spécifié est déjà utilisé");
-        }
+		logManager.addLog("Serveur Pone démarré sur le port " + this.port);
+		System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
     }
 
     public void addCodeProducer(int codeProducer){
@@ -80,7 +53,7 @@ public class Pone extends Server{
         if((registerPoneHandler.handle(this.getName(), this.getPort())!=0)){
             addCodeProducer(codeProducer);
         }else{
-            System.err.println("Impossible d'enregistrer le pone auprès du serveur AMI");
+            logManager.addLog("Impossible d'enregistrer le pone auprès du serveur AMI");
         }
     }
 
