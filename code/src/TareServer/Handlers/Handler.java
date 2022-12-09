@@ -77,7 +77,7 @@ public abstract class Handler implements HttpHandler{
         }
 
 		data = new JSONObject(post);
-
+		
 		return data;
 	}
 

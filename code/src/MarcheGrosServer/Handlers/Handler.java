@@ -71,7 +71,6 @@ public class Handler{
     }
 
     public void checkTypeRequest(DatagramPacket messageReceived, StockManage stock) throws InvalidRequestException{
-        String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
         if(data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){

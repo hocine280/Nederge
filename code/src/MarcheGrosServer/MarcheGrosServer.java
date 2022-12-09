@@ -63,27 +63,16 @@ public class MarcheGrosServer extends Server{
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
-            // sendRequestMarcheGrosToAmi(stock);
-            // simuSaleEnergy(stock);
-            ListeServerTARE(stock);
-            // listenRequest(socket, stock);
+            try {
+				listenRequest(socket, stock);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }else{
             System.err.println("Impossible de démarrer le serveur du marché de gros \""+this.name+ "\""); 
             System.exit(0);
         }
-    }
-
-    public void simuSaleEnergy(StockManage stock){
-        TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.PETROLE, true, ExtractModeEnum.MODE_1, 2022, 150015, 120);
-        Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 150.5, "TareServer1", "hbvfhebfhbvfhbvf-fjfhbvhfbv");
-
-        ValidationSaleHandler validationSaleHandler = new ValidationSaleHandler(this.logManager,stock);
-        validationSaleHandler.handle(energy, 150.5, "Hocine");
-    }
-
-    public void ListeServerTARE(StockManage stock){
-        ListServerHandler listServerHandler = new ListServerHandler(this.logManager, stock);
-        listServerHandler.handle();
     }
 
     public void listenRequest(DatagramSocket socket, StockManage stock) throws IOException{
