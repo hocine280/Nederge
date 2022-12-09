@@ -46,7 +46,7 @@ Description du format des requêtes.
 
 ### Demande de code de suivi :
 
-**Nom de la requête :** ``ValidationSellEnergy``
+**Nom de la requête :** ``RequestValidationSellEnergy``
 
 ####  *PONE => AMI*
 
@@ -54,16 +54,16 @@ Description du format des requêtes.
 {
 	"sender" : "Nom du PONE", 
 	"receiver" : "AMI",
-	"typeRequest" : "ValidationSellEnergy",
+	"typeRequest" : "RequestValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
-	"energy" : {
+	"energy" : [
 		"typeEnergy" : "PETROLE",
 		"extractionMode" : "FORAGE",
 		"green" : false,
 		"countryOrigin" : "FRANCE",
 		"quantity" : 50,
 		"price" : 300
-	}
+	]
 }
 ```
 
@@ -75,7 +75,7 @@ Description du format des requêtes.
 {
 	"sender" : "AMI", 
 	"receiver" : "Nom du PONE",
-	"typeRequest" : "ValidationSellEnergy",
+	"typeRequest" : "RequestValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
 	"status" : true,
 	"energy" : {Energy}
@@ -88,7 +88,7 @@ Description du format des requêtes.
 {
 	"sender" : "Nom du PONE", 
 	"receiver" : "AMI",
-	"typeRequest" : "ValidationSellEnergy",
+	"typeRequest" : "RequestValidationSellEnergy",
 	"timestamp" : "15/02/2019 10:00:00",
 	"status" : false,
 	"message" : "Message expliquant pourquoi l'énergie ne peut être ajouté à la vente"

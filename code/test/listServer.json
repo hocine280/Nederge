@@ -1,0 +1,16 @@
+[
+    {
+        "servers":{
+           "8050":{
+              "typeServer":"HTTP_Server",
+              "port":8050,
+              "name":"Inc"
+           },
+           "2300":{
+              "typeServer":"HTTP_Server",
+              "port":2300,
+              "name":"Test"
+           }
+        }
+    }
+]
