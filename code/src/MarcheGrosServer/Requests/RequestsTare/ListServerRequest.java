@@ -10,28 +10,36 @@ import Server.TypeServerEnum;
 public class ListServerRequest {
     // String = nomServer
     // Integer = port d'écoute
-    private HashMap<String, Integer> serverTARE; 
+    private HashMap<Integer, String> serverTARE; 
 
     public ListServerRequest() {
-        this.serverTARE = new HashMap<String, Integer>();
+        this.serverTARE = new HashMap<Integer, String>();
     }
 
-    public ListServerRequest(HashMap<String, Integer> serverTARE) {
+    public ListServerRequest(HashMap<Integer, String> serverTARE) {
         this.serverTARE = serverTARE;
     }
 
     public static ListServerRequest fromJSON(JSONObject requestJSON){
         ListServerRequest listServerRequest = new ListServerRequest();
 
-        for(String cle : requestJSON.getJSONObject("servers").keySet()){
-            String name = requestJSON.getJSONObject("servers").getJSONObject(cle).getString("name");
-            int port = requestJSON.getJSONObject("servers").getJSONObject(cle).getInt("port");
-            listServerRequest.serverTARE.put(name, port);
+        JSONObject servers = requestJSON.getJSONObject("servers");
+        for(String key : servers.keySet()){
+            int port = Integer.parseInt(key);
+            listServerRequest.serverTARE.put(port, servers.getString(key));
         }
-        return listServerRequest; 
+        return listServerRequest;
     }
 
-    public HashMap<String, Integer> getServerTare(){
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Integer key : serverTARE.keySet()) {
+            sb.append(key + ": " + serverTARE.get(key) + "\n");
+        }
+        return sb.toString();
+    }
+
+    public HashMap<Integer, String> getServerTare(){
         return this.serverTARE;
     }
 }

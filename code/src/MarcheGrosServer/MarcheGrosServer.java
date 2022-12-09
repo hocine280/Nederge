@@ -20,7 +20,8 @@ import MarcheGrosServer.Handlers.Handler;
 import MarcheGrosServer.Handlers.AmiServer.CheckEnergyMarketHandler;
 import MarcheGrosServer.Handlers.AmiServer.ValidationSaleHandler;
 import MarcheGrosServer.Handlers.TareServer.ListServerHandler;
-import MarcheGrosServer.ManageMarcheGrosServer.StockManage; 
+import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
+import MarcheGrosServer.Requests.RequestsTare.ListServerRequest;
 
 import org.json.JSONObject;
 
@@ -63,10 +64,10 @@ public class MarcheGrosServer extends Server{
             }
             this.logManager.addLog("Serveur UDP démarré sur le port " + this.port);
             System.out.println("Le serveur " + this.name + " est démarré sur le port " + this.port);
+            
             try {
 				listenRequest(socket, stock);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }else{
@@ -83,7 +84,7 @@ public class MarcheGrosServer extends Server{
             socket.receive(messageReceived);
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
             System.out.println("Message reçu : " + text);
-            handler.checkTypeRequest(messageReceived, stock);
+            handler.checkTypeRequest(messageReceived, stock, port);
             listenRequest(socket, stock);
         }catch(Exception e){
             System.err.println("Erreur lors de la réception du message : " + e); 

@@ -23,11 +23,12 @@ public class AskAvailabilityOrderHandler extends Handler{
     public void handle(DatagramPacket messageReceived){
         JSONObject data = receiveJSON(messageReceived); 
         JSONObject response; 
+        String sender = data.getString("sender");
         try{
             AskAvailabilityOrderRequest.check(data);
         }catch(InvalidRequestException e){
             response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.AskAvailabilityOrder); 
-            sendResponseTARE(messageReceived, response);
+            sendResponseTARE(messageReceived, response, sender);
             return; 
         }
         
@@ -45,12 +46,12 @@ public class AskAvailabilityOrderHandler extends Handler{
         if(listEnergy.isEmpty()){
             response = request.process(false, null); 
             System.out.println("JSON envoyé vers le TARE : "+response+"\n"); 
-            sendResponseTARE(messageReceived, response);
+            sendResponseTARE(messageReceived, response, sender);
             this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie indisponible !");
         }else{
             response = request.process(true, listEnergy);
             System.out.println("JSON envoyé vers le TARE : "+response+"\n");
-            sendResponseTARE(messageReceived, response);
+            sendResponseTARE(messageReceived, response, sender);
             this.logManager.addLog("Envoie requête | MarcheGros->Tare | AskAvailabilityOrder | Energie disponible !");
         }
     }

@@ -21,12 +21,12 @@ public class BuyEnergyOrderHandler extends Handler{
     public void handle(DatagramPacket messageReceived){
         System.out.println("Je suis dans le handle de buyEnergyOrderHandler");
         JSONObject data = receiveJSON(messageReceived);
-        
+        String sender = data.getString("sender");
         try{
             BuyEnergyOrderRequest.check(data);
         }catch(Exception e){
             JSONObject response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.BuyEnergyOrder); 
-            sendResponseTARE(messageReceived, response);
+            sendResponseTARE(messageReceived, response, sender);
             return; 
         }
         BuyEnergyOrderRequest request = null; 
@@ -40,13 +40,13 @@ public class BuyEnergyOrderHandler extends Handler{
         boolean saleIsValid = checkSaleAtAMI(request); 
         if(saleIsValid){
             JSONObject responseToTARE = request.process(saleIsValid);
-            sendResponseTARE(messageReceived, responseToTARE);
+            sendResponseTARE(messageReceived, responseToTARE, sender);
             this.stockManage.buyEnergy(request.getEnergy());
             System.out.println("Commande acheter : " + request.getEnergy().getTrackingCode().toString());
             System.out.println("Stock energie : " +this.stockManage.toString()); 
         }else{
             JSONObject responseToTARE = request.process(saleIsValid);
-            sendResponseTARE(messageReceived, responseToTARE);
+            sendResponseTARE(messageReceived, responseToTARE, sender);
         }
     }
 
