@@ -25,5 +25,5 @@ if(($jsonReceived = @file_get_contents($url, false, $context)) !== false){
         $_SESSION['listServer'] = $listServer;
     }
 }else{
-    var_dump("erreur"); 
+    $_SESSION['ManageTAREOff'] = "Connexion impossible au serveur TARE";
 }

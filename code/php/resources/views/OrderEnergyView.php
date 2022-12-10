@@ -15,7 +15,8 @@
 </head>
 
 <body>
-
+<?php include '../../app/controllers/ListServerTAREController.php'?>
+    
     <!-- ======= Header ======= -->
     <?php include '../layout/Header.html'; ?>
 
@@ -61,8 +62,17 @@
                         unset($_SESSION['statusOrder']);
                     }
                 }
+                
+                if(isset($_SESSION['ManageTAREOff'])){
+                    echo '<div class="col-md-12 text-center mt-4">
+                            <div class="alert alert-danger" role="alert" style="font-weight : bold;">
+                                <i class="bi bi-exclamation-circle-fill"></i> '.$_SESSION['ManageTAREOff'].'
+                            </div>
+                        </div>';
+                    unset($_SESSION['ManageTAREOff']);
+                }
+                
             ?>
-            <?php include '../../app/controllers/ListServerTAREController.php'?>
         <div class="row mt-5">
             <form action="../../app/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
                 <div class="row">
