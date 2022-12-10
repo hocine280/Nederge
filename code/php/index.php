@@ -32,6 +32,7 @@
             <li><a class="nav-link scrollto active" href="#hero">Accueil</a></li>
             <li><a class="nav-link scrollto" href="#about">A propos</a></li>
             <li><a class="nav-link scrollto" href="#features">Fonctionnalités</a></li>
+            <li><a class="nav-link scrollto" href="resources/views/ScenarioView.php">Mode scénario</a></li>
             <li class="dropdown"><a href="#"><span>Mon énergie</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="resources/views/OrderEnergyView.php">Commander une énergie</a></li>

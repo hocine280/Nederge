@@ -22,7 +22,6 @@ public class ManageTareServer extends Server{
 	private ManageTareServer() throws IOException{
 		super("Server TARE manager", port, TypeServerEnum.HTTP_Server);
 		this.listServer = new Hashtable<Integer, String>();
-		
 		this.server = HttpServer.create(new InetSocketAddress(port), 0);
 	}
 
