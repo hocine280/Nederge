@@ -1,7 +1,7 @@
 <?php 
 /**
  * Fichier autoload.php permettant de charger les classes automatiquement
- * @author HADID Hocine & CHEMIN Pierre
+ * @author HADID Hocine
  * @version 1.0
  */
 

@@ -1,11 +1,11 @@
 package MarcheGrosServer.Requests.RequestsPone;
 
-import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Requests.MarcheGrosRequest;
 import MarcheGrosServer.Requests.TypeRequestEnum;
+
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
-import TrackingCode.TrackingCode;
+
 
 import TrackingCode.Energy;
 
@@ -15,11 +15,28 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+/**
+ * Classe SendEnergyToMarketRequest
+ * Requête d'envoi de l'énergie du PONE au marché de gros - [UDP]
+ * @extends MarcheGrosRequest
+ * @author HADID Hocine
+ * @version 1.0
+ */
 public class SendEnergyToMarketRequest extends MarcheGrosRequest{
+    // Attributs
     private Energy energy;
     private int codeProducer;
     private double price; 
 
+    /**
+     * Constructeur par initialisation de la classe SendEnergyToMarketRequest
+     * @param sender
+     * @param receiver
+     * @param timestamp
+     * @param codeProducer
+     * @param energy
+     * @param price
+     */
     public SendEnergyToMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
         super(sender, receiver, timestamp, TypeRequestEnum.SendEnergyToMarket);
         this.codeProducer = codeProducer;
@@ -27,6 +44,12 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         this.price = price;
     }
     
+    /**
+     * Création d'un objet SendEnergyToMarketRequest à partir d'un JSONObject
+     * @param requestJSON
+     * @return
+     * @throws InvalidRequestException
+     */
     public static SendEnergyToMarketRequest fromJSON(JSONObject requestJSON) throws InvalidRequestException{
         check(requestJSON);
         String sender = requestJSON.getString("sender");
@@ -45,14 +68,11 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
     }
 
 
-    public Energy getEnergy(){
-        return this.energy;
-    }
-
-    public double getPrice(){
-        return this.price;
-    }
-
+    /**
+     * Vérifie si les données de la requête sont correctes
+     * @param data
+     * @throws InvalidRequestException
+     */
     public static void check(JSONObject data) throws InvalidRequestException{
         MarcheGrosRequest.check(data);
         if(!data.has("codeProducer")){
@@ -66,6 +86,11 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
         }
     }
 
+    /**
+     * Création d'un JSONObject à partir d'un objet ValidationSaleRequest
+     * @param status
+     * @return JSONObject
+     */
     public JSONObject process(boolean status){
         JSONObject response = new JSONObject();
         response.put("sender",this.sender); 
@@ -77,5 +102,21 @@ public class SendEnergyToMarketRequest extends MarcheGrosRequest{
             response.put("message", "L'énergie n'as pas pu être ajouté au marché de gros"); 
         }
         return response;
+    }
+
+    /**
+     * Récupère l'energie de la requête
+     * @return Energy
+     */
+    public Energy getEnergy(){
+        return this.energy;
+    }
+    
+    /**
+     * Récupère le code du producteur de la requête
+     * @return double
+     */
+    public double getPrice(){
+        return this.price;
     }
 }

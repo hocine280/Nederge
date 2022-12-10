@@ -3,7 +3,7 @@
  * ***********************************************************************************************************
  * Traitement d'une commande effectuer par le revendeur depuis le fichier resources/views/OrderEnergyView.php 
  * puis envoyer au serveur TARE
- * @author HADID Hocine & CHEMIN Pierre
+ * @author HADID Hocine
  * @version 1.0
  * ***********************************************************************************************************
  */
