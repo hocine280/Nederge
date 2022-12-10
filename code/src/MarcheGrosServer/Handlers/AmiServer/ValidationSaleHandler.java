@@ -1,17 +1,17 @@
 package MarcheGrosServer.Handlers.AmiServer;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
 import java.text.SimpleDateFormat;
 
-import org.json.JSONObject;
-
+import MarcheGrosServer.MarcheGrosServer;
 import MarcheGrosServer.Handlers.Handler;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Requests.RequestsAmi.ValidationSaleRequest;
 import Server.LogManage.LogManager;
 
+import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.InputStreamReader;
@@ -20,25 +20,47 @@ import java.io.BufferedWriter;
 
 import TrackingCode.Energy;
 
-
+import org.json.JSONObject;
+/**
+ * Classe ValidationSaleHandler
+ * Gère la validation de la vente d'une énergie
+ * @extends Handler
+ * @author HADID Hocine
+ * @version 1.0
+ */
 public class ValidationSaleHandler extends Handler{
-    private final int listeningPort = 5000; 
+    // Port d'écoute du serveur AMI
+    private final int listeningPort = 5050; 
 
-    public ValidationSaleHandler(LogManager logManager, StockManage stockManage) {
-        super(logManager, stockManage);
+    /**
+     * Constructeur par initialisation de la classe ValidationSaleHandler
+     * @param logManager
+     * @param stockManage
+     * @param server
+     */
+    public ValidationSaleHandler(LogManager logManager, StockManage stockManage, MarcheGrosServer server) {
+        super(logManager, stockManage, server);
     }
 
-    public boolean handle(Energy energy, double price, String buyer){
-        ValidationSaleRequest request = new ValidationSaleRequest("MarcheGrosServer", "ServerAmi",
+    /**
+     * Effectue le traitement de la validation de la vente d'une énergie, envoie de la requête vers l'AMI
+     * Sens de la requête : MarcheGrosServer -> AMIServer (TCP)
+     * @param energy
+     * @param price
+     * @param buyer
+     * @return
+     */
+    public JSONObject handle(Energy energy, double price, String buyer){
+        ValidationSaleRequest request = new ValidationSaleRequest("MarcheGrosServer", "AMIServer",
                                         new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"), energy, price, buyer); 
-
+        // Création de la socket
         Socket socket = null; 
         try{
             socket = new Socket("localhost", listeningPort); 
         }catch(UnknownHostException e){
-            System.err.println("Erreur sur l'hote : "+e);
+            this.logManager.addLog("['ValidationSale'] - Erreur sur l'hote : "+e);
         }catch(IOException e){
-            System.err.println("Creation de la socket impossible : "+e);
+            this.logManager.addLog("['ValidationSale'] - Erreur lors de la création de la socket : "+e);
         }
 
         // Association d'un flux d'entreé et de sortie
@@ -48,15 +70,13 @@ public class ValidationSaleHandler extends Handler{
             input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
         }catch(IOException e){
-            System.err.println("Association des flux impossible");
-            System.exit(0);
+            this.logManager.addLog("['ValidationSale'] - Association des flux impossible : "+e);
         }
 
         // Envoie de la requête vers l'AMI pour l'achat d'une énergie
         JSONObject responseJSON = request.process(); 
         String response = responseJSON.toString();
-        this.logManager.addLog("Envoie reqûete [ MarcheGrosServer -> AMIServer ] : Vérification de l'achat d'une énergie");
-        System.out.println("Requete envoyé : " + response);
+        this.logManager.addLog("['ValidationSale'] - Envoie reqûete [ MarcheGrosServer -> AMIServer ] : Vérification de l'achat d'une énergie");
         output.println(response);
 
         // Lecture de la réponse de l'AMI
@@ -64,9 +84,8 @@ public class ValidationSaleHandler extends Handler{
         try{
             responseAMI = input.readLine();
         }catch(IOException e){
-            System.err.println("Lecture de la réponse impossible : "+e);
+            this.logManager.addLog("['ValidationSale'] - Lecture de la réponse impossible : "+e);
         }
-        System.out.println("Réponse reçu : " + responseAMI);
 
         // Fermeture de la socket
         try {
@@ -74,18 +93,17 @@ public class ValidationSaleHandler extends Handler{
             output.close();
             socket.close();
         } catch(IOException e) {
-            System.err.println("Erreur lors de la fermeture des flux et de la socket : " + e);
+            this.logManager.addLog("['ValidationSale'] - Erreur lors de la fermeture des flux et de la socket : "+e);
         }
 
-        // Traitement de la réponse de l'AMI
+        // Traitement de la réponse reçu par l'AMI
         JSONObject responseJsonAMI = new JSONObject(responseAMI);
         boolean isSaleValid = responseJsonAMI.getBoolean("status");
         if(isSaleValid){
-            this.logManager.addLog("Réponse [ AMIServer -> MarcheGrosServer ] : Vente validée");
-            return true;
+            this.logManager.addLog("['ValidationSale'] - Réponse [ AMIServer -> MarcheGrosServer ] : Vente validée");
         }else{
-            this.logManager.addLog("Réponse [ AMIServer -> MarcheGrosServer ] : Vente non validée | Cause : "+responseJsonAMI.getString("message"));
-            return false;
+            this.logManager.addLog("['ValidationSale'] - Réponse [ AMIServer -> MarcheGrosServer ] : Vente non validée | Cause : "+responseJsonAMI.getString("message"));
         }
+        return responseJsonAMI;
     }
 }

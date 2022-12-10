@@ -2,7 +2,7 @@
 /**
  * *********************************************************************************************************
  * Traitement d'une requête permettant de récuperer la liste de toutes les commandes 
- * @author HADID Hocine & CHEMIN Pierre
+ * @author HADID Hocine
  * @version 1.0
  * *********************************************************************************************************
  */

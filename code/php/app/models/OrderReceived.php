@@ -4,7 +4,7 @@
  * ***********************************************************************************************************
  * Model gérant la commande reçue depuis le serveur TARE implémentant la classe JsonSerializable et 
  * qui hérite de Order
- * @author HADID Hocine & CHEMIN Pierre
+ * @author HADID Hocine
  * @version 1.0
  * ***********************************************************************************************************
  */

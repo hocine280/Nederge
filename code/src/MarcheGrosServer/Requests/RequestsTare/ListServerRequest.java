@@ -1,25 +1,40 @@
 package MarcheGrosServer.Requests.RequestsTare;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import org.json.JSONObject;
 
-import Server.TypeServerEnum;
 
+/**
+ * Classe ListServerRequest
+ * Requête de récupération de la liste des serveurs TARE - [HTTP]
+ * @extends MarcheGrosRequest
+ * @author HADID Hocine
+ * @version 1.0
+ */
 public class ListServerRequest {
-    // String = nomServer
-    // Integer = port d'écoute
+    // String = nomServer | Integer = port d'écoute
     private HashMap<Integer, String> serverTARE; 
 
+    /**
+     * Constructeur par défaut de la classe ListServerRequest
+     */
     public ListServerRequest() {
         this.serverTARE = new HashMap<Integer, String>();
     }
 
+    /**
+     * Constructeur par initialisation de la classe ListServerRequest
+     * @param serverTARE
+     */
     public ListServerRequest(HashMap<Integer, String> serverTARE) {
         this.serverTARE = serverTARE;
     }
 
+    /**
+     * Création d'un objet ListServerRequest à partir d'un JSONObject
+     * @param requestJSON
+     * @return
+     */
     public static ListServerRequest fromJSON(JSONObject requestJSON){
         ListServerRequest listServerRequest = new ListServerRequest();
 
@@ -31,6 +46,10 @@ public class ListServerRequest {
         return listServerRequest;
     }
 
+    /**
+     * Création d'une chaîne de caractères représentant l'objet ListServerRequest
+     * @return String
+     */
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Integer key : serverTARE.keySet()) {
@@ -39,6 +58,10 @@ public class ListServerRequest {
         return sb.toString();
     }
 
+    /**
+     * Récupération de la liste des serveurs TARE
+     * @return HashMap<Integer, String>
+     */
     public HashMap<Integer, String> getServerTare(){
         return this.serverTARE;
     }

@@ -2,9 +2,10 @@ package MarcheGrosServer.Requests.RequestsAmi;
 
 import MarcheGrosServer.Requests.MarcheGrosRequest;
 import MarcheGrosServer.Requests.TypeRequestEnum;
+
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
-import TrackingCode.TrackingCode;
+
 import TrackingCode.Energy;
 
 import java.lang.Exception;
@@ -14,13 +15,28 @@ import java.util.Date;
 
 import org.json.JSONObject;
 
+/**
+ * Classe CheckEnergyMarketRequest
+ * Requête de vérification de l'énergie du PONE envoyé à l'AMI par le marché de gros - [TCP]
+ * @extends MarcheGrosRequest
+ * @author HADID Hocine
+ * @version 1.0
+ */
 public class CheckEnergyMarketRequest extends MarcheGrosRequest{
-
+    // Attributs
     private Energy energy;
     private int codeProducer;
     private double price;
 
-
+    /**
+     * Constructeur par initialisation de la classe CheckEnergyMarketRequest
+     * @param sender
+     * @param receiver
+     * @param timestamp
+     * @param codeProducer
+     * @param energy
+     * @param price
+     */
     public CheckEnergyMarketRequest(String sender, String receiver, SimpleDateFormat timestamp, int codeProducer, Energy energy, double price){
         super(sender, receiver, timestamp, TypeRequestEnum.SendEnergyToMarket);
         this.codeProducer = codeProducer;
@@ -28,7 +44,12 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         this.price = price; 
     }
  
-    
+    /**
+     * Création d'un objet CheckEnergyMarketRequest à partir d'un JSONObject
+     * @param requestJSON
+     * @return CheckEnergyMarketRequest
+     * @throws InvalidRequestException
+     */
     public static CheckEnergyMarketRequest fromJSON(JSONObject requestJSON) throws InvalidRequestException{
         check(requestJSON);
         String sender = requestJSON.getString("sender");
@@ -46,6 +67,11 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
         return new CheckEnergyMarketRequest(sender, receiver, timestamp, codeProducer, energy, price);
     }
 
+    /**
+     * Vérifie si les données de la requête sont correctes
+     * @param data
+     * @throws InvalidRequestException
+     */
     public static void check(JSONObject data) throws InvalidRequestException{
         MarcheGrosRequest.check(data);
         if(!data.has("codeProducer")){
@@ -55,8 +81,9 @@ public class CheckEnergyMarketRequest extends MarcheGrosRequest{
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "energy absent");
         }
     }
+
     /**
-     * JSON de la requête serveur AMI pour savoir si l'energie envoyé par le PONE est correct
+     * Génére un JSONObject à partir de la requête
      * @return JSONObject
      */
     public JSONObject process(){

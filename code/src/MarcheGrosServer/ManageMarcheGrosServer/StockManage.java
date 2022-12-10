@@ -9,37 +9,65 @@ import TrackingCode.ExtractModeEnum;
 import TrackingCode.Energy;
 
 import org.json.JSONObject;
-
-
+/**
+ * Classe StockManage
+ * Gestion du stock d'énergie du marché de gros
+ * @author HADID Hocine
+ * @version 1.0
+ */
 public class StockManage{
     // Integer = Identifiant unique de l'énergie
     // Energy = TrackingCode + certificat
     private HashMap<Integer,HashMap<Energy, Double>> stockEnergy;
 
+    /**
+     * Constructeur par défaut de la classe StockManage
+     */
     public StockManage(){
         stockEnergy = new HashMap<Integer, HashMap<Energy, Double>>();
     }
 
+    /**
+     * Ajoute une énergie au stock
+     * @param energy
+     * @param price
+     */
     public void addEnergy(Energy energy, double price){
         stockEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), new HashMap<Energy, Double>());
         stockEnergy.get(energy.getTrackingCode().getUniqueIdentifier()).put(energy, price);
     }
     
+    /**
+     * Supprime une énergie du stock
+     * @param energy
+     */
     public void removeEnergy(Energy energy){
         stockEnergy.remove(energy.getTrackingCode().getUniqueIdentifier());
     }
 
+    /**
+     * Action effectué lors d'un achat d'une énergie
+     * @param energy
+     */
     public void buyEnergy(Energy energy){
         removeEnergy(energy);
     }
 
-    // Remplir le stock d'énergie -- fonction de test
+    /**
+     * Methode de simulation du stock d'énergie
+     * Rempli le stock d'énergie avec des énergies fictives
+     */
     public void simulationStockEnergie(){
         TrackingCode trackingCode = new TrackingCode(CountryEnum.FRANCE, 523, TypeEnergyEnum.GAZ, true, ExtractModeEnum.MODE_1, 2022, 150015, 150);
         Energy energy = new Energy(trackingCode, "hcbfhvhfbv-515vfjfvjfn", 1500, "TAREServer", "tyuinjjdchbgvhhb-chhcbfbf");
         addEnergy(energy, energy.getPrice());
     }   
 
+    /**
+     * Methode de vérification de l'existence d'une énergie dans le stock
+     * @param order
+     * @return JSONObject
+     */
     public JSONObject checkEnergyAvailability(Order order){
         simulationStockEnergie();
         ListEnergy listEnergy = new ListEnergy();
@@ -73,6 +101,11 @@ public class StockManage{
         return listEnergy.toJSON();
     }
     
+    /**
+     * Retourne l'énergie correspondant à l'identifiant unique
+     * @param uniqueIdentifier
+     * @return Energy
+     */
     public Energy getEnergy(int uniqueIdentifier){
         if(!this.stockEnergy.containsKey(uniqueIdentifier)){
             throw new IllegalArgumentException("L'énergie n'est pas dans le stock");
@@ -81,6 +114,10 @@ public class StockManage{
         }
     }
 
+    /**
+     * Génération d'une chaines de caractères représentant le stock d'énergie
+     * @return String
+     */
     public String toString(){
         String str = "Stock : \n";
         for(Integer key : stockEnergy.keySet()){
