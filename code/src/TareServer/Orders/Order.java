@@ -1,8 +1,11 @@
 package TareServer.Orders;
 
+import java.util.Vector;
+
 import org.json.JSONObject;
 
 import TrackingCode.CountryEnum;
+import TrackingCode.Energy;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 
@@ -23,6 +26,8 @@ public class Order {
 	private int maxPriceUnitEnergy;
 	private StatusOrderEnum status;
 
+	private Vector<Energy> listEnergy;
+	private Vector<Energy> purchaseEnergy;
 
 	public static Order fromJSON(JSONObject object){
 		return new Order(
@@ -52,6 +57,9 @@ public class Order {
 		this.budget = budget;
 		this.maxPriceUnitEnergy = maxPriceUnitEnergy;
 		this.status = status;
+
+		this.listEnergy = new Vector<Energy>();
+		this.purchaseEnergy = new Vector<Energy>();
 	}
 
 	public void setId(int id){
@@ -60,10 +68,18 @@ public class Order {
 		}
 	}
 
+	public int getId() {
+		return this.id;
+	}
+
 	public void setLogin(String login){
 		if(this.login == null){
 			this.login = login;
 		}
+	}
+
+	public void setStatus(StatusOrderEnum status) {
+		this.status = status;
 	}
 
 	public Client getclient() {
@@ -118,10 +134,32 @@ public class Order {
 		return this.status;
 	}
 
+	public Vector<Energy> getListEnergy() {
+		return this.listEnergy;
+	}
+
+	public Vector<Energy> getPurchaseEnergy() {
+		return this.purchaseEnergy;
+	}
+
+	public void addEnergy(Energy energy){
+		this.listEnergy.add(energy);
+	}
+
+	public double getPriceListEnergy(){
+		double price = 0;
+
+		for (Energy energy : listEnergy) {
+			price += energy.getPrice();
+		}
+
+		return price;
+	}
+
 	public JSONObject toJson(){
 		JSONObject ret = new JSONObject();
 
-		ret.put("idOrderForm", this.id);
+		ret.put("idOrder", this.id);
 		ret.put("client", this.client.toJson());
 		ret.put("typeEnergy", this.typeEnergy);
 		ret.put("countryOrigin", this.countryOrigin);
@@ -132,6 +170,18 @@ public class Order {
 		ret.put("budget", this.budget);
 		ret.put("maxPriceUnitEnergy", this.maxPriceUnitEnergy);
 		ret.put("statusOrder", this.status);
+
+		return ret;
+	}
+
+	public JSONObject toJsonWithEnergy(){
+		JSONObject ret = new JSONObject();
+
+		ret.put("idOrder", this.id);
+		ret.put("client", this.client.toJson());
+		ret.put("statusOrder", this.status);
+		ret.put("priceOrder", this.getPriceListEnergy());
+		ret.put("listEnergy", this.purchaseEnergy);
 
 		return ret;
 	}
