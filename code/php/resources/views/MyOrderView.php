@@ -67,7 +67,7 @@
         ?>
         <!-- Si le serveur HTTP est allumé mais qu'il n'y a pas de commande -->
         <?php
-            if(empty($listOrders) && $jsonReceived == true){
+            if(empty($listOrders) && $jsonReceived == true || !isset($_SESSION['listServer'])){
         ?>
             <div class="container mb-5">
                 <div class="row">

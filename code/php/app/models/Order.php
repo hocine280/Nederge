@@ -16,6 +16,7 @@ class Order implements JsonSerializable{
     private float $maxUnitPrice;
     private String $originCountry;
     private float $budget; 
+    private int $portTare;
     
     /**
      * Constructeur par initialisation

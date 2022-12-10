@@ -86,7 +86,7 @@ class Validation{
         if(isset($extractionMode) && empty($extractionMode)){
             $errors['extractionMode'] = "Veuillez sélectionner un mode d'extraction";
         }
-        if(!in_array($extractionMode, ['eolionne', 'eolienne', 'panneau_solaire', 'forage_puits', 'nucleaire','sans_preference', 'MODE_1'])){
+        if(!in_array($extractionMode, ['FORAGE', 'PANNEAUSOLAIRE', 'EOLIENNE', 'BARRAGE', 'NUCLEAIRE','CENTRALCHARBON', 'MINAGE'])){
             $errors['extractionMode'] = "Le mode d'extraction sélectionné ne figure pas dans la liste";
         }
 

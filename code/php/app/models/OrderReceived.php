@@ -24,7 +24,7 @@ class OrderReceived  extends Order implements JsonSerializable{
     // public function __construct($statusOrder, $green, $quantity, $idOrderForm, $typeEnergy, $client, $extractionMode, $quantityMin, $countryOrigin, $maxPriceUnitEnergy, $budget){
     public function __construct(Client $client, Energy $energy, float $quantity, float $minQuantity, float $maxUnitPrice, 
                                 String $originCountry, float $budget, String $statusOrder, int $idOrderForm){ 
-        parent::__construct($client, $energy, $quantity, $minQuantity, $maxUnitPrice, $originCountry, $budget); 
+        parent::__construct($client, $energy, $quantity, $minQuantity, $maxUnitPrice, $originCountry, $budget, null); 
         $this->statusOrder = $statusOrder;
         $this->idOrderForm = $idOrderForm;
     }
