@@ -157,7 +157,7 @@ public class AddOrderRequest implements RequestInterface{
 		order.setLogin(loginOrder);
 		
 		try {
-			orderManage.addOrder(idOrder, order);
+			this.orderManage.addOrder(idOrder, this.logManager, order);
 			response.put("status", true);
 			response.put("idOrderForm", idOrder);
 			response.put("login", loginOrder);

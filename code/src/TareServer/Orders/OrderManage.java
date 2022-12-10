@@ -5,17 +5,24 @@ import java.util.Random;
 
 import org.json.JSONArray;
 
+import Server.LogManage.LogManager;
+import TareServer.TareServer;
+
 public class OrderManage {
 
+	private TareServer server;
 	private Hashtable<Integer, Order> listOrder;
 
-	public OrderManage(){
+	public OrderManage(TareServer server){
+		this.server = server;
 		this.listOrder = new Hashtable<Integer, Order>();
 	}
 	
-	public void addOrder(int idOrder, Order order) throws OrderException{
+	public void addOrder(int idOrder, LogManager logManager, Order order) throws OrderException{
 		if(!this.listOrder.containsKey(idOrder)){
 			this.listOrder.put(idOrder, order);
+			ThreadProcessOrder threadProcessOrder = new ThreadProcessOrder(this.server, logManager, order);
+			threadProcessOrder.start();
 		}
 	}
 
@@ -61,5 +68,4 @@ public class OrderManage {
 
 		return array;
 	}
-
 }

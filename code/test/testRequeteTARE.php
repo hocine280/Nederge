@@ -23,7 +23,7 @@ switch ($argv[1]) {
 			"companyName" => "StonePath company",
 			"typeEnergy" => "ELECTRICITE",
 			"countryOrigin" => "FRANCE",
-			"extractionMode" => "MODE_1",
+			"extractionMode" => "NUCLEAIRE",
 			"green" => true,
 			"quantity" => 500,
 			"quantityMin" => 250,
@@ -91,7 +91,7 @@ $options = [
 
 // Envoi de la requête et lecture du JSON reçu
 // Remplacez l'URL par l'adresse locale vers generateur.php
-$URL = "http://localhost:5000/" . $argv[1];
+$URL = "http://localhost:8080/" . $argv[1];
 $contexte  = stream_context_create($options);
 
 if(($jsonTexte = @file_get_contents($URL, false, $contexte)) !== false) {

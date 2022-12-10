@@ -45,6 +45,7 @@ public class OrderStatusRequest implements RequestInterface{
 			response.put("status", true);
 			response.put("idOrder", this.idOrder);
 			response.put("statusOrder", this.orderManage.getOrder(this.idOrder).getStatus().toString());
+			response.put("order", this.orderManage.getOrder(idOrder).toJson());
 			this.logManager.addLog("Récupération du statut d'une commande. Commande : " + this.orderManage.getOrder(this.idOrder).toJson().toString());
 		}else{
 			response.put("status", false);

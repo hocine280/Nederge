@@ -200,10 +200,14 @@ public class Pone extends Server{
             InetAddress address = InetAddress.getByName(null);
             byte[] buffer = messageEncrypt.getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
+			socket.send(messageToSend);
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur lors de la création du message");
 			return null;
-        }
+		}catch(IOException e){
+			this.logManager.addLog("Erreur lors de l'envoi du message");
+			return null;
+		}
 
 		// Réception de la réponse
         byte[] tampon = new byte[1024];
@@ -219,15 +223,8 @@ public class Pone extends Server{
 
 		JSONObject response = this.receiveDecrypt(messageResponse);
 
-        try{
-            socket.send(messageToSend);
-        }catch(IOException e){
-            this.logManager.addLog("Erreur lors de l'envoi du message");
-			return null;
-        }
-
         socket.close();
-
+		
 		return response;
 	}
 
