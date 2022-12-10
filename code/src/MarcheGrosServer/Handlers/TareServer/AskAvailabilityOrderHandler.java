@@ -37,10 +37,9 @@ public class AskAvailabilityOrderHandler extends Handler{
      * Sens de la requête : TARE -> MarcheGrosServer (UDP)
      * @param messageReceived
      */
-    public void handle(DatagramPacket messageReceived){
+    public void handle(DatagramPacket messageReceived, JSONObject data){
         // Récupération de la requête dans un JSON
-        JSONObject data = receiveJSON(messageReceived); 
-
+        JSONObject requestSend; 
         JSONObject response; 
         String sender = data.getString("sender");
 
@@ -49,7 +48,7 @@ public class AskAvailabilityOrderHandler extends Handler{
         }catch(InvalidRequestException e){
             response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.AskAvailabilityOrder); 
             this.logManager.addLog("['AskAvailibilityOrder'] - Réception requete | TARE->MarcheGros | Requête invalide : "+e);
-            sendResponseTARE(messageReceived, response, sender);
+            requestSend = sendResponseTARE(messageReceived, response, sender);
             return; 
         }
         
@@ -67,12 +66,11 @@ public class AskAvailabilityOrderHandler extends Handler{
 
         if(listEnergy.isEmpty()){
             response = request.process(false, null); 
-            sendResponseTARE(messageReceived, response, sender);
+            requestSend = sendResponseTARE(messageReceived, response, sender);
             this.logManager.addLog("['AskAvailibilityOrder'] - Envoie requête | MarcheGros->TARE | Energie indisponible !");
         }else{
             response = request.process(true, listEnergy);
-            System.out.println("JSON envoyé vers le TARE : "+response+"\n");
-            sendResponseTARE(messageReceived, response, sender);
+            requestSend = sendResponseTARE(messageReceived, response, sender);
             this.logManager.addLog("['AskAvailibilityOrder'] - Envoie requête | MarcheGros->TARE | Energie disponible !");
         }
     }

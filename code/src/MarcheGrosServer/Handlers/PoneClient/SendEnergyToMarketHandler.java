@@ -38,10 +38,7 @@ public class SendEnergyToMarketHandler extends Handler{
      * Sens de la requête : PONE -> MarcheGrosServer (UDP)
      * @param messageReceived
      */
-    public void handle(DatagramPacket messageReceived){
-        // Récupération de la requête en JSON
-        JSONObject data = receiveJSON(messageReceived); 
-
+    public void handle(DatagramPacket messageReceived, JSONObject data){
         try{
             SendEnergyToMarketRequest.check(data);
         }catch(InvalidRequestException e){
@@ -60,7 +57,7 @@ public class SendEnergyToMarketHandler extends Handler{
         }
         boolean statusAddEnergieToMarket = checkEnergyAtAmi(request); 
         JSONObject response = request.process(statusAddEnergieToMarket);
-        sendResponse(messageReceived, response);
+        JSONObject requestSend = sendResponse(messageReceived, response);
         this.logManager.addLog("['SendEnergyToMarket'] - Envoie requete | MarcheGros -> Pone | Requête envoyé avec succès");
     }
 

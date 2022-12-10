@@ -8,8 +8,15 @@ import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.Vector;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -92,7 +99,7 @@ public class MarcheGrosServer extends Server{
         try{
             socket.receive(messageReceived);
             String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
-            JSONObject json = new JSONObject(text);
+            JSONObject json = receiveDecrypt(text);
             this.logManager.addLog("['MarcheGrosServer'] - Réception d'une requête "+json.getString("sender"));
             handler.checkTypeRequest(messageReceived, stock, port);
             listenRequest(socket, stock);
@@ -100,6 +107,24 @@ public class MarcheGrosServer extends Server{
             this.logManager.addLog("['MarcheGrosServer'] - Erreur lors de la réception du message : " + e);
         }
     }
+
+    /***
+     * Traiter la réponse lors de l'échange de clé publique
+     * @param response
+     */
+    public void processResponsePublicKey(JSONObject response){
+		if(response.has("status") && response.getBoolean("status") && response.has("publicKeySender") && response.has("sender")){
+			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(response.getString("publicKeySender")));
+			try {
+				this.listServerConnected.put(response.getString("sender"), KeyFactory.getInstance("RSA").generatePublic(spec));
+				this.logManager.addLog("Ajout d'un serveur à la liste. Serveur : " + response.getString("sender"));
+			} catch (JSONException | InvalidKeySpecException | NoSuchAlgorithmException e) {
+				
+			}
+		}else{
+			this.logManager.addLog("Impossible de traiter la réponse lors de l'échange de clé publique");
+		}
+	}
 
     /**
      * Arrêter le serveur UDP du marché de gros

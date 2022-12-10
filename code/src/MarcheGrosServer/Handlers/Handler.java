@@ -1,5 +1,6 @@
 package MarcheGrosServer.Handlers; 
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import MarcheGrosServer.Handlers.TareServer.AskAvailabilityOrderHandler;
@@ -10,17 +11,27 @@ import MarcheGrosServer.Requests.TypeRequestEnum;
 import MarcheGrosServer.Requests.RequestsTare.ListServerRequest;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.MarcheGrosServer;
-
+import Server.InvalidServerException;
 import Server.LogManage.LogManager;
 import Server.Request.InvalidRequestException;
 import Server.Request.InvalidRequestSituationEnum;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 
 
@@ -56,7 +67,7 @@ public class Handler{
      */
     public JSONObject receiveJSON(DatagramPacket messageReceived){
         String text = new String(messageReceived.getData(), 0, messageReceived.getLength());
-        JSONObject data = new JSONObject(text);
+        JSONObject data = this.server.receiveDecrypt(text);
         return data;
     }
 
@@ -97,11 +108,9 @@ public class Handler{
         if(!json.has("sender")){
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "sender absent");
         }
-
         if(!json.has("receiver")){
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "receiver absent");
         }
-
         if(!json.has("timestamp")){
             throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "timestamp absent");
         }
@@ -115,19 +124,20 @@ public class Handler{
      * @throws InvalidRequestException
      */
     public void checkTypeRequest(DatagramPacket messageReceived, StockManage stock, int portServer) throws InvalidRequestException{
+
         JSONObject data = receiveJSON(messageReceived); 
         check(data);
         if(data.getString("typeRequest").equals(TypeRequestEnum.AskAvailabilityOrder.toString())){
             AskAvailabilityOrderHandler askAvailabilityOrderHandler = new AskAvailabilityOrderHandler(this.logManager, stock, server);
-            askAvailabilityOrderHandler.handle(messageReceived);
+            askAvailabilityOrderHandler.handle(messageReceived, data);
             this.logManager.addLog("['Handler'] Réception requete | TareServer->MarcheGrosServer | AskAvailabilityOrder");
         }else if(data.getString("typeRequest").equals(TypeRequestEnum.BuyEnergyOrder.toString())){
             BuyEnergyOrderHandler buyEnergyOrderHandler = new BuyEnergyOrderHandler(this.logManager, stock, server);
-            buyEnergyOrderHandler.handle(messageReceived);
+            buyEnergyOrderHandler.handle(messageReceived, data);
             this.logManager.addLog("['Handler'] Réception requete | TareServer->MarcheGrosServer | BuyEnergyOrder");
         }else if(data.getString("typeRequest").equals(TypeRequestEnum.SendEnergyToMarket.toString())){
             SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this.logManager, stock, server);
-            sendEnergyToMarketHandler.handle(messageReceived);
+            sendEnergyToMarketHandler.handle(messageReceived, data);
             this.logManager.addLog("['Handler'] Réception requete | PoneClient->MarcheGrosServer | SendEnergyToMarket\n");
         }
     }
@@ -138,22 +148,26 @@ public class Handler{
      * @param messageReiceived
      * @param json
      */
-    public void sendResponse(DatagramPacket messageReiceived, JSONObject json){
-        // boolean encrypt = true;
-        // String messageEncrypt = ""; 
-        // if(encrypt){
-        //     boolean retry = false; 
-        //     do{
-        //         try{
-        //             messageEncrypt = this.server.encryptRequest(json.getString("receiver"), json);
-        //         }catch(InvalidServerException e1){
-        //             if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
-        //                 JSONObject request = this.server.sendFirstConnectionServe(json.getString("receiver"));
-        //                 this.server.p
-        //             }
-        //         }
-        //     }
-        // }
+    public JSONObject sendResponse(DatagramPacket messageReiceived, JSONObject json){
+        // Chiffrement de la requête
+        boolean encrypt = true;
+        String messageEncrypt = ""; 
+        if(encrypt){
+            boolean retry = false; 
+            do{
+                try{
+                    messageEncrypt = this.server.encryptRequest(json.getString("receiver"), json);
+                }catch(InvalidServerException e1){
+                    if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
+                        JSONObject request = this.server.sendFirstConnectionServe(json.getString("receiver"));
+                        this.server.processResponsePublicKey(this.sendResponse(messageReiceived, request));
+                        retry = true;
+                    }else{
+                        this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+                    }
+                }
+            }while(retry);
+        }
 
         DatagramSocket socket = null; 
         try{
@@ -164,8 +178,9 @@ public class Handler{
         }
         
         DatagramPacket messageToSend = null; 
+        JSONObject response = new JSONObject(messageEncrypt);
         try{
-            byte[] buffer = json.toString().getBytes();
+            byte[] buffer = messageEncrypt.getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, messageReiceived.getAddress(), messageReiceived.getPort());
         }catch(Exception e){
             System.err.println("Erreur lors de la création du message");
@@ -180,6 +195,78 @@ public class Handler{
         }
         
         socket.close();
+        return response;
+    }
+
+    public JSONObject sendRequestTCP(JSONObject json){
+        // Création de la socket
+        Socket socket = null;
+        try{
+            socket = new Socket("localhos", 5050);
+        }catch(UnknownHostException e){
+            this.logManager.addLog("['Handler - SendRequestTCP'] - Erreur sur l'hote. Motif : " + e.toString());
+        }catch (IOException e){
+            this.logManager.addLog("['Handler - SendRequestTCP'] - Erreur lors de la création du socket. Motif : " + e.toString());
+        }
+
+        // Association d'un flux d'entreé et de sortie
+        BufferedReader input = null; 
+        PrintWriter output = null; 
+        try{
+            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+        }catch(IOException e){
+            this.logManager.addLog("['Handler - SendRequestTCP'] - Création de la socket impossible : " +e);
+        }
+
+        // Chiffrement de la requête
+        boolean encrypt = true;
+        String messageEncrypt = ""; 
+        if(encrypt){
+            boolean retry = false; 
+            do{
+                try{
+                    messageEncrypt = this.server.encryptRequest(json.getString("receiver"), json);
+                }catch(InvalidServerException e1){
+                    if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
+                        JSONObject requestKey = this.server.sendFirstConnectionServe(json.getString("receiver"));
+                        this.server.processResponsePublicKey(sendRequestTCP(requestKey));
+                        retry = true;
+                    }else{
+                        this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+                    }
+                }
+            }while(retry);
+        }
+        
+        // Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI
+        this.logManager.addLog("['CheckEnergyMarket] - Envoie requête [ MarcheGrosServer -> AMIServer ] : Vérification de l'énergie du PONE");
+        output.println(messageEncrypt);
+
+        // Lecture de la réponse
+        String messageReceived = null;
+        try{
+            messageReceived = input.readLine();
+        }catch(IOException e){
+            this.logManager.addLog("['Handler - SendRequestTCP'] - Erreur lors de la lecture de la réponse. Motif : " + e.toString());
+        }
+        
+        // Déchiffrement de la requête
+        JSONObject response = this.server.receiveDecrypt(messageReceived); 
+        this.logManager.addLog("['Handler - SendRequestTCP'] - Réception requête de " + response.getString("sender"));
+        this.logManager.addLog("['Handler - SendRequestTCP'] - Déchiffrement requête de " + response.getString("sender"));
+
+
+        // Fermeture des flux et de la socket
+        try {
+            input.close();
+            output.close();
+            socket.close();
+        } catch(IOException e) {
+            this.logManager.addLog("['CheckEnergyMarket] - Erreur lors de la fermeture des flux et de la socket : "+e);
+        }
+
+        return response;
     }
 
     /**
@@ -188,7 +275,26 @@ public class Handler{
      * @param json
      * @param sender
      */
-    public void sendResponseTARE(DatagramPacket messageReiceived, JSONObject json, String sender){
+    public JSONObject sendResponseTARE(DatagramPacket messageReiceived, JSONObject json, String sender){
+        boolean encrypt = true;
+        String messageEncrypt = ""; 
+        if(encrypt){
+            boolean retry = false; 
+            do{
+                try{
+                    messageEncrypt = this.server.encryptRequest(json.getString("receiver"), json);
+                }catch(InvalidServerException e1){
+                    if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
+                        JSONObject request = this.server.sendFirstConnectionServe(json.getString("receiver"));
+                        this.server.processResponsePublicKey(this.sendResponseTARE(messageReiceived, request, sender));
+                        retry = true;
+                    }else{
+                        this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+                    }
+                }
+            }while(retry);
+        }
+
         DatagramSocket socket = null; 
         try{
             socket = new DatagramSocket();
@@ -207,8 +313,9 @@ public class Handler{
         }
 
         DatagramPacket messageToSend = null; 
+        JSONObject response = new JSONObject(messageEncrypt);
         try{
-            byte[] buffer = json.toString().getBytes();
+            byte[] buffer = messageEncrypt.getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, messageReiceived.getAddress(), port);
             this.logManager.addLog("Envoi réponse | MarcheGrosServer->"+sender+"(TARE) | "+json.getString("typeRequest") + " | Port : "+port);
         }catch(Exception e){
@@ -222,6 +329,8 @@ public class Handler{
         }
         
         socket.close();
+
+        return response; 
     }
     
     /**

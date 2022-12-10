@@ -40,15 +40,15 @@ public class BuyEnergyOrderHandler extends Handler{
      * Sens de la requête : TARE -> MarcheGrosServer (UDP)
      * @param messageReceived
      */
-    public void handle(DatagramPacket messageReceived){
-        JSONObject data = receiveJSON(messageReceived);
+    public void handle(DatagramPacket messageReceived, JSONObject data){
         String sender = data.getString("sender");
+        JSONObject requestSend; 
         try{
             BuyEnergyOrderRequest.check(data);
         }catch(Exception e){
             JSONObject response = invalidRequest(data.getString("sender"), data.getString("receiver"), TypeRequestEnum.BuyEnergyOrder); 
             this.logManager.addLog("['BuyEnergyOrder'] - Envoie requête | MarcheGros->TARE | Requête invalide : "+e);
-            sendResponseTARE(messageReceived, response, sender);
+            requestSend = sendResponseTARE(messageReceived, response, sender);
             return; 
         }
         BuyEnergyOrderRequest request = null; 
@@ -70,12 +70,12 @@ public class BuyEnergyOrderHandler extends Handler{
 
         if(saleIsValid){
             JSONObject responseToTARE = request.process(saleIsValid, energy);
-            sendResponseTARE(messageReceived, responseToTARE, sender);
+            requestSend = sendResponseTARE(messageReceived, responseToTARE, sender);
             this.stockManage.buyEnergy(request.getEnergy());
             this.logManager.addLog("['BuyEnergyOrder'] - Informations | MarcheGros->TARE | Commande effectué avec succès : ");
         }else{
             JSONObject responseToTARE = request.process(saleIsValid, energy);
-            sendResponseTARE(messageReceived, responseToTARE, sender);
+            requestSend = sendResponseTARE(messageReceived, responseToTARE, sender);
             this.logManager.addLog("['BuyEnergyOrder'] - Informations | MarcheGros->TARE | Commande refusé");
         }
     }

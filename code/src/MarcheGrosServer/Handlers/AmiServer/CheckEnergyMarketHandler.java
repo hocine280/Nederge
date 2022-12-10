@@ -4,7 +4,7 @@ import MarcheGrosServer.Handlers.Handler;
 import MarcheGrosServer.MarcheGrosServer;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Requests.RequestsAmi.CheckEnergyMarketRequest;
-
+import Server.InvalidServerException;
 import Server.LogManage.LogManager;
 
 import TrackingCode.Energy;
@@ -56,49 +56,10 @@ public class CheckEnergyMarketHandler extends Handler{
         CheckEnergyMarketRequest request = new CheckEnergyMarketRequest("MarcheGrosServer", "AMIServer", 
                                             new SimpleDateFormat("dd/MM/yyyy HH:mm:ss"),
                                             energy.getTrackingCode().getCodeProducer(), energy, price);
-        // Création de la socket
-        Socket socket = null; 
-        try{
-            socket = new Socket("localhost", listeningPort);
-        }catch(UnknownHostException e){
-            this.logManager.addLog("['CheckEnergyMarket'] - Erreur sur l'hôte : "+e);
-        }catch(IOException e){
-            this.logManager.addLog("['CheckEnergyMarket'] - Création de la socket impossible : "+e);
-        }
 
-        // Association d'un flux d'entreé et de sortie
-        BufferedReader input = null; 
-        PrintWriter output = null; 
-        try{
-            input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            output = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-        }catch(IOException e){
-            this.logManager.addLog("['CheckEnergyMarket'] - Création de la socket impossible : " +e);
-        }
-
-        // Envoie de la requête vérifiant que l'énergie du PONE est bien enregistrer chez l'AMI
+                                            
         JSONObject requestJSON = request.process();
-        String messageToSend = requestJSON.toString();
-        this.logManager.addLog("['CheckEnergyMarket] - Envoie requête [ MarcheGrosServer -> AMIServer ] : Vérification de l'énergie du PONE");
-        output.println(messageToSend);
-
-        // Lecture de la réponse
-        String messageReceived=null; 
-        try{
-            messageReceived = input.readLine();
-        }catch(IOException e){
-            this.logManager.addLog("['CheckEnergyMarket] - Erreur lors de la lecture de la réponse : "+e);
-        }
-        this.logManager.addLog("['CheckEnergyMarket] - Réception requête | AMIServer -> MarcheGrosServer | Réponse de l'AMI");
-
-        // Fermeture des flux et de la socket
-        try {
-            input.close();
-            output.close();
-            socket.close();
-        } catch(IOException e) {
-            this.logManager.addLog("['CheckEnergyMarket] - Erreur lors de la fermeture des flux et de la socket : "+e);
-        }
+        JSONObject messageReceived = sendRequestTCP(requestJSON); 
 
         // Traitement de la réponse 
         boolean status = AmiResponseTreatment(messageReceived);
@@ -116,9 +77,8 @@ public class CheckEnergyMarketHandler extends Handler{
      * @param response
      * @return boolean
      */
-    public boolean AmiResponseTreatment(String response){
-        JSONObject responseJSON = new JSONObject(response);
-        if(responseJSON.getBoolean("status")==true){
+    public boolean AmiResponseTreatment(JSONObject response){
+        if(response.getBoolean("status")==true){
             return true;
         }else{
             return false;

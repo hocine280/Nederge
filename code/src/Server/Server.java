@@ -123,6 +123,14 @@ public abstract class Server {
 	}
 
 	/**
+	 * Retourne la liste des serveurs dont on connait la cle publique
+	 * @return HashMap<String, PublicKey> 
+	 */
+	public HashMap<String, PublicKey> getListServerConnected(){
+		return this.listServerConnected;
+	} 
+
+	/**
 	 * Permet d'obtenir la chaine de caractere representant un serveur
 	 * 
 	 * @return La chaine de caractere representant le serveur
