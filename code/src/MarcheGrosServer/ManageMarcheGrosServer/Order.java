@@ -55,7 +55,7 @@ public class Order{
             TypeEnergyEnum.valueOf(orderJSON.getString("typeEnergy")),
             CountryEnum.valueOf(orderJSON.getString("countryOrigin")),
             ExtractModeEnum.valueOf(orderJSON.getString("extractionMode")),
-            Boolean.valueOf(orderJSON.getBoolean("greenEnergy")),
+            Boolean.valueOf(orderJSON.getBoolean("green")),
             Integer.valueOf(orderJSON.getInt("quantity")),
             Integer.valueOf(orderJSON.getInt("quantityMin")),
             Integer.valueOf(orderJSON.getInt("budget")),

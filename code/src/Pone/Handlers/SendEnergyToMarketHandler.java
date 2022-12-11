@@ -23,13 +23,19 @@ public class SendEnergyToMarketHandler {
 
 		request.put("typeRequest", TypeRequestPoneEnum.SendEnergyToMarket);
 		request.put("codeProducer", this.server.getCodeProducer());
-        request.put("energy", energy);
+        request.put("energy", energy.toJson());
 
 		JSONObject response = this.server.sendRequestMarcheGros(request, true);
 
 		// Traitement de la réponse
 		if(response.has("status") && response.getBoolean("status")){
-			this.logManager.addLog("Energie ajouté sur le marché ! Energie : " + energy.toString());
+			Energy energyReceive = null;
+			try {
+				energyReceive = Energy.fromJSON(response.getJSONObject("energy"));
+			} catch (Exception e) {
+				this.logManager.addLog("Problème pour reconstruire l'énergie reçu. Motif : " + e.toString());
+			}
+			this.logManager.addLog("Energie ajouté sur le marché ! Energie : " + (energyReceive != null ? energyReceive.toJson() : "Energie non reçu ...") );
 		}else{
 			this.logManager.addLog("L'énergie n'a pas pu être ajouté sur le marché ! Motif : " + (response.has("message") ? response.getString("message") : "Inconnu"));
 		}

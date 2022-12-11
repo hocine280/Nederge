@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import AMIServer.AMIServer;
 import AMIServer.RequestAMI.ProcessRequestAMI.CheckEnergyMarketRequest;
+import AMIServer.RequestAMI.ProcessRequestAMI.CheckSaleEnergyRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.PublicKeyRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.RegisterPoneRequest;
 import AMIServer.RequestAMI.ProcessRequestAMI.ValidationSaleRequest;
@@ -55,7 +56,7 @@ public abstract class RequestAMI extends Request{
 				break;
 
 			case CheckSaleEnergy:
-				ret = null;
+				ret = CheckSaleEnergyRequest.fromJSON(server, logManager, object);
 				break;
 		
 			default:

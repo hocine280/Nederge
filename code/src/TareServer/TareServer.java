@@ -172,6 +172,7 @@ public class TareServer extends Server{
 			do {
 				try {
 					messageEncrypt = this.encryptRequest("AMI", request);
+					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
 						this.sendPublicKeyAMI();
@@ -198,7 +199,7 @@ public class TareServer extends Server{
 			this.logManager.addLog("Lecture de la réponse impossible");
         }
 		response = this.receiveDecrypt(messageReceived);
-		this.logManager.addLog("Réception d'une requête de " + (response.has("sender") ? response.getString("sender") : "Inconnu"));
+		this.logManager.addLog("Réception d'une requête de " + (response.has("sender") ? response.getString("sender") : "Inconnu") + " Type : " + (response.has("typeRequest") ? response.getString("typeRequest") : "Inconnu"));
 
 		// Fermeture des flux et de la socket
 		try {
@@ -216,7 +217,7 @@ public class TareServer extends Server{
 	public JSONObject sendRequestMarcheGros(JSONObject request, boolean encrypt){
 		DatagramSocket socket = null; 
         try{
-            socket = new DatagramSocket(this.port);
+            socket = new DatagramSocket();
         }catch(Exception e){
             this.logManager.addLog("Erreur lors de la création du socket");
 			return null;
@@ -228,6 +229,7 @@ public class TareServer extends Server{
 			do {
 				try {
 					messageEncrypt = this.encryptRequest("Marche de gros", request);
+					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
 						this.sendPublicKeyMarcheGros();

@@ -56,8 +56,7 @@ public class TrackingCode{
 	 */
 	public static TrackingCode fromCode(String code) throws Exception{
 		String codeSplit[] = code.split("-");
-
-		return new TrackingCode(CountryEnum.fromCode(codeSplit[0]), Integer.valueOf(codeSplit[1]), TypeEnergyEnum.fromCode(codeSplit[2]), false, ExtractModeEnum.fromCode(codeSplit[4]), Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
+		return new TrackingCode(CountryEnum.fromCode(codeSplit[0]), Integer.valueOf(codeSplit[1]), TypeEnergyEnum.fromCode(codeSplit[2]), (Integer.valueOf(codeSplit[3]) == 1 ? true : false ), ExtractModeEnum.fromCode(codeSplit[4]), Integer.valueOf(codeSplit[6]), Integer.valueOf(codeSplit[7]), Integer.valueOf(codeSplit[5].substring(1)));
 	}
 
 
