@@ -20,13 +20,13 @@ public class ScenarioA extends Scenario{
 		WindowPrincipal.getInstance().createBaseServer();
 
 		PoneServerScenario pone1 = new PoneServerScenario("Pone Scenario A", 6464);
-		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone1.getName(), pone1.getPort(), 300, 450, pone1));
+		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone1.getName(), pone1.getPort(), (int)(Math.random()*500), (int)(Math.random()*500), pone1));
 		pone1.start();
 		pone1.generateEnergyScenario();
 
 		try {
 			TareServer tare1 = new TareServer("Tare Scenario A", 8010);
-			WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.TARE, tare1.getName(), tare1.getPort(), 300, 150, tare1));
+			WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.TARE, tare1.getName(), tare1.getPort(), (int)(Math.random()*500), (int)(Math.random()*500), tare1));
 			tare1.start();
 		} catch (IOException e) {
 			e.printStackTrace();

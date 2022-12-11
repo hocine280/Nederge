@@ -21,12 +21,12 @@ public class ScenarioC extends Scenario{
 		WindowPrincipal.getInstance().createBaseServer();
 
 		Pone pone1 = new Pone("Pone_1 Scenario C", 6463);
-		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone1.getName(), pone1.getPort(), 300, 450, pone1));
+		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone1.getName(), pone1.getPort(), (int)(Math.random()*500), (int)(Math.random()*500), pone1));
 		pone1.start();
 
 		try {
 			TareServer tare1 = new TareServer("Tare Scenario C", 8030);
-			WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.TARE, tare1.getName(), tare1.getPort(), 300, 150, tare1));
+			WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.TARE, tare1.getName(), tare1.getPort(), (int)(Math.random()*500), (int)(Math.random()*500), tare1));
 			tare1.start();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -40,7 +40,7 @@ public class ScenarioC extends Scenario{
 
 
 		PoneServerScenario pone2 = new PoneServerScenario("Pone_2 Scenario C", 6464);
-		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone2.getName(), pone2.getPort(), 300, 450, pone2));
+		WindowPrincipal.zoneInfos.addServerLog(WindowPrincipal.zoneMove.addServer(TypeServerIHMEnum.PONE, pone2.getName(), pone2.getPort(), (int)(Math.random()*500), (int)(Math.random()*500), pone2));
 		pone2.start();
 		pone2.generateEnergyScenario();
 	}

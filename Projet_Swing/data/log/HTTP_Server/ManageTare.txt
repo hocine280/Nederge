@@ -1,0 +1,4 @@
+=========== LOG SERVEUR HTTP_Server - ManageTare ===========
+
+[ManageTare - 11/12/2022 21:23:20] : 	Serveur démarré
+[ManageTare - 11/12/2022 21:23:20] : 	Ajout du serveur TARE : Tare Scenario C

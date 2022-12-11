@@ -1,0 +1,15 @@
+=========== LOG SERVEUR PONE_Server - Pone_1 Scenario C ===========
+
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Serveur Pone démarré sur le port 6463
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Réception d'une requête de AMI Type : PublicKeyRequest
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Ajout d'un serveur à la liste. Serveur : AMI
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Requête chiffré pour AMI
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Réception d'une requête de AMI Type : RegisterPone
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Enregistrement auprés de l'AMI réussi
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Nouvelle énergie produite : {"green":true,"quantity":54,"typeEnergy":"ELECTRICITE","price":57.992466777449415,"extractionMode":"PANNEAUSOLAIRE","countryOrigin":"FRANCE","productionYear":2022}
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Requête chiffré pour AMI
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Réception d'une requête de AMI Type : RequestValidationSellEnergy
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Energie validé pour l'ajout sur le marché ! Energie : {"price":57.992466777449415,"trackingCode":"FR-1819625263-EL-01-PA-Q54-2022-1621034569","certificateEnergy":"CV3u0g9Gwzb3ICJoLw56mLHgTTFVQIDG9V1htJzkIxnoTAsC8ZSbfU9BqICgqaPM55WqrqN3FtJcxBaUldCYdYffKqE/rdh5RivRS1dk/o3nxL/qhqi7XcW6wV0ndRQHTawptGknKElkU3O3VfVPusiypJczM/2ae5x9FmxMR9U="}
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Ajout d'un serveur à la liste. Serveur : Marche de gros
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Requête chiffré pour Marche de gros
+[Pone_1 Scenario C - 11/12/2022 21:23:20] : 	Energie ajouté sur le marché ! Energie : {"price":57.992466777449415,"trackingCode":"FR-1819625263-EL-01-PA-Q54-2022-1621034569","certificateEnergy":"CV3u0g9Gwzb3ICJoLw56mLHgTTFVQIDG9V1htJzkIxnoTAsC8ZSbfU9BqICgqaPM55WqrqN3FtJcxBaUldCYdYffKqE/rdh5RivRS1dk/o3nxL/qhqi7XcW6wV0ndRQHTawptGknKElkU3O3VfVPusiypJczM/2ae5x9FmxMR9U="}
