@@ -2,7 +2,7 @@
 /**
  * ***********************************************************************************************************
  * Traitement d'une requête permettant de récuperer le status de la commande selectionnée
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * ***********************************************************************************************************
  */

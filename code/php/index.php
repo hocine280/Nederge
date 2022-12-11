@@ -36,7 +36,6 @@
             <li class="dropdown"><a href="#"><span>Mon énergie</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="resources/views/OrderEnergyView.php">Commander une énergie</a></li>
-                <li><a href="resources/views/ConsultAvailableEnergyView.php">Consulter les énergies disponibles</a></li>
                 <li><a href="resources/views/MyOrderView.php">Mes commandes</a></li>
               </ul>
             </li>

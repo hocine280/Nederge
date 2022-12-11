@@ -3,7 +3,7 @@
 /**
  * *********************************************************************************************************
  * Traitement d'une requête permettant de connaitre la disponibilité d'une énergie au sein du marché de Gros
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * *********************************************************************************************************
  */

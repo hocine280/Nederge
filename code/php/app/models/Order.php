@@ -2,7 +2,7 @@
 /**
  * ***********************************************************************************************************
  * Model gérant une commande dans sa globalité implémentant la classe JsonSerializable
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * ***********************************************************************************************************
  */

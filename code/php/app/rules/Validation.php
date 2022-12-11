@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * ***********************************************************************************************************
+ * Classe de validation des formulaires
+ * @author HADID Hocine & CHEMIN Pierre
+ * @version 1.0
+ * ***********************************************************************************************************
+ */
+
 class Validation{
     public static function ValidationOfOrderForm():array{
         // Récupération des données du formulaire

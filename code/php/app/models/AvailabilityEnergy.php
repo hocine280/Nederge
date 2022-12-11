@@ -3,7 +3,7 @@
 /**
  * ***********************************************************************************************************
  * Model de la disponibilité d'une énergie au sein du marché de Gros implémentant la classe JsonSerializable
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * ***********************************************************************************************************
  */
