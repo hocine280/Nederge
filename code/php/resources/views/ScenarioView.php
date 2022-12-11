@@ -35,7 +35,7 @@
         <h1 class="text-center mb-5">Choisissez le scénario que vous désirez lancer</h1>
         <?php
             if(isset($_SESSION['scenarioResponse'])){
-                if($_SESSION['scenarioResponse']=="sucess"){
+                if($_SESSION['scenarioResponse']=="success"){
                     echo '
                     <div class="col-md-12 text-center mt-4 mb-3">
                         <div class="alert alert-success" role="alert" style="font-weight : bold;">
@@ -45,8 +45,8 @@
                             Informations envoyées : <br>
                             <u>Client :</u> <br>
                                 Nom : '.$_SESSION['dataScenario']['name'].'<br>
-                                Prénom : '.$_SESSION['dataScenario']['firstName'].'<br>
-                                E-mail : '.$_SESSION['dataScenario']['mail'].'<br>
+                                Prénom : '.$_SESSION['dataScenario']['surname'].'<br>
+                                E-mail : '.$_SESSION['dataScenario']['email'].'<br>
                                 Numéro de téléphone : '.$_SESSION['dataScenario']['phoneNumber'].'<br>
                                 Nom de la compagnie : '.$_SESSION['dataScenario']['companyName'].'<br>
                             <u>Energie :</u> <br>
@@ -65,6 +65,14 @@
                                     Budget : '.$_SESSION['dataScenario']['budget'].'<br>
                                     Prix maximum par unité d\'énergie : '.$_SESSION['dataScenario']['maxPriceUnitEnergy'].'<br>';
                             }
+							if(isset($_SESSION['dataOrder'])){
+								echo '
+								<br>
+								<u>Pour suivre ma commande :</u> <a href="http://localhost/Nederge/resources/views/MyOrderView.php">Suivre ma commande</a> (N\'oubliez pas votre login !!)<br>
+								Identifiant de commande ' . $_SESSION['dataOrder']['idOrderForm'] . '<br>
+								Login : ' . $_SESSION['dataOrder']['login'] . '
+								';
+							}
                         echo '</div>
                     </div>';
                     unset($_SESSION['scenarioResponse']);

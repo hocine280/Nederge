@@ -14,18 +14,18 @@ include "../../../vendor/autoload.php";
 
 $data = [
     "name" => "De la bath",
-    "firstName" => "Patrice",
-    "mail" => "patrice.delabath@gmail.com",
+    "surname" => "Patrice",
+    "email" => "patrice.delabath@gmail.com",
     "phoneNumber" => "0666692555",
     "companyName" => "OSS117", 
-    "typeEnergy" => "GAZ",
-    "countryOrigin" => null, 
-    "extractionMode" => null,
-    "green" => null,
-    "quantity" => 150,
-    "quantityMin" => null, 
-    "budget" => null,
-    "maxPriceUnitEnergy" => null
+    "typeEnergy" => "ELECTRICITE",
+    "countryOrigin" => "FRANCE", 
+    "extractionMode" => "EOLIENNE",
+    "green" => true,
+    "quantity" => 100,
+    "quantityMin" => 50, 
+    "budget" => 150,
+    "maxPriceUnitEnergy" => 20
 ]; 
 
 $dataJSON = json_encode($data);
@@ -45,10 +45,12 @@ $context = stream_context_create($options);
 
 if(($jsonReceived = @file_get_contents($url, false, $context)) !== false){
     $dataReceived = json_decode($jsonReceived, true);
-    if($dataReceived['status'] == "success"){
+	var_dump($dataReceived);
+    if($dataReceived['status'] == "true"){
         $_SESSION['scenarioResponse'] = "success"; 
         header("Location: ../../../resources/views/ScenarioView.php");
         $_SESSION['dataScenario'] = $data;
+		$_SESSION['dataOrder'] = $dataReceived;
     }else{
         $_SESSION['scenarioResponse'] = "error"; 
         header("Location: ../../../resources/views/ScenarioView.php");

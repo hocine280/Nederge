@@ -14,9 +14,10 @@ include "../../vendor/autoload.php";
 // Début d'une session
 session_start(); 
 
+include "ListServerTAREController.php";
+
 // Création de l'objet contenant les commandes
 $myOrders = new MyOrders(); 
-
 if(isset($_SESSION["listServer"])){
     foreach($_SESSION['listServer']->getListTARE() as $port=>$name){
         // Création du json à envoyer au serveur TARE

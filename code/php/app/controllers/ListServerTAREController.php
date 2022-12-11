@@ -20,7 +20,7 @@ $options = [
             'header' => 'Content-Type: application/x-www-form-urlencoded', 
         ]
 ]; 
-$url = "http://localhost:5000/list-server";
+$url = "http://localhost:4659/list-server";
 $context = stream_context_create($options);
 
 // Récupération de la réponse du serveur TARE avec gestion des erreurs
@@ -28,9 +28,9 @@ if(($jsonReceived = @file_get_contents($url, false, $context)) !== false){
     $data = json_decode($jsonReceived, true);
     $listServer = new ListTARE();
     foreach($data['servers'] as $port=>$value){
-        $listServer->addTARE($port, $value);
+		$listServer->addTARE($port, $value);
         $_SESSION['listServer'] = $listServer;
     }
 }else{
-    $_SESSION['ManageTAREOff'] = "Connexion impossible au serveur TARE";
+	$_SESSION['ManageTAREOff'] = "Connexion impossible au serveur TARE";
 }

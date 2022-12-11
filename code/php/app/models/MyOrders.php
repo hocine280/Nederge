@@ -37,7 +37,7 @@ class MyOrders{
                                 $order['client']['companyName'], $order['client']['phoneNumber']);
             $energy = new Energy($order['typeEnergy'], $order['extractionMode'], $order['green']);
             $order = new OrderReceived($client, $energy, $order['quantity'], $order['quantityMin'], $order['maxPriceUnitEnergy'],
-                                        $order['countryOrigin'], $order['budget'], $order['statusOrder'], $order['idOrderForm']);
+                                        $order['countryOrigin'], $order['budget'], $order['statusOrder'], $order['idOrder']);
             array_push($this->listOrders, $order);
         }
     }
