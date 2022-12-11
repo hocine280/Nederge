@@ -1,4 +1,4 @@
-# <p align="center"><img src="logo.png"/></p>
+# <p align="center"><img src="infra/logo.png"/></p>
 
 ## Projet - Systeme d'achat d'energie
 
