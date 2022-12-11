@@ -3,7 +3,7 @@ package Server;
 /**
  * Enumeration des types de serveur possibles
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID HOcine
  * @version 1.0
  */
 public enum TypeServerEnum {

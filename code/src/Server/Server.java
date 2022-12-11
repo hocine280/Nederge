@@ -28,7 +28,7 @@ import Server.InvalidServerException.SituationServerException;
  * @see TypeServerEnum
  * @see LogManager
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * @version 1.0
  */
 public abstract class Server {

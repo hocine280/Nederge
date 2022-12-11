@@ -5,7 +5,7 @@ import org.json.JSONObject;
 /**
  * Interface définissant les méthodes et fonctions d'une Requête
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * 
  * @since 1.0
  */

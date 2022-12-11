@@ -5,7 +5,7 @@ package Server.Request;
  * 
  * @see InvalidRequestSituationEnum
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * @version 1.0
  */
 public class InvalidRequestException extends Exception{

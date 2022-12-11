@@ -5,7 +5,7 @@ package Server.LogManage;
  * 
  * @see LogManager
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * @version 1.0
  */
 public abstract class LogHandler {

@@ -2,6 +2,9 @@ package TrackingCode;
 
 import org.json.JSONObject;
 
+/**
+ * 
+ */
 public class Energy {
 	
 	/**

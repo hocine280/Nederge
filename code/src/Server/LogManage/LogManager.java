@@ -15,7 +15,7 @@ import Server.TypeServerEnum;
  * 
  * @see Server
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * @version 1.0
  */
 public class LogManager {

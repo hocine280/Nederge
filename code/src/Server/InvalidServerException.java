@@ -3,7 +3,7 @@ package Server;
 /**
  * Exception traitant les cas d'erreur survenue sur un serveur 
  * 
- * @author Pierre CHEMIN
+ * @author Pierre CHEMIN & HADID Hocine
  * @version 1.0
  */
 public class InvalidServerException extends Exception{
