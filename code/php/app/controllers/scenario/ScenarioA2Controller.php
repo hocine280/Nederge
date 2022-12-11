@@ -1,8 +1,10 @@
 <?php
 /**
+ * *********************************************************************************************************
  * Déclenchement du scénario A2
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
+ * *********************************************************************************************************
  */
 // On démarre la session
 session_start(); 
@@ -55,19 +57,3 @@ if(($jsonReceived = @file_get_contents($url, false, $context)) !== false){
     $_SESSION['scenarioResponse'] = "error"; 
     header("Location: ../../../resources/views/ScenarioView.php");
 }
-
-/**
- * Vérification du numéro de suivi
- */
-$method = "POST";
-$options = [
-    'http'=>
-        [
-            'method' => $method,
-            'header' => 'Content-Type: application/x-www-form-urlencoded', 
-            'content' => $dataJSON
-        ]
-]; 
-
-$url = "http://localhost:8050/add-order";
-$context = stream_context_create($options);

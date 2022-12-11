@@ -3,7 +3,7 @@
 /**
  * ***********************************************************************************************************
  * Model gérant le client de la commande implémentant la classe JsonSerializable
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * ***********************************************************************************************************
  */

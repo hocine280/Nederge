@@ -4,24 +4,14 @@
  * ***********************************************************************************************************
  * Model gérant la commande reçue depuis le serveur TARE implémentant la classe JsonSerializable et 
  * qui hérite de Order
- * @author HADID Hocine
+ * @author HADID Hocine & CHEMIN Pierre
  * @version 1.0
  * ***********************************************************************************************************
  */
 class OrderReceived  extends Order implements JsonSerializable{
     private String $statusOrder; 
-    // private String $green; 
-    // private int $quantity; 
     private int $idOrderForm; 
-    // private String $typeEnergy; 
-    // private Client $client; 
-    // private String $extractionMode; 
-    // private int $quantityMin; 
-    // private String $countryOrigin; 
-    // private int $maxPriceUnitEnergy; 
-    // private int $budget; 
 
-    // public function __construct($statusOrder, $green, $quantity, $idOrderForm, $typeEnergy, $client, $extractionMode, $quantityMin, $countryOrigin, $maxPriceUnitEnergy, $budget){
     public function __construct(Client $client, Energy $energy, float $quantity, float $minQuantity, float $maxUnitPrice, 
                                 String $originCountry, float $budget, String $statusOrder, int $idOrderForm){ 
         parent::__construct($client, $energy, $quantity, $minQuantity, $maxUnitPrice, $originCountry, $budget, null); 
