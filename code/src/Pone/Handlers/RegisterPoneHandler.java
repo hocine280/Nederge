@@ -2,6 +2,7 @@ package Pone.Handlers;
 
 import org.json.JSONObject;
 
+import Config.Configuration;
 import Pone.Pone;
 import Pone.TypeRequestPoneEnum;
 import Server.LogManage.LogManager;
@@ -17,7 +18,7 @@ public class RegisterPoneHandler {
 	}
 
 	public int handle(){
-		JSONObject request = this.server.constructBaseRequest("AMI");
+		JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 
 		request.put("typeRequest", TypeRequestPoneEnum.RegisterPone);
 		request.put("nameProducer", this.server.getName());

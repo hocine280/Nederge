@@ -49,7 +49,7 @@ public class ClientUDP {
             JSONObject response = requeteTARE1();
             String message = response.toString();
             byte[] tampon = message.getBytes();
-            msg = new DatagramPacket(tampon, tampon.length, adresse, 2025);
+            msg = new DatagramPacket(tampon, tampon.length, adresse, Configuration.getPortServerMarcheGros());
             System.out.println("Message envoyer : " +message);
         } catch(UnknownHostException e) {
             System.err.println("Erreur lors de la création du message : " + e);

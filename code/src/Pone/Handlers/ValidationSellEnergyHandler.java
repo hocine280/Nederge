@@ -8,6 +8,8 @@ import TrackingCode.Energy;
 
 import org.json.JSONObject;
 
+import Config.Configuration;
+
 public class ValidationSellEnergyHandler {
     private LogManager logManager;
 	private Pone server;
@@ -19,7 +21,7 @@ public class ValidationSellEnergyHandler {
 
     public Energy handle(EnergyPone energy){
 
-		JSONObject request = this.server.constructBaseRequest("AMI");
+		JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerAMI());
        
 		request.put("typeRequest", TypeRequestPoneEnum.RequestValidationSellEnergy);
 		request.put("codeProducer", this.server.getCodeProducer());

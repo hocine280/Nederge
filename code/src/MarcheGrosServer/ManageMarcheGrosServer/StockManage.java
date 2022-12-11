@@ -5,7 +5,6 @@ import java.util.HashMap;
 import TrackingCode.Energy;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 /**
  * Classe StockManage
  * Gestion du stock d'énergie du marché de gros

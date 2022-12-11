@@ -13,8 +13,10 @@ import org.json.JSONArray;
 
 import org.json.JSONObject;
 
+import Config.Configuration;
+
 public class ListServerTARE {
-    public static int portEcoute = 2025;
+    public static int portEcoute = Configuration.getPortServerMarcheGros();
 
     public static void main(String[] args) {
         System.out.println("ServerManage démarré sur le port "+portEcoute);
@@ -62,7 +64,7 @@ public class ListServerTARE {
         //     String message = response.toString();
 
         //     byte[] tampon = message.getBytes();
-        //     msg = new DatagramPacket(tampon, tampon.length, adresse, 2025);
+        //     msg = new DatagramPacket(tampon, tampon.length, adresse, Configuration.getPortServerMarcheGros());
         //     System.out.println("Message envoyer au Marche de gros : " +message);
         // } catch(UnknownHostException e) {
         //     System.err.println("Erreur lors de la création du message : " + e);

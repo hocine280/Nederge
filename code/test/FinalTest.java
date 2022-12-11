@@ -1,6 +1,7 @@
 import java.io.IOException;
 
 import AMIServer.AMIServer;
+import Config.Configuration;
 import MarcheGrosServer.MarcheGrosServer;
 import Pone.Pone;
 import TareServer.ManageTareServer;
@@ -9,11 +10,15 @@ import TareServer.TareServer;
 public class FinalTest {
 	
 	public static void main(String[] args) {
+
+		Configuration.loadProperties();
+
+
 		Thread tAmi = new Thread(){
 			public void run() {
 				AMIServer server = null;
 				try {
-					server = new AMIServer("AMI", 6000);
+					server = new AMIServer(Configuration.getNameServerAMI(), Configuration.getPortServerAMI());
 				} catch (IOException e) {
 					e.printStackTrace();
 					System.exit(0);
@@ -33,7 +38,7 @@ public class FinalTest {
 
 		Thread tMarcheGros = new Thread(){
 			public void run() {
-				MarcheGrosServer marcheGros = new MarcheGrosServer("Marche de gros", 2025);
+				MarcheGrosServer marcheGros = new MarcheGrosServer(Configuration.getNameServerMarcheGros(), Configuration.getPortServerMarcheGros());
 				marcheGros.start();
 			};
 		};

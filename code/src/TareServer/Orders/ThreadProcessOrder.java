@@ -3,6 +3,7 @@ package TareServer.Orders;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import Config.Configuration;
 import Server.LogManage.LogManager;
 import TareServer.TareServer;
 import TrackingCode.Energy;
@@ -56,7 +57,7 @@ public class ThreadProcessOrder extends Thread{
 		while (process) {
 
 			if(this.order.getStatus().equals(StatusOrderEnum.PROCESS) || this.order.getStatus().equals(StatusOrderEnum.UNAVAILABLE)){
-				JSONObject request = this.server.constructBaseRequest("Marche de gros");
+				JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerMarcheGros());
 				request.put("typeRequest", "AskAvailabilityOrder");
 				request.put("idOrder", this.order.getId());
 				request.put("order", this.order.toJson());
@@ -80,7 +81,7 @@ public class ThreadProcessOrder extends Thread{
 			
 			if(this.order.getStatus().equals(StatusOrderEnum.WAITING_VALIDATION)){
 				for (Energy energy : this.order.getListEnergy()) {
-					JSONObject request = this.server.constructBaseRequest("AMI");
+					JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 					request.put("typeRequest", "CheckEnergyMarket");
 					request.put("energy", energy.toJson());
 					request.put("codeProducer", energy.getTrackingCode().getCodeProducer());
@@ -97,7 +98,7 @@ public class ThreadProcessOrder extends Thread{
 					boolean purchaseSuccess = true;
 					
 					for (Energy energy : this.order.getListEnergy()) {
-						JSONObject request = this.server.constructBaseRequest("Marche de gros");
+						JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerMarcheGros());
 						request.put("typeRequest", "BuyEnergyOrder");
 						request.put("idOrder", this.order.getId());
 						request.put("energy", energy.toJson());
@@ -132,7 +133,7 @@ public class ThreadProcessOrder extends Thread{
 			if(this.order.getStatus().equals(StatusOrderEnum.DELIVERY)){
 				boolean errorCertificate = false;
 				for (Energy energy : this.order.getPurchaseEnergy()) {
-					JSONObject request = this.server.constructBaseRequest("AMI");
+					JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 					request.put("typeRequest", "CheckSaleEnergy");
 					request.put("energy", energy.toJson());
 

@@ -2,10 +2,9 @@ package MarcheGrosServer.Request.Tare;
 
 import java.text.SimpleDateFormat;
 
-import javax.sound.midi.InvalidMidiDataException;
-
 import org.json.JSONObject;
 
+import Config.Configuration;
 import MarcheGrosServer.MarcheGrosServer;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Request.RequestMarcheGros;
@@ -71,9 +70,9 @@ public class BuyEnergyOrderRequest extends RequestMarcheGros{
 	public JSONObject process() {
 		JSONObject response = this.server.constructBaseRequest(this.sender);
 		response.put("typeRequest", this.typeRequest);
-		// response.put("idOrder", this.idOrder);
+		response.put("idOrder", this.idOrder);
 
-		JSONObject requestCheckEnergy = this.server.constructBaseRequest("AMI");
+		JSONObject requestCheckEnergy = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 		requestCheckEnergy.put(("typeRequest"), TypeRequestEnum.CheckEnergyMarket);
 		requestCheckEnergy.put("energy", this.energy.toJson());
 		requestCheckEnergy.put("codeProducer", this.energy.getTrackingCode().getCodeProducer());
@@ -83,7 +82,7 @@ public class BuyEnergyOrderRequest extends RequestMarcheGros{
 
 		if(responseValidationAMI.has("status") && responseValidationAMI.getBoolean("status")){
 			this.logManager.addLog("Le certificat a été validé par l'AMI. Energie : " + this.energy.toJson());
-			JSONObject requestValidationEnergy = this.server.constructBaseRequest("AMI");
+			JSONObject requestValidationEnergy = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 			requestValidationEnergy.put("typeRequest", TypeRequestEnum.ValidationSale);
 			requestValidationEnergy.put("energy", this.energy.toJson());
 			requestValidationEnergy.put("price", this.price);

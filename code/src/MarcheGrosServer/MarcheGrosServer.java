@@ -20,6 +20,7 @@ import java.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import Config.Configuration;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import Server.InvalidServerException;
 import Server.Server;
@@ -72,7 +73,7 @@ public class MarcheGrosServer extends Server{
 		// Création de la socket 
         Socket socket = null;
         try{
-            socket = new Socket("localhost", 6000);
+            socket = new Socket("localhost", Configuration.getPortServerAMI());
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur sur l'hôte");
         }catch(IOException e){
@@ -95,7 +96,7 @@ public class MarcheGrosServer extends Server{
 			boolean retry = false;
 			do {
 				try {
-					messageEncrypt = this.encryptRequest("AMI", request);
+					messageEncrypt = this.encryptRequest(Configuration.getNameServerAMI(), request);
 					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){

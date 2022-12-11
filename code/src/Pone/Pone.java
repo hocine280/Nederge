@@ -11,6 +11,7 @@ import java.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import Config.Configuration;
 import Pone.Energy.EnergyManage;
 import Pone.Energy.EnergyPone;
 import Pone.Handlers.RegisterPoneHandler;
@@ -64,13 +65,13 @@ public class Pone extends Server{
     }
 
 	public void sendPublicKeyAMI(){
-		JSONObject request = this.sendFirstConnectionServe("AMI");
+		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerAMI());
 
 		this.processResponsePublicKey(this.sendRequestAMI(request, false));
 	}
 
 	public void sendPublicKeyMarcheGros(){
-		JSONObject request = this.sendFirstConnectionServe("Marche de gros");
+		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerMarcheGros());
 
 		this.processResponsePublicKey(this.sendRequestMarcheGros(request, false));
 	}
@@ -101,7 +102,7 @@ public class Pone extends Server{
 		// Création de la socket 
         Socket socket = null;
         try{
-            socket = new Socket("localhost", 6000);
+            socket = new Socket("localhost", Configuration.getPortServerAMI());
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur sur l'hôte");
         }catch(IOException e){
@@ -124,7 +125,7 @@ public class Pone extends Server{
 			boolean retry = false;
 			do {
 				try {
-					messageEncrypt = this.encryptRequest("AMI", request);
+					messageEncrypt = this.encryptRequest(Configuration.getNameServerAMI(), request);
 					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
@@ -180,7 +181,7 @@ public class Pone extends Server{
 			boolean retry = false;
 			do {
 				try {
-					messageEncrypt = this.encryptRequest("Marche de gros", request);
+					messageEncrypt = this.encryptRequest(Configuration.getNameServerMarcheGros(), request);
 					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
@@ -200,7 +201,7 @@ public class Pone extends Server{
         try{
             InetAddress address = InetAddress.getByName(null);
             byte[] buffer = messageEncrypt.getBytes();
-            messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
+            messageToSend = new DatagramPacket(buffer, buffer.length, address ,Configuration.getPortServerMarcheGros());
 			socket.send(messageToSend);
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur lors de la création du message");

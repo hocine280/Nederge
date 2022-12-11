@@ -2,6 +2,7 @@ package TareServer;
 
 import com.sun.net.httpserver.HttpServer;
 
+import Config.Configuration;
 import Server.Server;
 import Server.TypeServerEnum;
 import TareServer.Handlers.ManageTareServer.AddTareHandler;
@@ -31,7 +32,7 @@ public class ManageTareServer extends Server{
 	private HttpServer server;
 
 	public ManageTareServer() throws IOException{
-		super("Server TARE manager", 5000, TypeServerEnum.HTTP_Server);
+		super(Configuration.getNameServerManageTare(), Configuration.getPortServerManageTare(), TypeServerEnum.HTTP_Server);
 		this.listServer = new Hashtable<Integer, String>();
 		this.server = HttpServer.create(new InetSocketAddress(port), 0);
 	}

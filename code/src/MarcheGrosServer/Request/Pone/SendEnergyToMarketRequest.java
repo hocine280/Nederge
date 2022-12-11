@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import org.json.JSONObject;
 
+import Config.Configuration;
 import MarcheGrosServer.MarcheGrosServer;
 import MarcheGrosServer.ManageMarcheGrosServer.StockManage;
 import MarcheGrosServer.Request.RequestMarcheGros;
@@ -62,7 +63,7 @@ public class SendEnergyToMarketRequest extends RequestMarcheGros{
 	public JSONObject process() {
 		JSONObject response = this.server.constructBaseRequest(this.sender);
 
-		JSONObject requestCheckEnergy = this.server.constructBaseRequest("AMI");
+		JSONObject requestCheckEnergy = this.server.constructBaseRequest(Configuration.getNameServerAMI());
 		requestCheckEnergy.put(("typeRequest"), TypeRequestEnum.CheckEnergyMarket);
 		requestCheckEnergy.put("energy", this.energy.toJson());
 		requestCheckEnergy.put("codeProducer", this.codeProducer);

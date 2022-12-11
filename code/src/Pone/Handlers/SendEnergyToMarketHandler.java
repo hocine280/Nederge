@@ -2,6 +2,7 @@ package Pone.Handlers;
 
 import org.json.JSONObject;
 
+import Config.Configuration;
 import Pone.Pone;
 import Pone.TypeRequestPoneEnum;
 import Server.LogManage.LogManager;
@@ -19,7 +20,7 @@ public class SendEnergyToMarketHandler {
 
     public void handle(Energy energy){
 		
-		JSONObject request = this.server.constructBaseRequest("Marche de gros");
+		JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerMarcheGros());
 
 		request.put("typeRequest", TypeRequestPoneEnum.SendEnergyToMarket);
 		request.put("codeProducer", this.server.getCodeProducer());

@@ -2,6 +2,7 @@ package TareServer;
 
 import com.sun.net.httpserver.HttpServer;
 
+import Config.Configuration;
 import Server.Server;
 import Server.TypeServerEnum;
 import Server.InvalidServerException;
@@ -81,7 +82,7 @@ public class TareServer extends Server{
 	private void registerToManageTare(){
 		URL url = null;
 		try {
-			url = new URL("http://localhost:5000/add-tare");
+			url = new URL("http://localhost:" + Configuration.getPortServerManageTare() +"/add-tare");
 		} catch (MalformedURLException e) {
 			this.logManager.addLog("Problème dans l'URL de la requête. Motif : " + e.toString());
 			return;
@@ -144,7 +145,7 @@ public class TareServer extends Server{
 	 @since 1.0
 	 */
 	public void sendPublicKeyAMI(){
-		JSONObject request = this.sendFirstConnectionServe("AMI");
+		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerAMI());
 
 		this.processResponsePublicKey(this.sendRequestAMI(request, false));
 	}
@@ -155,7 +156,7 @@ public class TareServer extends Server{
 	 * @since 1.0
 	 */
 	public void sendPublicKeyMarcheGros(){
-		JSONObject request = this.sendFirstConnectionServe("Marche de gros");
+		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerMarcheGros());
 
 		this.processResponsePublicKey(this.sendRequestMarcheGros(request, false));
 	}
@@ -193,7 +194,7 @@ public class TareServer extends Server{
 		// Création de la socket 
         Socket socket = null;
         try{
-            socket = new Socket("localhost", 6000);
+            socket = new Socket("localhost", Configuration.getPortServerAMI());
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur sur l'hôte");
         }catch(IOException e){
@@ -216,7 +217,7 @@ public class TareServer extends Server{
 			boolean retry = false;
 			do {
 				try {
-					messageEncrypt = this.encryptRequest("AMI", request);
+					messageEncrypt = this.encryptRequest(Configuration.getNameServerAMI(), request);
 					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
@@ -282,7 +283,7 @@ public class TareServer extends Server{
 			boolean retry = false;
 			do {
 				try {
-					messageEncrypt = this.encryptRequest("Marche de gros", request);
+					messageEncrypt = this.encryptRequest(Configuration.getNameServerMarcheGros(), request);
 					retry = false;
 				} catch (InvalidServerException e1) {
 					if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow) && !retry){
@@ -303,7 +304,7 @@ public class TareServer extends Server{
         try{
             InetAddress address = InetAddress.getByName(null);
             byte[] buffer = messageEncrypt.getBytes();
-            messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
+            messageToSend = new DatagramPacket(buffer, buffer.length, address ,Configuration.getPortServerMarcheGros());
 			socket.send(messageToSend);
 			this.logManager.addLog("Envoie d'une requête à l'AMI. Type : " + (request.has("typeRequest") ? request.getString("typeRequest") : "Inconnu"));
         }catch(UnknownHostException e){
