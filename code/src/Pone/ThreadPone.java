@@ -7,16 +7,31 @@ import TrackingCode.Energy;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 
+/**
+ * Classe representant le thread de production d'energie
+ * @author HADID Hocine & CHEMIN Pierre
+ * @version 1.0
+ * @extends Thread
+ */
 public class ThreadPone extends Thread{
 	
 	private Pone server;
 	private LogManager logManager;
 
+	/**
+	 * Constructeur par initialisation de la classe ThreadPone
+	 * @param server
+	 * @param logManager
+	 */
 	public ThreadPone(Pone server, LogManager logManager){
 		this.server = server;
 		this.logManager = logManager;
 	}
 
+	/**
+	 * Permet de lancer le thread de production d'energie
+	 * @return
+	 */
 	private EnergyPone generateEnergy(){
 		EnergyPone energy;
 
@@ -50,14 +65,35 @@ public class ThreadPone extends Thread{
 		return energy;
 	}
 
+	/**
+	 * Permet de créer une energie de type petrole
+	 * @param quantity
+	 * @param countryOrigin
+	 * @param price
+	 * @return
+	 */
 	private EnergyPone generateEnergyPetrole(int quantity, CountryEnum countryOrigin, double price){
 		return new EnergyPone(TypeEnergyEnum.PETROLE, ExtractModeEnum.FORAGE, quantity, false, countryOrigin, price, 2022);
 	}
 
+	/**
+	 * Permet de créer une energie de type gaz
+	 * @param quantity
+	 * @param countryOrigin
+	 * @param price
+	 * @return
+	 */
 	private EnergyPone generateEnergyGaz(int quantity, CountryEnum countryOrigin, double price){
 		return new EnergyPone(TypeEnergyEnum.GAZ, ExtractModeEnum.FORAGE, quantity, false, countryOrigin, price, 2022);
 	}
 
+	/**
+	 * Permet de créer une energie de type electricite
+	 * @param quantity
+	 * @param countryOrigin
+	 * @param price
+	 * @return
+	 */
 	private EnergyPone generateEnergyElectricite(int quantity, CountryEnum countryOrigin, double price){
 		ExtractModeEnum extractMode;
 		int extractModeRandom = (int) (Math.random()*5);
@@ -90,6 +126,13 @@ public class ThreadPone extends Thread{
 		return new EnergyPone(TypeEnergyEnum.ELECTRICITE, extractMode, quantity, !extractMode.equals(ExtractModeEnum.CENTRALCHARBON), countryOrigin, price, 2022);
 	}
 
+	/**
+	 * Permet de créer une energie de type charbon
+	 * @param quantity
+	 * @param countryOrigin
+	 * @param price
+	 * @return
+	 */
 	private EnergyPone generateEnergyCharbon(int quantity, CountryEnum countryOrigin, double price){
 		ExtractModeEnum extractMode;
 		int extractModeRandom = (int) (Math.random() * 2);
@@ -109,6 +152,9 @@ public class ThreadPone extends Thread{
 		return new EnergyPone(TypeEnergyEnum.CHARBON, extractMode, quantity, false, countryOrigin, price, 2022);
 	}
 
+	/**
+	 * Permet de lancer le thread de production d'energie
+	 */
 	@Override
 	public void run() {
 		while (true) {

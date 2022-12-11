@@ -10,15 +10,30 @@ import org.json.JSONObject;
 
 import Config.Configuration;
 
+/**
+ * 	* Classe representant le handler de validation de vente d'energie auprés de l'AMI
+ * 	* @author HADID Hocine & CHEMIN Pierre
+ * 	* @version 1.0
+ */
 public class ValidationSellEnergyHandler {
     private LogManager logManager;
 	private Pone server;
 
+	/**
+	 * Constructeur par initialisation de la classe ValidationSellEnergyHandler
+	 * @param server
+	 * @param logManager
+	 */
     public ValidationSellEnergyHandler(Pone server, LogManager logManager){
 		this.server = server;
         this.logManager = logManager;
     }
 
+	/**
+	 * Permet d'envoyer une requete de validation de vente d'energie auprés de l'AMI
+	 * @param energy
+	 * @return Energy
+	 */
     public Energy handle(EnergyPone energy){
 
 		JSONObject request = this.server.constructBaseRequest(Configuration.getNameServerAMI());
