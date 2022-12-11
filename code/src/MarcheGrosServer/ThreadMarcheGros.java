@@ -29,7 +29,8 @@ public class ThreadMarcheGros extends Thread{
 	
 	@Override
 	public void run() {
-		while (true) {
+		boolean close = false;
+		while (!close) {
 			
 			byte[] buffer = new byte[2048];        
 			DatagramPacket messageReceived = new DatagramPacket(buffer, buffer.length);
@@ -40,6 +41,7 @@ public class ThreadMarcheGros extends Thread{
 				messageReceive = new String(messageReceived.getData(), 0, messageReceived.getLength());
 			}catch(Exception e){
 				this.logManager.addLog("['MarcheGrosServer'] - Erreur lors de la réception du message : " + e);
+				close = true;
 			}
 	
 			boolean encrypt = false;
@@ -51,41 +53,43 @@ public class ThreadMarcheGros extends Thread{
 				encrypt = true;
 			}
 			
-			try {
-				RequestMarcheGros request = RequestMarcheGros.fromJSON(this.server, this.logManager, requestJson, this.stockManage);
-				this.logManager.addLog("Réception d'une requête envoyé par " + request.getSender() + " Type : " + request.getTypeRequest());
-	
-				JSONObject response;
-				if(encrypt || request.getTypeRequest().equals(TypeRequestEnum.PublicKeyRequest)){
-					response = request.process();
-				}else{
-					response = this.server.constructBaseRequest(request.getSender());
-					response.put("status", false);
-					response.put("error", "La requête n'est pas chiffré");
-				}
-				
-				String messageEncrypt = "";
-				boolean retry = false; 
-				do{
-					try{
-						messageEncrypt = this.server.encryptRequest(response.getString("receiver"), response);
-						retry = false;
-					}catch(InvalidServerException e1){
-						if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
-							JSONObject requestFirstConnection = this.server.sendFirstConnectionServe(response.getString("receiver"));
-							this.server.sendResponse(messageReceived, requestFirstConnection.toString());
-							retry = true;
-						}else{
-							this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
-							return;
-						}
+			if(requestJson != null){
+				try {
+					RequestMarcheGros request = RequestMarcheGros.fromJSON(this.server, this.logManager, requestJson, this.stockManage);
+					this.logManager.addLog("Réception d'une requête envoyé par " + request.getSender() + " Type : " + request.getTypeRequest());
+		
+					JSONObject response;
+					if(encrypt || request.getTypeRequest().equals(TypeRequestEnum.PublicKeyRequest)){
+						response = request.process();
+					}else{
+						response = this.server.constructBaseRequest(request.getSender());
+						response.put("status", false);
+						response.put("error", "La requête n'est pas chiffré");
 					}
-				}while(retry);
-	
-				this.server.sendResponse(messageReceived, messageEncrypt);
-	
-			} catch (InvalidRequestException e) {
-				this.logManager.addLog("Requête invalide. Motif : " + e.toString());
+					
+					String messageEncrypt = "";
+					boolean retry = false; 
+					do{
+						try{
+							messageEncrypt = this.server.encryptRequest(response.getString("receiver"), response);
+							retry = false;
+						}catch(InvalidServerException e1){
+							if(e1.getSituation().equals(InvalidServerException.SituationServerException.ServerUnknow)){
+								JSONObject requestFirstConnection = this.server.sendFirstConnectionServe(response.getString("receiver"));
+								this.server.sendResponse(messageReceived, requestFirstConnection.toString());
+								retry = true;
+							}else{
+								this.logManager.addLog("Une erreur est survenue lors du chiffrement du message a envoyé. Motif : " + e1.toString());
+								return;
+							}
+						}
+					}while(retry);
+		
+					this.server.sendResponse(messageReceived, messageEncrypt);
+		
+				} catch (InvalidRequestException e) {
+					this.logManager.addLog("Requête invalide. Motif : " + e.toString());
+				}
 			}
 		}
 	}

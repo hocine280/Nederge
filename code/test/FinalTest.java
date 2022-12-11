@@ -52,7 +52,13 @@ public class FinalTest {
 		System.out.println("Pone 1 lancé !");
 
 
-		ManageTareServer.manageTareServer().start();
+		try {
+			ManageTareServer manageTareServer = new ManageTareServer();
+			manageTareServer.start();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+			System.exit(0);
+		}
 		System.out.println("Serveur manage Tare lancé !");
 		try {
 			Thread.sleep(2000);

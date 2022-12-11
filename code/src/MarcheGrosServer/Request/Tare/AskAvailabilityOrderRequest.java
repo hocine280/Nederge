@@ -69,7 +69,7 @@ public class AskAvailabilityOrderRequest extends RequestMarcheGros{
 			response.put("status", true);
 			response.put("listEnergy", listEnergy);
         }
-
+		
 		return response;
 	}
 	

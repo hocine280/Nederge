@@ -35,9 +35,9 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class Pone extends Server{
     
-    private int codeProducer; 
+    protected int codeProducer; 
+	protected ThreadPone processProduction;
 	private EnergyManage energyManage;
-	private ThreadPone processProduction;
 
     public Pone(String name, int port){
         super(name, port, TypeServerEnum.PONE_Server);
@@ -240,7 +240,9 @@ public class Pone extends Server{
     }
     
     public void shutdown(){
-		this.processProduction.interrupt();
+		if(this.processProduction != null){
+			this.processProduction.interrupt();
+		}
 		this.logManager.addLog("Serveur éteint");
     }
 }

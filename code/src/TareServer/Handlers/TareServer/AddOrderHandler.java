@@ -27,7 +27,7 @@ public class AddOrderHandler extends Handler{
 		JSONObject response = new JSONObject();
 
 		JSONObject data = receiveJSON(exchange);
-
+		this.logManager.addLog("Nouvelle demande de commande reçu");
 		if(data == null){
 			response.put("status", false);
 			response.put("message", "Aucune donnée à traiter ...");

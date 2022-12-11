@@ -74,7 +74,7 @@ public class StockManage{
 			if(order.getQuantityMin() > energy.getTrackingCode().getQuantity()){
 				isAvailable = false;   
 			}
-			if(order.getBudget() > energy.getPrice()){
+			if(order.getBudget() < energy.getPrice()){
 				isAvailable = false;
 			}
 			if(isAvailable == true){

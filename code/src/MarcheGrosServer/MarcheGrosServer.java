@@ -34,6 +34,11 @@ public class MarcheGrosServer extends Server{
 	public MarcheGrosServer(String name, int port) {
 		super(name, port, TypeServerEnum.UDP_Server);
 		
+		try {
+			this.socket = new DatagramSocket(this.port);
+		} catch (SocketException e) {
+			this.logManager.addLog("Erreur lors de la création de la socket. Motif : " + e.toString());
+		}
 		this.stockManage = new StockManage();
 	}
 
@@ -152,13 +157,7 @@ public class MarcheGrosServer extends Server{
 	}
 
 	@Override
-	public void start() {
-		try {
-			this.socket = new DatagramSocket(this.port);
-		} catch (SocketException e) {
-			this.logManager.addLog("Erreur lors de la création de la socket. Motif : " + e.toString());
-		}
-		
+	public void start() {		
 		this.process = new ThreadMarcheGros(this, this.logManager, this.socket, this.stockManage);
 		this.process.start();
 		this.logManager.addLog("Serveur allumé !");

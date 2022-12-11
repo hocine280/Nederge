@@ -12,29 +12,15 @@ import java.net.InetSocketAddress;
 import java.util.Hashtable;
 
 public class ManageTareServer extends Server{
-	
-	private static ManageTareServer manageTareServer = null;
 	private static int port = 5000;
 
 	private Hashtable<Integer, String> listServer;
 	private HttpServer server;
 
-	private ManageTareServer() throws IOException{
+	public ManageTareServer() throws IOException{
 		super("Server TARE manager", port, TypeServerEnum.HTTP_Server);
 		this.listServer = new Hashtable<Integer, String>();
 		this.server = HttpServer.create(new InetSocketAddress(port), 0);
-	}
-
-	public static ManageTareServer manageTareServer(){
-		if(manageTareServer == null){
-			try {
-				manageTareServer = new ManageTareServer();
-			} catch (IOException e) {
-				System.err.println("Impossible de créer le serveur de gestion de serveur de Tare ! " + e);
-			}
-		}
-
-		return manageTareServer;
 	}
 
 	@Override
@@ -60,7 +46,4 @@ public class ManageTareServer extends Server{
 		this.server.stop(0);
 		this.logManager.addLog("Serveur éteint");
 	}
-
-	
-
 }
