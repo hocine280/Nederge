@@ -34,25 +34,45 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Classe representant le Pone
+ * @author HADID Hocine & CHEMIN Pierre
+ * @version 1.0
+ * @extends Server
+ */
 public class Pone extends Server{
     
     protected int codeProducer; 
 	protected ThreadPone processProduction;
 	private EnergyManage energyManage;
 
+	/**
+	 * Constructeur par initilisation de la classe Pone
+	 */
     public Pone(String name, int port){
         super(name, port, TypeServerEnum.PONE_Server);
 		this.energyManage = new EnergyManage();
     }
 
+	/**
+	 * Permet de recuperer le code du producteur
+	 * @return
+	 */
 	public int getCodeProducer() {
 		return codeProducer;
 	}
 
+	/**
+	 * Permet de recuperer la gestion de l'energie
+	 * @return
+	 */
 	public EnergyManage getEnergyManage() {
 		return energyManage;
 	}
 
+	/**
+	 * Permet de lancer le Pone 
+	 */
     public void start(){
 		logManager.addLog("Serveur Pone démarré sur le port " + this.port);
 
@@ -64,18 +84,28 @@ public class Pone extends Server{
 		this.processProduction.start();
     }
 
+	/**
+	 * Permet d'envoyer la clé publique au serveur AMI
+	 */
 	public void sendPublicKeyAMI(){
 		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerAMI());
 
 		this.processResponsePublicKey(this.sendRequestAMI(request, false));
 	}
 
+	/**
+	 * Permet d'envoyer la clé publique au serveur MarcheGros
+	 */
 	public void sendPublicKeyMarcheGros(){
 		JSONObject request = this.sendFirstConnectionServe(Configuration.getNameServerMarcheGros());
 
 		this.processResponsePublicKey(this.sendRequestMarcheGros(request, false));
 	}
 
+	/**
+	 * Traiter la réponse lors de l'échange de clé publique
+	 * @param response
+	 */
 	private void processResponsePublicKey(JSONObject response){
 		if(response.has("status") && response.getBoolean("status") && response.has("publicKeySender") && response.has("sender")){
 			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(response.getString("publicKeySender")));
@@ -167,6 +197,12 @@ public class Pone extends Server{
 		return response;
 	}
 
+	/**
+	 * Permet d'envoyer une requete a MarcheGros de maniere chiffre ou non et retourne la reponse de MarcheGros
+	 * @param request
+	 * @param encrypt
+	 * @return
+	 */
 	public JSONObject sendRequestMarcheGros(JSONObject request, boolean encrypt){
 		DatagramSocket socket = null; 
         try{
@@ -230,16 +266,28 @@ public class Pone extends Server{
 		return response;
 	}
 
+	/**
+	 * Envoie la requete de validation de vente d'energie à l'AMI
+	 * @param energyPone
+	 * @return
+	 */
     public Energy sendValidationSellEnergy(EnergyPone energyPone){
         ValidationSellEnergyHandler validationSellEnergyHandler = new ValidationSellEnergyHandler(this, this.logManager);
         return validationSellEnergyHandler.handle(energyPone);
     }
 
+	/**
+	 * Envoie la requete qui envoie l'energie au marché de gros 
+	 * @param energy
+	 */
     public void sendEnergyToMarket(Energy energy){
         SendEnergyToMarketHandler sendEnergyToMarketHandler = new SendEnergyToMarketHandler(this, this.logManager);
         sendEnergyToMarketHandler.handle(energy);
     }
     
+	/**
+	 * Permet d'eteindre le serveur Pone
+	 */
     public void shutdown(){
 		if(this.processProduction != null){
 			this.processProduction.interrupt();
