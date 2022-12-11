@@ -1,8 +1,11 @@
 package MarcheGrosServer.ManageMarcheGrosServer; 
 
 import java.util.HashMap;
+import java.util.Vector;
+
 import TrackingCode.Energy;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -13,13 +16,13 @@ import org.json.JSONObject;
  */
 public class ListEnergy{
     // Liste des énergies enregistrées sous le format suivant : <idEnergy, <Energy, priceOrder>>
-    private HashMap<Integer,HashMap<Energy, Double>> listEnergy;
+    private Vector<Energy> listEnergy;
 
     /**
      * Constructeur par défaut de la classe ListEnergy
      */
     public ListEnergy(){
-        listEnergy = new HashMap<Integer, HashMap<Energy, Double>>();
+        listEnergy = new Vector<Energy>();
     }
 
     /**
@@ -27,23 +30,18 @@ public class ListEnergy{
      * @param energy
      */
     public void addEnergy(Energy energy){
-        listEnergy.put(energy.getTrackingCode().getUniqueIdentifier(), new HashMap<Energy, Double>());
-        listEnergy.get(energy.getTrackingCode().getUniqueIdentifier()).put(energy, energy.getPrice());    
+		listEnergy.add(energy);
     }
 
     /**
      * Génére un JSONObject à partir de la liste des énergies
      * @return JSONObject
      */
-    public JSONObject toJSON(){
-        JSONObject json = new JSONObject();
-        for(Integer key : listEnergy.keySet()){
-            for(Energy energy : listEnergy.get(key).keySet()){
-                json.put("energy", energy.toJson());
-                json.put("idEnergy", energy.getTrackingCode().getUniqueIdentifier());
-                json.put("priceOrder", energy.getPrice());
-            }
-        }
+    public JSONArray toJSON(){
+        JSONArray json = new JSONArray();
+		for (Energy energy : listEnergy) {
+			json.put(energy.toJson());
+		}
         return json;
     }
 }

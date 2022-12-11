@@ -63,7 +63,7 @@ public class ThreadConnectionAMI extends Thread{
 
 				try {
 					RequestAMI request = RequestAMI.fromJSON(this.server, this.logManager, requestJson);
-					this.logManager.addLog("Réception d'une requête envoyé par " + request.getSender());
+					this.logManager.addLog("Réception d'une requête envoyé par " + request.getSender() + " Type : " + request.getTypeRequest());
 					JSONObject response;
 					String send;
 					if(encrypt || request.getTypeRequest().equals(TypeRequestAMI.PublicKeyRequest)){
@@ -93,8 +93,6 @@ public class ThreadConnectionAMI extends Thread{
 		} catch (Exception e) {
 			this.logManager.addLog("Erreur lors de la fermeture des flux d'un client ! Motif : " + e.toString());
 		}
-
-		this.logManager.addLog("Déconnexion d'un client");
 	}
 
 }

@@ -33,7 +33,7 @@ public class ValidationSellEnergyHandler {
 			try {
 				energyValidate = Energy.fromJSON(response.getJSONObject("energy"));
 				this.server.getEnergyManage().addEnergy(energyValidate);
-				this.logManager.addLog("Energie validé pour l'ajout sur le marché !");
+				this.logManager.addLog("Energie validé pour l'ajout sur le marché ! Energie : " + energyValidate.toJson());
 			} catch (Exception e) {
 				this.logManager.addLog("Une erreur est survenue lors de la construction de l'énergie reçu. Motif : " + e.toString());
 			}

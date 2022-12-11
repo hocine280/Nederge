@@ -122,7 +122,7 @@ public class ThreadPone extends Thread{
 			}
 
 			try {
-				Thread.sleep((int)(Math.random()*3000 + 2000));
+				Thread.sleep((int)(Math.random()*20000 + 10000));
 			} catch (InterruptedException e) {
 				System.err.println("Impossible de simuler une attente");
 				e.printStackTrace();

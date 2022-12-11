@@ -157,7 +157,7 @@ public abstract class Server {
 			return;
 		}
 
-		generator.initialize(2048);
+		generator.initialize(1024);
 		KeyPair keyPair = generator.generateKeyPair();
 
 		this.publicKey = keyPair.getPublic();
@@ -263,15 +263,14 @@ public abstract class Server {
 			int offset = 0;
 			while (offset < requestEncrypt.length) {
 				int length = requestEncrypt.length - offset;
-				result.write(crypt.doFinal(requestEncrypt, offset, length > 256 ? 256 : length));
-				offset += 256;
+				result.write(crypt.doFinal(requestEncrypt, offset, length > 128 ? 128 : length));
+				offset += 128;
 			}
 
 			ret = new JSONObject(new String(result.toByteArray()));
 		} catch (Exception e) {
 			this.logManager.addLog("Problème à la réception d'une requête : " + e.toString());
 		}
-
 		return ret;
 	}
 
@@ -291,7 +290,7 @@ public abstract class Server {
 		}
 
 		String requestEncrypt = "";
-
+		
 		try {
 			Cipher crypt = Cipher.getInstance("RSA");
 			crypt.init(Cipher.ENCRYPT_MODE, this.listServerConnected.get(nameReceiver));
@@ -301,9 +300,9 @@ public abstract class Server {
 			int offset = 0;
 			while (offset < requestToEncrypt.length) {
 				int length = requestToEncrypt.length - offset;
-				result.write(crypt.doFinal(requestToEncrypt, offset, length > 245 ? 245 : length));
+				result.write(crypt.doFinal(requestToEncrypt, offset, length > 117 ? 117 : length));
 				
-				offset += 245;
+				offset += 117;
 			}
 			
 			requestEncrypt = Base64.getEncoder().encodeToString(result.toByteArray());

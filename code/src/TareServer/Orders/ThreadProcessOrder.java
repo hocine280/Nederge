@@ -51,16 +51,17 @@ public class ThreadProcessOrder extends Thread{
 				for (Energy energy : this.order.getListEnergy()) {
 					JSONObject request = this.server.constructBaseRequest("AMI");
 					request.put("typeRequest", "CheckEnergyMarket");
-					request.put("energy", energy);
+					request.put("energy", energy.toJson());
 					request.put("codeProducer", energy.getTrackingCode().getCodeProducer());
 
 					JSONObject response = this.server.sendRequestAMI(request, true);
 					if(response.has("status") && !response.getBoolean("status")){
-						this.logManager.addLog("Le certificat d'une éneegie n'est pas valide. Message : " + (response.has("message") ? response.getString("message") : "Inconnu"));
+						this.logManager.addLog("Le certificat d'une énergie n'est pas valide. Message : " + (response.has("message") ? response.getString("message") : "Inconnu"));
 						this.order.getListEnergy().remove(energy);
 						this.order.setStatus(StatusOrderEnum.UNAVAILABLE);
 					}
 				}
+				
 				if(this.order.getStatus().equals(StatusOrderEnum.WAITING_VALIDATION)){
 					boolean purchaseSuccess = true;
 					for (Energy energy : this.order.getListEnergy()) {
@@ -112,6 +113,7 @@ public class ThreadProcessOrder extends Thread{
 				if(errorCertificate){
 					this.order.setStatus(StatusOrderEnum.UNAVAILABLE);
 				}else{
+					this.logManager.addLog("Le certificat de vente et de l'énergie est validé ! Energie livré. Commande envoté : " + this.order.toJsonWithEnergy());
 					this.order.setStatus(StatusOrderEnum.DELIVERED);
 					process = false;
 				}

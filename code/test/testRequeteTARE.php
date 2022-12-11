@@ -27,7 +27,7 @@ switch ($argv[1]) {
 			"green" => true,
 			"quantity" => 500,
 			"quantityMin" => 250,
-			"budget" => 5000,
+			"budget" => 500,
 			"maxPriceUnitEnergy" => 250
 		];
 		break;
@@ -91,7 +91,7 @@ $options = [
 
 // Envoi de la requête et lecture du JSON reçu
 // Remplacez l'URL par l'adresse locale vers generateur.php
-$URL = "http://localhost:8080/" . $argv[1];
+$URL = "http://localhost:5110/" . $argv[1];
 $contexte  = stream_context_create($options);
 
 if(($jsonTexte = @file_get_contents($URL, false, $contexte)) !== false) {

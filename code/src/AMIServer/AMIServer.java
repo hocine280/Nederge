@@ -210,7 +210,6 @@ public class AMIServer extends Server{
 				socketClient = this.serverSocket.accept();
 				ThreadConnectionAMI connection = new ThreadConnectionAMI(socketClient, this, this.logManager);
 				connection.start();
-				this.logManager.addLog("Un client vient de se connecter au serveur !");
 			} catch (IOException e) {
 				this.logManager.addLog("Erreur lors de la connexion d'un client ! Motif : " + e.toString());
 			}
