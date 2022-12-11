@@ -15,47 +15,37 @@ import com.sun.net.httpserver.HttpHandler;
 
 import Server.LogManage.LogManager;
 
-
+/**
+ * Permet de gérer les handler d'un serveur HTTP
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ * @version 1.0
+ */
 public abstract class Handler implements HttpHandler{
 
+	/**
+	 * Le LogManager associé au serveur dont appartient le handler
+	 * @since 1.0
+	 */
 	protected LogManager logManager;
 
+	/**
+	 * Construis un handler
+	 * @param logManager Le LogManager associé au serveur dont appartient le handler
+	 * 
+	 * @since 1.0
+	 */
 	public Handler(LogManager logManager){
 		this.logManager = logManager;
 	}
 
-	public HashMap<String, String> receivePost(HttpExchange exchange){
-		
-		HashMap<String, String> data = new HashMap<String, String>();
-
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(exchange.getRequestBody(),"utf-8"));
-        } catch(UnsupportedEncodingException e) {
-            System.err.println("Erreur lors de la récupération du flux " + e);
-			return data;
-        }
-	
-		String post = null;
-        // Récupération des données en POST
-        try {
-            post = br.readLine();
-        } catch(IOException e) {
-            System.err.println("Erreur lors de la lecture d'une ligne " + e);
-			return data;
-        }
-
-		String[] postTable = post.split("&");
-
-		for (String string : postTable) {
-			String[] keyValue = string.split("=");
-
-			data.put(keyValue[0], keyValue[1]);
-		}
-
-		return data;
-	}
-
+	/**
+	 * Permet de traiter lorsque le serveur HTTP reçoit une requête au format JSON en POST
+	 * @param exchange L'échange possédant une requête au format JSON en POST
+	 * @return La requête au format JSON reçu
+	 * 
+	 * @since 1.0
+	 */
 	public JSONObject receiveJSON(HttpExchange exchange){
 		JSONObject data = null;
 
@@ -81,6 +71,13 @@ public abstract class Handler implements HttpHandler{
 		return data;
 	}
 
+	/**
+	 * Permet d'envoyer une réponse à une requête HTTP reçu
+	 * @param exchange L'échange HTTP auquel il faut répondre
+	 * @param response La réponse à envoyer
+	 * 
+	 * @since 1.0
+	 */
 	public void sendResponse(HttpExchange exchange, JSONObject response){
         try {
             Headers h = exchange.getResponseHeaders();
@@ -101,6 +98,14 @@ public abstract class Handler implements HttpHandler{
         }
 	}
 
+	/**
+	 * Le traitement de la requête reçu
+	 * 
+	 * @param exchange L'échange HTTP
+	 * @throws IOException
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public abstract void handle(HttpExchange exchange) throws IOException;
 }

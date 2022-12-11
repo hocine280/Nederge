@@ -12,16 +12,41 @@ import Server.Request.InvalidRequestException;
 import TareServer.Handlers.Handler;
 import TareServer.RequestManageTare.AddTareRequest;
 
+/**
+ * Handler permettant d'ajouter un serveur TARE
+ * 
+ * @see Handler
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ * @version 1.0
+ */
 public class AddTareHandler extends Handler{
 
+	/**
+	 * La liste des serveurs
+	 * @since 1.0
+	 */
 	private Hashtable<Integer, String> listServer;
 
+	/**
+	 * Construis le handler
+	 * @param logManager Le LogManager du serveur HTTP auquel est rattaché ce handler
+	 * @param listServer La liste des serveurs du serveur HTTP
+	 */
 	public AddTareHandler(LogManager logManager, Hashtable<Integer, String> listServer) {
 		super(logManager);
 
 		this.listServer = listServer;
 	}
 
+	/**
+	 * Le traitement de la requête reçu
+	 * 
+	 * @param exchange L'échange HTTP
+	 * @throws IOException
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		JSONObject response = new JSONObject();

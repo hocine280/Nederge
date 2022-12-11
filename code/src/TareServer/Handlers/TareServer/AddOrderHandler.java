@@ -11,16 +11,42 @@ import TareServer.RequestsTare.AddOrderRequest;
 
 import org.json.JSONObject;
 
-
+/**
+ * Handler permettant d'ajouter une commande au serveur TARE
+ * 
+ * @see OrderManage
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ * @version 1.0
+ */
 public class AddOrderHandler extends Handler{
 
+	/**
+	 * Le gestionnaire de commande du serveur TARE
+	 * @since 1.0
+	 */
 	private OrderManage orderManage;
 
+	/**
+	 * Construis le handler
+	 * @param logManager Le LogManager du serveur HTTP auquel est rattaché ce handler
+	 * @param orderManage Le gestionnaire de commande du serveur TARE
+	 * 
+	 * @since 1.0
+	 */
 	public AddOrderHandler(LogManager logManager, OrderManage orderManage){
 		super(logManager);
 		this.orderManage = orderManage;
 	}
 
+	/**
+	 * Le traitement de la requête reçu
+	 * 
+	 * @param exchange L'échange HTTP
+	 * @throws IOException
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		

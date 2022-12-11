@@ -8,33 +8,108 @@ import Server.Request.InvalidRequestSituationEnum;
 import Server.Request.RequestInterface;
 import TareServer.Orders.Client;
 import TareServer.Orders.Order;
-import TareServer.Orders.OrderException;
 import TareServer.Orders.OrderManage;
 import TareServer.Orders.StatusOrderEnum;
 import TrackingCode.CountryEnum;
 import TrackingCode.ExtractModeEnum;
 import TrackingCode.TypeEnergyEnum;
 
+/**
+ * Requête permettant d'ajouter une commande
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ */
 public class AddOrderRequest implements RequestInterface{
 
+	/**
+	 * Le gestionnaire de commande du serveur TARE
+	 * @since 1.0
+	 */
 	private OrderManage orderManage;
+	/**
+	 * Le LogManager du serveur TARE
+	 * @since 1.0
+	 */
 	private LogManager logManager;
 
+	/**
+	 * Le nom du client
+	 * @since 1.0
+	 */
 	private String name;
+	/**
+	 * Le prénom du client
+	 * @since 1.0
+	 */
 	private String surname;
+	/**
+	 * L'adresse email du client
+	 * @since 1.0
+	 */
 	private String email;
+	/**
+	 * Le numéro de téléphone du client
+	 * @since 1.0
+	 */
 	private int phoneNumber;
+	/**
+	 * Le nom de la compagnie du client
+	 * @since 1.0
+	 */
 	private String companyName;
+	/**
+	 * Le type de l'énergie de la commande
+	 * @since 1.0
+	 */
 	private TypeEnergyEnum typeEnergy;
+	/**
+	 * Le pays d'origine de l'énergie de la commande
+	 * @since 1.0
+	 */
 	private CountryEnum countryOrigin;
+	/**
+	 * Le mode d'extraction de l'énergie de la commande
+	 * @since 1.0
+	 */
 	private ExtractModeEnum extractionMode;
+	/**
+	 * Indique si l'énergie est verte ou non
+	 * @since 1.0
+	 */
 	private boolean greenEnergy;
+	/**
+	 * La quantité d'énergie de la commande
+	 * @since 1.0
+	 */
 	private int quantity;
+	/**
+	 * La quantité minimale d'énergie de la commande
+	 * @since 1.0
+	 */
 	private int quantityMin;
+	/**
+	 * Le budget de la commande
+	 * @since 1.0
+	 */
 	private int budget;
+	/**
+	 * Le prix maximale par unité d'énergie de la commande
+	 * @since 1.0
+	 */
 	private int maxPriceUnitEnergy;
+	/**
+	 * Le status de la commande
+	 * @since 1.0
+	 */
 	private StatusOrderEnum statusOrder;
 
+	/**
+	 * Construis la requête
+	 * @param logManager Le LogManager du serveur Manage Tare
+	 * @param listServer La liste des serveurs 
+	 * @param nameServer Le nom du serveur ajouté
+	 * @param portServer LE port du serveur ajouté
+	 */
 	public static AddOrderRequest fromJSON(JSONObject object, OrderManage orderManage, LogManager logManager) throws InvalidRequestException{
 		check(object);
 
@@ -58,6 +133,14 @@ public class AddOrderRequest implements RequestInterface{
 		);
 	}
 
+	/**
+	 * Permet d'obtenir la requête depuis son format JSON
+	 * @param object Le format JSON de la requête
+	 * @param logManager Le LogManager du serveur Manage Tare
+	 * @param listServer La liste des serveurs
+	 * @return La requête créé
+	 * @throws InvalidRequestException S'il manque un champ dans le format JSON
+	 */
 	private AddOrderRequest(String name, String surname, String email, int phoneNumber, String companyName, TypeEnergyEnum typeEnergy,
 			CountryEnum countryOrigin, ExtractModeEnum extractionMode, boolean greenEnergy, int quantity, int quantityMin, int budget,
 			int maxPriceUnitEnergy, StatusOrderEnum statusOrder, OrderManage orderManage, LogManager logManager) {
@@ -79,6 +162,11 @@ public class AddOrderRequest implements RequestInterface{
 		this.logManager = logManager;
 	}
 
+	/**
+	 * Vérifie le format JSON
+	 * @param data Le format JSON a vérifié
+	 * @throws InvalidRequestException
+	 */
 	public static void check(JSONObject data) throws InvalidRequestException {
 		if(!data.has("name")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "Champ name absent");
@@ -133,6 +221,13 @@ public class AddOrderRequest implements RequestInterface{
 		}
 	}
 
+	/**
+	 * Réalise le traitement de la requête
+	 * 
+	 * @return La réponse à la requête
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public JSONObject process() {
 		JSONObject response = new JSONObject();
@@ -156,17 +251,11 @@ public class AddOrderRequest implements RequestInterface{
 		order.setId(idOrder);
 		order.setLogin(loginOrder);
 		
-		try {
-			this.orderManage.addOrder(idOrder, this.logManager, order);
-			response.put("status", true);
-			response.put("idOrderForm", idOrder);
-			response.put("login", loginOrder);
-			this.logManager.addLog("Ajout d'une nouvelle commande. Commande : " + order.toJson().toString());
-		} catch (OrderException e) {
-			response.put("status", false);
-			response.put("message", e.toString());
-			this.logManager.addLog("Echec de l'ajout d'une nouvelle commande. Motif : " + e.toString());
-		}
+		this.orderManage.addOrder(idOrder, this.logManager, order);
+		response.put("status", true);
+		response.put("idOrderForm", idOrder);
+		response.put("login", loginOrder);
+		this.logManager.addLog("Ajout d'une nouvelle commande. Commande : " + order.toJson().toString());
 
 		return response;
 	}

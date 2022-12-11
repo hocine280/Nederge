@@ -6,7 +6,6 @@ import Server.Server;
 import Server.TypeServerEnum;
 import Server.InvalidServerException;
 import TareServer.Handlers.TareServer.AddOrderHandler;
-import TareServer.Handlers.TareServer.InfosMarketHandler;
 import TareServer.Handlers.TareServer.ListOrderHandler;
 import TareServer.Handlers.TareServer.RemoveOrderHandler;
 import TareServer.Handlers.TareServer.OrderStatusHandler;
@@ -37,20 +36,48 @@ import java.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+/**
+ * Classe permettant de gérer un serveur TARE
+ * 
+ * @see Server
+ * @see OrderManage
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ * @version 1.0
+ */
 public class TareServer extends Server{
 
+	/**
+	 * Le gestionnaire de commande d'un TARE
+	 * @since 1.0
+	 */
 	private OrderManage orderManage;
-
+	/**
+	 * Le serveur HTTP
+	 * @since 1.0
+	 */
 	private HttpServer server;
 
+	/**
+	 * Construis un serveur TARE
+	 * @param name Le nom du serveur
+	 * @param port Le port du serveur
+	 * @throws IOException S'il n'est pas possible de créer l'objet HttpServer
+	 * 
+	 * @since 1.0
+	 */
 	public TareServer(String name, int port) throws IOException{
 		super(name, port, TypeServerEnum.HTTP_Server);
 		this.orderManage = new OrderManage(this);
 
-		this.server = HttpServer.create(new InetSocketAddress(port), 0);
+		this.server = HttpServer.create(new InetSocketAddress(this.port), 0);
 	}
 
+	/**
+	 * Envoie une requête au serveur ManageTare pour s'enregistrer auprès de lui
+	 * 
+	 * @since 1.0
+	 */
 	private void registerToManageTare(){
 		URL url = null;
 		try {
@@ -80,6 +107,7 @@ public class TareServer extends Server{
         try {
             OutputStream writer = connection.getOutputStream();
             writer.write(data.toString().getBytes("utf-8"));
+			this.logManager.addLog("Envoie de la requête d'enregistrement au serveur Manage Tare");
             writer.flush();
             writer.close();
         } catch(IOException e) {
@@ -110,18 +138,35 @@ public class TareServer extends Server{
 		}
 	}
 
+	/**
+	 * Permet de réaliser l'échange de clé publique avec l'AMI
+	 * 
+	 @since 1.0
+	 */
 	public void sendPublicKeyAMI(){
 		JSONObject request = this.sendFirstConnectionServe("AMI");
 
 		this.processResponsePublicKey(this.sendRequestAMI(request, false));
 	}
 
+	/**
+	 * Permet de réaliser l'échange de clé publique avec le Marché de gros
+	 * 
+	 * @since 1.0
+	 */
 	public void sendPublicKeyMarcheGros(){
 		JSONObject request = this.sendFirstConnectionServe("Marche de gros");
 
 		this.processResponsePublicKey(this.sendRequestMarcheGros(request, false));
 	}
 
+	/**
+	 * Permet de traiter la réponse à un échange de clé publique
+	 * 
+	 * @param response La réponse au format JSON de l'échange de clé publique à traiter
+	 * 
+	 * @since 1.0
+	 */
 	private void processResponsePublicKey(JSONObject response){
 		if(response.has("status") && response.getBoolean("status") && response.has("publicKeySender") && response.has("sender")){
 			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(response.getString("publicKeySender")));
@@ -136,7 +181,7 @@ public class TareServer extends Server{
 		}
 	}
 
-		/**
+	/**
 	 * Permet d'envoyer une requete a l'AMI de maniere chiffre ou non et retourne la reponse de l'AMI
 	 * @param request La requete a envoye
 	 * @param encrypt s'il faut chiffre la requete ou non
@@ -187,6 +232,7 @@ public class TareServer extends Server{
 			messageEncrypt = request.toString();
 		}
 
+		this.logManager.addLog("Envoie d'une requête à l'AMI. Type : " + (request.has("typeRequest") ? request.getString("typeRequest") : "Inconnu"));
 		output.println(messageEncrypt);
 
 		// Lecture de la réponse
@@ -214,6 +260,14 @@ public class TareServer extends Server{
 	}
 
 
+	/**
+	 * Permet d'envoyer une requête au marché de gros de maniere chiffre ou non et retourne la réponse du marché de gros
+	 * @param request La requete a envoyé
+	 * @param encrypt S'il faut chiffré la requête ou non
+	 * @return La reponse à la requete ou null en cas d'erreur
+	 * 
+	 * @since 1.0
+	 */
 	public JSONObject sendRequestMarcheGros(JSONObject request, boolean encrypt){
 		DatagramSocket socket = null; 
         try{
@@ -251,6 +305,7 @@ public class TareServer extends Server{
             byte[] buffer = messageEncrypt.getBytes();
             messageToSend = new DatagramPacket(buffer, buffer.length, address ,2025);
 			socket.send(messageToSend);
+			this.logManager.addLog("Envoie d'une requête à l'AMI. Type : " + (request.has("typeRequest") ? request.getString("typeRequest") : "Inconnu"));
         }catch(UnknownHostException e){
             this.logManager.addLog("Erreur lors de la création du message");
 			return null;
@@ -272,16 +327,21 @@ public class TareServer extends Server{
         }
 
 		JSONObject response = this.receiveDecrypt(messageResponse);
+		this.logManager.addLog("Réception d'une requête de " + (response.has("sender") ? response.getString("sender") : "Inconnu") + " Type : " + (response.has("typeRequest") ? response.getString("typeRequest") : "Inconnu"));
         socket.close();
 
 		return response;
 	}
 
+	/**
+	 * Permet de démarrer le serveur TARE. Crée les contextes et s'enregistre auprès du serveur Manage Tare.
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void start(){
 		this.server.createContext("/add-order", new AddOrderHandler(this.logManager, this.orderManage));
 		this.server.createContext("/remove-order", new RemoveOrderHandler(this.logManager, this.orderManage));
-		this.server.createContext("/infos-market", new InfosMarketHandler(this.logManager));
 		this.server.createContext("/order-status", new OrderStatusHandler(this.logManager, this.orderManage));
 		this.server.createContext("/list-order", new ListOrderHandler(this.logManager, this.orderManage));
 		this.server.setExecutor(null);
@@ -291,11 +351,11 @@ public class TareServer extends Server{
 		this.registerToManageTare();
 	}
 
-	@Override
-	public String toString() {
-		return "{Nom : " + this.name + ", Adresse : " + this.server.getAddress() + "}";
-	}
-
+	/**
+	 * Permet d'éteindre le serveur TARE.
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void shutdown() {
 		this.server.stop(0);

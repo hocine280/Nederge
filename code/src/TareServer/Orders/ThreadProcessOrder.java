@@ -7,18 +7,49 @@ import Server.LogManage.LogManager;
 import TareServer.TareServer;
 import TrackingCode.Energy;
 
+/**
+ * Thread permettant de gérer une commande et de traiter toutes les étapes. De la disponibilité à l'achat en passant par la vérification des certificats.
+ * 
+ * @author Pierre CHEMIN & Hocine HADID
+ * @version 1.0
+ */
 public class ThreadProcessOrder extends Thread{
 	
+	/**
+	 * Le serveur de TARE qui traite la commande
+	 * @since 1.0
+	 */
 	private TareServer server;
+	/**
+	 * Le LogManager du serveur TARE qui traite la commande
+	 * @since 1.0
+	 */
 	private LogManager logManager;
+	/**
+	 * La commande que l'on traite
+	 * @since 1.0
+	 */
 	private Order order;
 
+	/**
+	 * Construis le Thread de traitement d'une commande
+	 * @param server Le serveur TARE qui traite la commande
+	 * @param logManager Le LogManager du TARE qui traite la commande
+	 * @param order La commande que l'on traite ici
+	 * 
+	 * @since 1.0
+	 */
 	public ThreadProcessOrder(TareServer server, LogManager logManager, Order order){
 		this.server = server;
 		this.logManager = logManager;
 		this.order = order;
 	}
 
+	/**
+	 * Réalise le traitement de la commande
+	 * 
+	 * @since 1.0
+	 */
 	@Override
 	public void run() {
 		boolean process = true;
