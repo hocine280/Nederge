@@ -56,6 +56,8 @@ public class StockManage{
      */
     public JSONArray checkEnergyAvailability(Order order){
         ListEnergy listEnergy = new ListEnergy();
+		int quantityTotal = 0;
+
         for(String key : stockEnergy.keySet()){
 			Energy energy = stockEnergy.get(key);
 			boolean isAvailable = true;
@@ -79,8 +81,13 @@ public class StockManage{
 			}
 			if(isAvailable == true){
 				listEnergy.addEnergy(energy);
+				quantityTotal += energy.getTrackingCode().getQuantity();
 			}
         }
+
+		if(quantityTotal < order.getQuantity()){
+			listEnergy.clearAllEnergy();
+		}
         return listEnergy.toJSON();
     }
     

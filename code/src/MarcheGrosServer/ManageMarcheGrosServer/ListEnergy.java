@@ -1,12 +1,10 @@
 package MarcheGrosServer.ManageMarcheGrosServer; 
 
-import java.util.HashMap;
 import java.util.Vector;
 
 import TrackingCode.Energy;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  * Classe ListEnergy
@@ -32,6 +30,15 @@ public class ListEnergy{
     public void addEnergy(Energy energy){
 		listEnergy.add(energy);
     }
+
+	/**
+	 * Permet de supprimer toutes les énergies de la liste
+	 * 
+	 * @since 1.0
+	 */
+	public void clearAllEnergy(){
+		this.listEnergy.clear();
+	}
 
     /**
      * Génére un JSONObject à partir de la liste des énergies
