@@ -7,7 +7,8 @@ package TrackingCode;
 public enum CountryEnum {
 	FRANCE("FR"),
 	ALLEMAGNE("AL"),
-	UKRAINE("UK");
+	UKRAINE("UK"),
+	ETATSUNIS("USA");
 
 	/** Attribut contenant le code du pays */
 	private String code = "";
@@ -37,6 +38,8 @@ public enum CountryEnum {
 
 	/**
 	 * Surcharge de la méthode toString affichant un pays sous son format de code
+	 * 
+	 * @return Le code du pays d'origine de l'énergie
 	 */
 	@Override
 	public String toString(){

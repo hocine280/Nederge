@@ -39,6 +39,8 @@ public enum TypeEnergyEnum{
 
 	/**
 	 * Surcharge de la méthode toString affichant un type d'énergie sous son format de code
+	 * 
+	 * @return Le code du type de l'énergie
 	 */
 	@Override
 	public String toString(){
