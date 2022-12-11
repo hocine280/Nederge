@@ -16,15 +16,19 @@ include "../../vendor/autoload.php";
 // On valide les données saisies dans le formulaire
 $errorEnteredForm = Validation::ValidationOfOrderForm(); 
 
+
 // Si aucune erreur, on crée l'objet Order et on envoie sous format JSON la commande à notre serveur HTTP - TARE
 if (empty($errorEnteredForm)) {
     // On supprime la variable de session une fois que l'utilisateur a corrigé ses erreurs
     unset($_SESSION['champError']); 
+
     // Création de l'objet Commande avec les données saisies dans le formulaire
+
     $client = new Client($_POST['name'], $_POST['firstName'], $_POST['mail'], $_POST['companyName'], $_POST['phoneNumber']);
     $energyDesiredByClient = new Energy($_POST['energy'], $_POST['extractionMode'], $_POST['greenEnergy']);
     $order = new Order($client, $energyDesiredByClient, $_POST['quantity'], $_POST['minQuantity'], $_POST['maxUnitPrice'], 
                         $_POST['originCountry'], $_POST['budget']);
+
     // Création du json à envoyer au serveur TARE
     $orderJSON = json_encode($order, true);
     
@@ -38,7 +42,8 @@ if (empty($errorEnteredForm)) {
                 'content' => $orderJSON
             ]
     ]; 
-    $url = "http://localhost:8080/add-order";
+    $portTare = $_POST['tare'];
+    $url = "http://localhost:".$portTare."/add-order";
     $context = stream_context_create($options);
     
     // Récupération de la réponse du serveur TARE avec gestion des erreurs

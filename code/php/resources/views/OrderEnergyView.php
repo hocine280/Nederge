@@ -15,7 +15,8 @@
 </head>
 
 <body>
-
+<?php include '../../app/controllers/ListServerTAREController.php'?>
+    
     <!-- ======= Header ======= -->
     <?php include '../layout/Header.html'; ?>
 
@@ -61,9 +62,38 @@
                         unset($_SESSION['statusOrder']);
                     }
                 }
+                
+                if(isset($_SESSION['ManageTAREOff'])){
+                    echo '<div class="col-md-12 text-center mt-4">
+                            <div class="alert alert-danger" role="alert" style="font-weight : bold;">
+                                <i class="bi bi-exclamation-circle-fill"></i> '.$_SESSION['ManageTAREOff'].'
+                            </div>
+                        </div>';
+                    unset($_SESSION['ManageTAREOff']);
+                }
+                
             ?>
         <div class="row mt-5">
             <form action="../../app/controllers/OrderEnergyProcessingController.php" method="POST" id="formulaire">
+                <div class="row">
+                    <h3>Choix du TARE</h3>
+                    <div class="col-md-12 mb-4">
+                        <div class="trait mb-4"></div>    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <select class="form-control" name="tare" id="tare">
+                                    <option selected disabled>Veuillez choisir le TARE à qui vous désirez commander une énergie</option>
+                                    <?php
+                                        $servers = $listServer->getListTARE();
+                                        foreach($servers as $port=>$name){
+                                            echo '<option value="'.$port.'">'.$name.'</option>';
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
                 <div class="row">
                     <h3>Informations du client</h3>
                     <div class="col-md-12 mb-4">
@@ -130,12 +160,13 @@
                             <div class="col-md-6">
                                 <select class="form-control" name="extractionMode" id="modeExtraction">
                                     <option selected disabled>Mode d'extraction</option>
-                                    <option value="eolienne">Eolienne</option>
-                                    <option value="panneau_solaire">Panneau solaire</option>
-                                    <option value="forage_puits">Forage de puits</option>
-                                    <option value="nucleaire">Nucléaire</option>
-                                    <option value="sans_preference">Sans préférence</option>
-                                    <option value="MODE_1">Mode 1</option>
+                                    <option value="FORAGE">Forage</option>
+                                    <option value="PANNEAUSOLAIRE">Panneau solaire</option>
+                                    <option value="EOLIENNE">Eolienne</option>
+                                    <option value="BARRAGE">Barrage</option>
+                                    <option value="NUCLEAIRE">Nucleaire</option>
+                                    <option value="CENTRALCHARBON">Central à charbon</option>
+                                    <option value="MINAGE">Minage</option>
                                 </select>                        
                             </div>
                         </div>
