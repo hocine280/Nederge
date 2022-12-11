@@ -64,6 +64,7 @@ public class ThreadProcessOrder extends Thread{
 				
 				if(this.order.getStatus().equals(StatusOrderEnum.WAITING_VALIDATION)){
 					boolean purchaseSuccess = true;
+					
 					for (Energy energy : this.order.getListEnergy()) {
 						JSONObject request = this.server.constructBaseRequest("Marche de gros");
 						request.put("typeRequest", "BuyEnergyOrder");
@@ -96,6 +97,7 @@ public class ThreadProcessOrder extends Thread{
 				}
 			}
 
+			// Vérifie les certificats
 			if(this.order.getStatus().equals(StatusOrderEnum.DELIVERY)){
 				boolean errorCertificate = false;
 				for (Energy energy : this.order.getPurchaseEnergy()) {

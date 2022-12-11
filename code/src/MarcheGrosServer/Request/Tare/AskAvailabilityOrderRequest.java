@@ -44,7 +44,7 @@ public class AskAvailabilityOrderRequest extends RequestMarcheGros{
 
 	public static void check(JSONObject data) throws InvalidRequestException{
 		RequestMarcheGros.check(data);
-
+		
 		if(!data.has("order")){
 			throw new InvalidRequestException(InvalidRequestSituationEnum.DataEmpty, "order absent");
 		}

@@ -260,7 +260,7 @@ public class TareServer extends Server{
 		}
 
 		// Réception de la réponse
-        byte[] tampon = new byte[1024];
+        byte[] tampon = new byte[2048];
         DatagramPacket msg = new DatagramPacket(tampon, tampon.length);
 		String messageResponse = "";
         try {
@@ -272,7 +272,6 @@ public class TareServer extends Server{
         }
 
 		JSONObject response = this.receiveDecrypt(messageResponse);
-
         socket.close();
 
 		return response;
