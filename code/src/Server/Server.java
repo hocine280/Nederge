@@ -23,7 +23,10 @@ import Server.LogManage.LogManager;
 import Server.InvalidServerException.SituationServerException;
 
 /**
- * La classe permettant de gerer un serveur de maniere generale avec le chiffrement et dechiffrement des requetes
+ * La classe permettant de gerer un serveur de maniere generale avec le chiffrement et dechiffrement des requetes ainsi que les clés privés et publiques
+ * 
+ * @see TypeServerEnum
+ * @see LogManager
  * 
  * @author Pierre CHEMIN
  * @version 1.0
@@ -125,6 +128,8 @@ public abstract class Server {
 	/**
 	 * Retourne la liste des serveurs dont on connait la cle publique
 	 * @return HashMap<String, PublicKey> 
+	 * 
+	 * @since 1.0
 	 */
 	public HashMap<String, PublicKey> getListServerConnected(){
 		return this.listServerConnected;
@@ -306,6 +311,7 @@ public abstract class Server {
 			}
 			
 			requestEncrypt = Base64.getEncoder().encodeToString(result.toByteArray());
+			this.logManager.addLog("Requête chiffré pour " + nameReceiver);
 		} catch (Exception e) {
 			this.logManager.addLog("Problème lors du cryptage d'une requête pour le destinataire : " + nameReceiver + ". Erreur : " + e.toString());
 			throw new InvalidServerException(SituationServerException.EncryptionError, e.toString());
