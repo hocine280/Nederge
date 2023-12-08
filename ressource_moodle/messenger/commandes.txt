@@ -1,8 +1,0 @@
-Pour compiler :
-javac -d cls/ -sourcepath src/ src/TestMessenger.java
-
-Pour executer :
-java -cp cls/ TestMessenger
-
-Pour générer la documentation (avec l'auteur, la version, les attributs privés et le lien vers la documentation de JAVA 18)
-javadoc -private -author -version -link https://docs.oracle.com/en/java/javase/18/docs/api/ -d doc -sourcepath src/ src/*.java
