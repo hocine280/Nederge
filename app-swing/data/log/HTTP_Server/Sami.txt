@@ -1,0 +1,42 @@
+=========== LOG SERVEUR HTTP_Server - Sami ===========
+
+[Sami - 07/12/2023 11:57:46] : 	Serveur démarré sur le port 5555
+[Sami - 07/12/2023 11:57:46] : 	Envoie de la requête d'enregistrement au serveur Manage Tare
+[Sami - 07/12/2023 11:57:46] : 	Réception du serveur Manage TARE : {"status":true}
+[Sami - 07/12/2023 11:57:46] : 	Serveur ajouté à la liste des serveur TARE
+[Sami - 07/12/2023 11:59:08] : 	Nouvelle demande de commande reçu
+[Sami - 07/12/2023 11:59:08] : 	Ajout d'une nouvelle commande. Commande : {"idOrder":1047907952,"statusOrder":"PROCESS","green":true,"quantity":15,"typeEnergy":"GAZ","client":{"phoneNumber":688582259,"surname":"Sami","companyName":"Driouche Corporation","name":"Driouche","email":"sami.dricouche@gmail.com"},"extractionMode":"PANNEAUSOLAIRE","quantityMin":2,"countryOrigin":"FRANCE","maxPriceUnitEnergy":5,"budget":13000}
+[Sami - 07/12/2023 11:59:08] : 	Envoie d'une requête à l'AMI. Type : PublicKeyRequest
+[Sami - 07/12/2023 11:59:08] : 	Réception d'une requête de Marche de gros Type : PublicKeyRequest
+[Sami - 07/12/2023 11:59:08] : 	Ajout d'un serveur à la liste. Serveur : Marche de gros
+[Sami - 07/12/2023 11:59:08] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 11:59:08] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 11:59:08] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 11:59:30] : 	Récupération de la liste des commandes par le revendeur
+[Sami - 07/12/2023 11:59:37] : 	Récupération du statut d'une commande. Commande : {"idOrder":1047907952,"statusOrder":"PROCESS","green":true,"quantity":15,"typeEnergy":"GAZ","client":{"phoneNumber":688582259,"surname":"Sami","companyName":"Driouche Corporation","name":"Driouche","email":"sami.dricouche@gmail.com"},"extractionMode":"PANNEAUSOLAIRE","quantityMin":2,"countryOrigin":"FRANCE","maxPriceUnitEnergy":5,"budget":13000}
+[Sami - 07/12/2023 11:59:38] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 11:59:38] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 11:59:38] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 11:59:56] : 	Récupération de la liste des commandes par le revendeur
+[Sami - 07/12/2023 12:00:04] : 	Récupération du statut d'une commande. Commande : {"idOrder":1047907952,"statusOrder":"PROCESS","green":true,"quantity":15,"typeEnergy":"GAZ","client":{"phoneNumber":688582259,"surname":"Sami","companyName":"Driouche Corporation","name":"Driouche","email":"sami.dricouche@gmail.com"},"extractionMode":"PANNEAUSOLAIRE","quantityMin":2,"countryOrigin":"FRANCE","maxPriceUnitEnergy":5,"budget":13000}
+[Sami - 07/12/2023 12:00:08] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:00:08] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:00:08] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:00:38] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:00:38] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:00:38] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:01:08] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:01:08] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:01:08] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:01:38] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:01:38] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:01:38] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:02:08] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:02:08] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:02:08] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:02:38] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:02:38] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:02:38] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:03:08] : 	Requête chiffré pour Marche de gros
+[Sami - 07/12/2023 12:03:08] : 	Envoie d'une requête à l'AMI. Type : AskAvailabilityOrder
+[Sami - 07/12/2023 12:03:08] : 	Réception d'une requête de Marche de gros Type : AskAvailabilityOrder

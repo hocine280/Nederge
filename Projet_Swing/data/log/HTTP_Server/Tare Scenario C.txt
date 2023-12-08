@@ -1,6 +1,0 @@
-=========== LOG SERVEUR HTTP_Server - Tare Scenario C ===========
-
-[Tare Scenario C - 11/12/2022 21:23:20] : 	Serveur démarré sur le port 8030
-[Tare Scenario C - 11/12/2022 21:23:20] : 	Envoie de la requête d'enregistrement au serveur Manage Tare
-[Tare Scenario C - 11/12/2022 21:23:20] : 	Réception du serveur Manage TARE : {"status":true}
-[Tare Scenario C - 11/12/2022 21:23:20] : 	Serveur ajouté à la liste des serveur TARE

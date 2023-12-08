@@ -23,11 +23,11 @@ switch ($argv[1]) {
 			"companyName" => "StonePath company",
 			"typeEnergy" => "ELECTRICITE",
 			"countryOrigin" => "FRANCE",
-			"extractionMode" => "MODE_1",
+			"extractionMode" => "NUCLEAIRE",
 			"green" => true,
 			"quantity" => 500,
 			"quantityMin" => 250,
-			"budget" => 5000,
+			"budget" => 500,
 			"maxPriceUnitEnergy" => 250
 		];
 		break;
@@ -45,6 +45,10 @@ switch ($argv[1]) {
 		break;
 
 	case 'list-order':
+		$method = 'GET';
+		break;
+
+	case 'list-server':
 		$method = 'GET';
 		break;
 
@@ -92,6 +96,6 @@ $contexte  = stream_context_create($options);
 
 if(($jsonTexte = @file_get_contents($URL, false, $contexte)) !== false) {
 	echo $jsonTexte;
-}
-else
+}else{
 	echo "Une erreur est survenue lors de la récupération des données.";
+}

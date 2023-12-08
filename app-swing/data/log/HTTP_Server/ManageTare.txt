@@ -1,0 +1,4 @@
+=========== LOG SERVEUR HTTP_Server - ManageTare ===========
+
+[ManageTare - 07/12/2023 11:56:33] : 	Serveur démarré
+[ManageTare - 07/12/2023 11:57:46] : 	Ajout du serveur TARE : Sami

@@ -1,0 +1,24 @@
+=========== LOG SERVEUR UDP_Server - Marche de gros ===========
+
+[Marche de gros - 07/12/2023 11:56:33] : 	Serveur allumé !
+[Marche de gros - 07/12/2023 11:59:08] : 	Réception d'une requête envoyé par Sami Type : PublicKeyRequest
+[Marche de gros - 07/12/2023 11:59:08] : 	Ajout d'un serveur et de sa clé public. Serveur : Sami
+[Marche de gros - 07/12/2023 11:59:08] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 11:59:08] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 11:59:08] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 11:59:38] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 11:59:38] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:00:08] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:00:08] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:00:38] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:00:38] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:01:08] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:01:08] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:01:38] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:01:38] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:02:08] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:02:08] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:02:38] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:02:38] : 	Requête chiffré pour Sami
+[Marche de gros - 07/12/2023 12:03:08] : 	Réception d'une requête envoyé par Sami Type : AskAvailabilityOrder
+[Marche de gros - 07/12/2023 12:03:08] : 	Requête chiffré pour Sami
